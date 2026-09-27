@@ -1,664 +1,412 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Data Analyst Mastery Engine</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --bg: #090D16;
-      --surface: #111827;
-      --surface-card: #182235;
-      --border: #2B374E;
-      --text: #F3F4F6;
-      --text-muted: #9CA3AF;
-      --accent-blue: #38BDF8;
-      --accent-green: #34D399;
-      --accent-yellow: #FBBF24;
-      --accent-pink: #F472B6;
-      --code-bg: #030712;
-    }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-
-    /* Top Sticky Header */
-    header {
-      padding: 20px 24px;
-      background: rgba(17, 24, 39, 0.9);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-    .header-content {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-    .brand h1 {
-      font-size: 1.35rem;
-      font-weight: 800;
-      letter-spacing: -0.5px;
-      background: linear-gradient(90deg, #38BDF8, #818CF8, #34D399);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .brand p { font-size: 0.8rem; color: var(--text-muted); font-weight: 500; }
-
-    /* Horizontal Stack Navigation */
-    nav {
-      background: #0D1322;
-      border-bottom: 1px solid var(--border);
-      padding: 10px 20px;
-    }
-    .nav-track {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: flex;
-      gap: 8px;
-      overflow-x: auto;
-      white-space: nowrap;
-      scrollbar-width: thin;
-    }
-    .tab-btn {
-      padding: 8px 16px;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      background: var(--surface);
-      color: var(--text-muted);
-      cursor: pointer;
-      font-size: 0.82rem;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      transition: all 0.2s ease;
-    }
-    .tab-btn:hover { border-color: var(--accent-blue); color: var(--text); }
-    .tab-btn.active {
-      background: rgba(56, 189, 248, 0.12);
-      border-color: var(--accent-blue);
-      color: var(--accent-blue);
-      box-shadow: 0 0 12px rgba(56, 189, 248, 0.15);
-    }
-
-    main {
-      flex: 1;
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 28px 20px 40px;
-      width: 100%;
-    }
-
-    .tool-pane { display: none; }
-    .tool-pane.active { display: block; animation: fadeIn 0.2s ease-out; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
-
-    .module-header { margin-bottom: 24px; }
-    .badge {
-      display: inline-block;
-      font-size: 0.72rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
-      padding: 3px 8px;
-      border-radius: 4px;
-      margin-bottom: 8px;
-    }
-    .module-header h2 { font-size: 1.6rem; font-weight: 800; margin-bottom: 4px; }
-    .module-header p { color: var(--text-muted); font-size: 0.9rem; }
-
-    /* Concept Cards (Def / Meaning / Syntax / Use) */
-    .concept-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 22px;
-      margin-bottom: 24px;
-    }
-    .concept-card h3 {
-      font-size: 1.2rem;
-      color: var(--text);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 16px;
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 10px;
-    }
-
-    .block-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 14px;
-      margin-bottom: 16px;
-    }
-    .info-box {
-      background: var(--surface-card);
-      border: 1px solid rgba(255,255,255,0.05);
-      border-radius: 8px;
-      padding: 14px;
-    }
-    .info-box span.label {
-      font-size: 0.72rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
-      color: var(--accent-blue);
-      display: block;
-      margin-bottom: 6px;
-    }
-    .info-box p { font-size: 0.86rem; color: #D1D5DB; line-height: 1.5; }
-
-    pre {
-      background: var(--code-bg);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 14px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.82rem;
-      color: #93C5FD;
-      overflow-x: auto;
-      line-height: 1.5;
-      margin-bottom: 14px;
-    }
-
-    /* Interactive Output Arena */
-    .interactive-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 10px;
-      margin-bottom: 8px;
-    }
-    .interactive-header span { font-size: 0.75rem; font-weight: 700; color: var(--accent-green); text-transform: uppercase; }
-    .interactive-terminal {
-      background: #060911;
-      border: 1px solid #1E293B;
-      border-radius: 8px;
-      padding: 14px;
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 0.82rem;
-      min-height: 80px;
-    }
-
-    table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 0.8rem; }
-    th, td { padding: 8px 10px; border: 1px solid var(--border); text-align: left; }
-    th { background: #0E1626; color: var(--text-muted); font-weight: 600; }
-    .hl-row { background: rgba(56, 189, 248, 0.15); color: var(--accent-blue); font-weight: 600; }
-
-    .run-btn {
-      padding: 6px 12px;
-      background: var(--accent-blue);
-      color: #030712;
-      border: none;
-      border-radius: 4px;
-      font-weight: 700;
-      font-size: 0.75rem;
-      cursor: pointer;
-      transition: opacity 0.15s;
-    }
-    .run-btn:hover { opacity: 0.85; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>LearnRoadmap — Data Analyst Study Hub</title>
+<style>
+:root{
+  --cream:#f7f1e6; --cream2:#efe6d4; --denim:#2f4a63; --denim2:#3d5f7d;
+  --ink:#26313a; --accent:#d97b3f; --accent2:#6a8a5f; --card:#fffaf0; --border:#d9cdb3;
+  --code-bg:#232b32; --code-text:#e6edf3;
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --cream:#1c2128; --cream2:#242b33; --ink:#eee6d3; --card:#232a32; --border:#3a4653; --denim:#7fa5c4; --code-bg:#151b23; --code-text:#f0f6fc;
+  }
+}
+:root[data-theme="dark"]{
+  --cream:#1c2128; --cream2:#242b33; --ink:#eee6d3; --card:#232a32; --border:#3a4653; --denim:#7fa5c4; --code-bg:#151b23; --code-text:#f0f6fc;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px);}
+*{box-sizing:border-box;}
+body{margin:0;background:var(--cream);color:var(--ink);font-family:'Courier New',ui-monospace,monospace;min-height:100%;}
+header{background:var(--denim);color:#fdf6e8;padding:22px 16px calc(18px + env(safe-area-inset-top,0px));text-align:center;}
+header h1{margin:0 0 6px;font-size:1.6rem;}
+header p{margin:0;opacity:.9;font-size:.88rem;max-width:650px;margin:0 auto;}
+nav{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;padding:12px;background:var(--cream2);position:sticky;top:0;z-index:10;border-bottom:2px solid var(--border);}
+nav button{font-family:inherit;font-size:.8rem;padding:8px 13px;border-radius:20px;border:2px solid var(--border);background:var(--card);color:var(--ink);cursor:pointer;transition:all .15s ease;}
+nav button:hover{border-color:var(--accent);}
+nav button.active{background:var(--accent);color:#fff;border-color:var(--accent);}
+main{max-width:960px;margin:0 auto;padding:22px 16px 60px;}
+h2{color:var(--denim);border-bottom:3px solid var(--accent);display:inline-block;padding-bottom:3px;margin-top:0;}
+p.subhead{font-size:.86rem;opacity:.85;margin-top:4px;margin-bottom:18px;}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin-top:14px;}
+.card{background:var(--card);border:2px solid var(--border);border-radius:10px;min-height:140px;padding:14px;cursor:pointer;position:relative;display:flex;flex-direction:column;justify-content:space-between;transition:transform .12s ease, box-shadow .12s ease;}
+.card:hover{transform:translateY(-2px);box-shadow:0 4px 10px rgba(0,0,0,0.06);}
+.card .front{font-weight:bold;color:var(--denim);font-size:.95rem;}
+.card .front small{display:block;font-weight:normal;color:var(--ink);opacity:.7;margin-top:8px;font-size:.75rem;}
+.card .back{display:none;font-size:.8rem;line-height:1.45;white-space:pre-wrap;}
+.card.flipped .front{display:none;}
+.card.flipped .back{display:block;}
+.card .tag{display:inline-block;background:var(--accent2);color:#fff;font-size:.65rem;padding:2px 8px;border-radius:10px;margin-bottom:8px;}
+.hint{font-size:.7rem;opacity:.6;align-self:flex-end;margin-top:10px;}
+.steps{margin-top:14px;}
+.step{background:var(--card);border-left:5px solid var(--accent);border-radius:6px;padding:14px;margin-bottom:12px;}
+.step b{color:var(--denim);font-size:.95rem;}
+.step div{margin-top:4px;font-size:.85rem;line-height:1.45;}
+.quiz-card{background:var(--card);border:2px solid var(--border);border-radius:10px;padding:16px;margin-bottom:14px;}
+.quiz-card p.q{font-weight:bold;color:var(--denim);margin-top:0;font-size:.92rem;}
+.quiz-card .ans{display:none;margin-top:10px;padding-top:10px;border-top:1px dashed var(--border);font-size:.85rem;line-height:1.45;}
+.quiz-card button.reveal{font-family:inherit;background:var(--accent);color:#fff;border:none;border-radius:20px;padding:6px 14px;cursor:pointer;font-size:.8rem;}
+.guide-controls{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:18px;align-items:center;}
+.guide-search{flex:1;min-width:240px;padding:9px 14px;border:2px solid var(--border);border-radius:8px;font-family:inherit;font-size:.85rem;background:var(--card);color:var(--ink);}
+.guide-search:focus{outline:none;border-color:var(--accent);}
+.guide-filter-pills{display:flex;flex-wrap:wrap;gap:6px;}
+.guide-pill{font-family:inherit;font-size:.75rem;padding:5px 10px;border-radius:14px;border:1px solid var(--border);background:var(--card);color:var(--ink);cursor:pointer;}
+.guide-pill.active{background:var(--denim2);color:#fff;border-color:var(--denim2);}
+.guide-entry{background:var(--card);border:2px solid var(--border);border-radius:10px;padding:16px;margin-bottom:14px;}
+.guide-entry h3{margin:0 0 6px;color:var(--denim);font-size:1.05rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;}
+.guide-entry .category-badge{font-size:.65rem;background:var(--accent2);color:#fff;padding:2px 8px;border-radius:10px;font-weight:normal;}
+.guide-entry .section-row{margin:6px 0;font-size:.84rem;line-height:1.45;}
+.guide-entry .section-row strong{color:var(--denim2);}
+.guide-entry pre{background:var(--code-bg);color:var(--code-text);padding:10px 12px;border-radius:6px;font-size:.8rem;overflow-x:auto;position:relative;margin:8px 0;}
+.guide-entry code{font-family:'Courier New',ui-monospace,monospace;}
+.copy-btn{position:absolute;top:6px;right:6px;background:rgba(255,255,255,0.2);border:none;border-radius:4px;color:#fff;font-size:.7rem;padding:3px 7px;cursor:pointer;}
+.copy-btn:hover{background:rgba(255,255,255,0.4);}
+footer{text-align:center;padding:20px;font-size:.75rem;opacity:.65;}
+</style>
 </head>
 <body>
+<header>
+  <h1>📊 LearnRoadmap</h1>
+  <p>Data Analyst study hub — interactive cards, complete reference handbook, analytical frameworks, and interview prep.</p>
+</header>
+<nav id="nav"></nav>
+<main id="main"></main>
+<footer>Built for interview prep & quick reference. Tap tabs above to switch modules.</footer>
 
-  <header>
-    <div class="header-content">
-      <div class="brand">
-        <h1>DATA ANALYST ARCADIA</h1>
-        <p>Definitions • Plain Meaning • Exact Syntax • Interactive Execution</p>
-      </div>
-    </div>
-  </header>
+<script>
+const GUIDE_DATA = [
+  {part:"SQL", cat:"Basic Querying", name:"SELECT", def:"Retrieves columns from a table. The starting point of every query.", syntax:"SELECT column1, column2 FROM table_name;", use:"You need to view or extract specific data — e.g., 'show me customer name and sales.'"},
+  {part:"SQL", cat:"Basic Querying", name:"DISTINCT", def:"Removes duplicate rows from the result.", syntax:"SELECT DISTINCT region FROM orders;", use:"You want unique values only — e.g., 'what regions do we sell in?'"},
+  {part:"SQL", cat:"Basic Querying", name:"LIMIT", def:"Restricts the number of rows returned.", syntax:"SELECT * FROM orders LIMIT 10;", use:"Previewing a large table, or finding 'Top N' combined with ORDER BY."},
+  {part:"SQL", cat:"Filtering", name:"WHERE", def:"Filters rows before any aggregation, based on a condition.", syntax:"SELECT * FROM orders WHERE sales > 10000;", use:"You want only rows meeting a condition (dates, amounts, categories)."},
+  {part:"SQL", cat:"Filtering", name:"AND / OR / NOT", def:"Logical operators to combine or negate conditions.", syntax:"WHERE region = 'South' AND sales > 5000;\nWHERE region = 'South' OR region = 'West';\nWHERE NOT region = 'South';", use:"Combining multiple filter conditions."},
+  {part:"SQL", cat:"Filtering", name:"IN", def:"Checks if a value matches any value in a list.", syntax:"WHERE region IN ('South', 'West');", use:"Filtering against multiple discrete values (cleaner than many ORs)."},
+  {part:"SQL", cat:"Filtering", name:"BETWEEN", def:"Checks if a value falls within a range (inclusive).", syntax:"WHERE sales BETWEEN 1000 AND 5000;", use:"Filtering date ranges, price ranges, age ranges."},
+  {part:"SQL", cat:"Filtering", name:"LIKE", def:"Pattern matching for text (% = any characters, _ = one character).", syntax:"WHERE customer_name LIKE 'A%';", use:"Searching partial text — names starting/containing/ending with specific characters."},
+  {part:"SQL", cat:"Sorting", name:"ORDER BY", def:"Sorts the result set ascending (ASC) or descending (DESC).", syntax:"SELECT * FROM orders ORDER BY profit DESC;", use:"Ranking results, e.g. highest sales first, oldest date first."},
+  {part:"SQL", cat:"Aggregation", name:"COUNT / SUM / AVG / MIN / MAX", def:"Summary/aggregate functions that collapse many rows into one value.", syntax:"SELECT SUM(sales), AVG(profit) FROM orders;", use:"Computing totals, averages, extremes — the foundation of reporting."},
+  {part:"SQL", cat:"Aggregation", name:"GROUP BY", def:"Groups rows sharing a value so aggregates can be computed per group.", syntax:"SELECT region, SUM(sales) AS total_sales\nFROM orders\nGROUP BY region;", use:"'Sales by region,' 'profit by category' — any breakdown question."},
+  {part:"SQL", cat:"Aggregation", name:"HAVING", def:"Filters groups after aggregation (unlike WHERE, which filters rows before).", syntax:"SELECT customer_id, SUM(sales) AS total_sales\nFROM orders\nGROUP BY customer_id\nHAVING SUM(sales) > 100000;", use:"You need to filter on an aggregated result, e.g. 'customers with total sales > 1L.'"},
+  {part:"SQL", cat:"Joins & Combining", name:"INNER JOIN", def:"Returns only rows with matches in both tables.", syntax:"SELECT o.order_id, c.customer_name\nFROM orders o\nINNER JOIN customers c ON o.customer_id = c.customer_id;", use:"You only want records that exist in both tables (e.g., orders that have a valid customer)."},
+  {part:"SQL", cat:"Joins & Combining", name:"LEFT JOIN", def:"Returns all rows from the left table, plus matches from the right (NULL if no match).", syntax:"FROM orders o LEFT JOIN customers c ON o.customer_id = c.customer_id;", use:"You want to keep everything from your main table even if related data is missing."},
+  {part:"SQL", cat:"Joins & Combining", name:"RIGHT JOIN", def:"Mirror of LEFT JOIN — keeps all rows from the right table.", syntax:"FROM orders o RIGHT JOIN customers c ON o.customer_id = c.customer_id;", use:"Rare in practice — usually rewritten as a LEFT JOIN with tables swapped."},
+  {part:"SQL", cat:"Joins & Combining", name:"SELF JOIN", def:"A table joined to itself, using aliases.", syntax:"SELECT e1.name AS employee, e2.name AS manager\nFROM employees e1\nJOIN employees e2 ON e1.manager_id = e2.employee_id;", use:"Comparing rows within the same table — e.g., employee-to-manager hierarchy."},
+  {part:"SQL", cat:"Joins & Combining", name:"UNION / UNION ALL", def:"Stacks results of two queries vertically. UNION removes duplicates; UNION ALL keeps everything.", syntax:"SELECT customer_id FROM orders_2024\nUNION ALL\nSELECT customer_id FROM orders_2025;", use:"Combining similar datasets (e.g., two fiscal years of data) into one result set."},
+  {part:"SQL", cat:"Conditional Logic", name:"CASE WHEN", def:"SQL's if/else logic — creates a new categorical column based on conditions.", syntax:"SELECT sales,\n  CASE\n    WHEN profit < 0 THEN 'Loss'\n    WHEN profit < 1000 THEN 'Low Profit'\n    ELSE 'High Profit'\n  END AS profit_category\nFROM orders;", use:"Bucketing continuous numbers into categories, e.g. profit tiers, age brackets."},
+  {part:"SQL", cat:"Subqueries & CTEs", name:"Subquery", def:"A query nested inside another query.", syntax:"SELECT * FROM orders\nWHERE sales > (SELECT AVG(sales) FROM orders);", use:"You need a dynamic benchmark value (like an average) computed on the fly to filter against."},
+  {part:"SQL", cat:"Subqueries & CTEs", name:"WITH (CTE)", def:"A named, temporary result set you can reference like a table — makes complex queries readable.", syntax:"WITH customer_sales AS (\n  SELECT customer_id, SUM(sales) AS total_sales\n  FROM orders\n  GROUP BY customer_id\n)\nSELECT * FROM customer_sales WHERE total_sales > 100000;", use:"Breaking multi-step logic into readable, debuggable chunks instead of nested subqueries."},
+  {part:"SQL", cat:"Window Functions", name:"ROW_NUMBER()", def:"Assigns a unique sequential number to each row within a partition.", syntax:"ROW_NUMBER() OVER (PARTITION BY region ORDER BY sales DESC) AS rn", use:"Picking the 'Top 1 per group' or deduplicating records."},
+  {part:"SQL", cat:"Window Functions", name:"RANK() / DENSE_RANK()", def:"Ranks rows within a partition. RANK skips ranks after ties; DENSE_RANK assigns consecutive numbers.", syntax:"RANK() OVER (ORDER BY sales DESC)\nDENSE_RANK() OVER (ORDER BY sales DESC)", use:"Leaderboards and 'Top N products per category' analysis."},
+  {part:"SQL", cat:"Window Functions", name:"LAG() / LEAD()", def:"Accesses a previous (LAG) or next (LEAD) row's value without a self-join.", syntax:"LAG(sales, 1) OVER (ORDER BY month)", use:"Month-over-month comparisons, delta tracking, previous period benchmarking."},
+  {part:"SQL", cat:"Window Functions", name:"SUM() / AVG() OVER()", def:"Aggregate calculated across a window of rows without collapsing them.", syntax:"SUM(sales) OVER (PARTITION BY region ORDER BY month) AS running_total", use:"Running totals and moving averages while preserving row-level detail."},
+  {part:"SQL", cat:"Data Cleaning", name:"UPPER / LOWER / LENGTH / CONCAT", def:"String functions to standardize, inspect, or merge text values.", syntax:"SELECT CONCAT(first_name, ' ', last_name) FROM customers;", use:"Fixing inconsistent casing ('North' vs 'north') or merging split name fields."},
+  {part:"SQL", cat:"Data Cleaning", name:"CAST / COALESCE / IFNULL", def:"CAST converts types; COALESCE/IFNULL substitute NULLs with a fallback value.", syntax:"CAST(sales AS DECIMAL(10,2))\nCOALESCE(discount, 0)", use:"Cleaning text-stored numbers or replacing missing values before aggregations."},
 
-  <nav>
-    <div class="nav-track">
-      <button class="tab-btn active" onclick="openTool('sql')">🗄️ MySQL</button>
-      <button class="tab-btn" onclick="openTool('python')">🐍 Python & Pandas</button>
-      <button class="tab-btn" onclick="openTool('excel')">📊 Excel Advanced</button>
-      <button class="tab-btn" onclick="openTool('dax')">⚡ Power BI DAX</button>
-      <button class="tab-btn" onclick="openTool('tableau')">📈 Tableau LOD</button>
-    </div>
-  </nav>
+  {part:"Python", cat:"Fundamentals", name:"Data Types (int, float, str, bool)", def:"Core value categories — whole numbers, decimals, strings, and True/False flags.", syntax:"age = 25\nprice = 99.50\nname = 'Tanu'\nis_active = True", use:"Underlying baseline for all variables, calculations, and conditional evaluations."},
+  {part:"Python", cat:"Fundamentals", name:"List", def:"An ordered, mutable collection of items.", syntax:"sales = [100, 200, 300]", use:"Storing a sequence of elements you plan to iterate over, filter, or append to."},
+  {part:"Python", cat:"Fundamentals", name:"Dictionary", def:"A collection of key-value pairs.", syntax:"customer = {'name': 'Alice', 'sales': 5000}", use:"Representing single records with labeled properties, configs, and lookup mappings."},
+  {part:"Python", cat:"Fundamentals", name:"Tuple", def:"An ordered, immutable collection.", syntax:"coordinates = (12.9716, 77.5946)", use:"Fixed coordinate pairs, unchangeable constants, and safe dictionary keys."},
+  {part:"Python", cat:"Fundamentals", name:"if / elif / else", def:"Conditional branching — runs code only when specified boolean checks pass.", syntax:"if sale > 1000:\n    tier = 'High'\nelif sale > 500:\n    tier = 'Mid'\nelse:\n    tier = 'Low'", use:"Classification logic, validation gates, and rule-based pipelines."},
+  {part:"Python", cat:"Fundamentals", name:"for / while Loops", def:"Iteration constructs: 'for' iterates over known collections; 'while' iterates until a condition fails.", syntax:"for s in sales:\n    total += s\n\nwhile count < 10:\n    count += 1", use:"Iterating through files, API pagination batches, and sequence transformations."},
+  {part:"Python", cat:"Fundamentals", name:"def (Functions)", def:"A reusable, named block of logic accepting arguments and returning results.", syntax:"def calculate_profit(sales, cost):\n    return sales - cost", use:"Eliminating copy-pasted code and modularizing data transformation steps."},
+  {part:"Python", cat:"Fundamentals", name:"lambda", def:"An anonymous, one-line concise function.", syntax:"double = lambda x: x * 2", use:"Inline throwaway transformations, commonly inside Pandas .apply()."},
+  {part:"Python", cat:"Fundamentals", name:"List Comprehension", def:"A compact syntax to generate a transformed list from an iterable.", syntax:"doubled = [x * 2 for x in numbers if x > 0]", use:"Concise in-memory feature engineering and string cleaning."},
 
-  <main>
-    <!-- ================= MYSQL PANE ================= -->
-    <div id="sql" class="tool-pane active">
-      <div class="module-header">
-        <span class="badge" style="background: rgba(56, 189, 248, 0.15); color: var(--accent-blue);">Relational Database Core</span>
-        <h2>MySQL Syntax & Mechanics</h2>
-        <p>Mastering filtering, multi-table combining, and analytical window functions.</p>
-      </div>
+  {part:"NumPy", cat:"Arrays & Math", name:"NumPy Array", def:"A homogeneous, fixed-type n-dimensional grid for high-speed computation.", syntax:"import numpy as np\nsales = np.array([100, 200, 300])", use:"High-performance numerical computing forming the core substrate of Pandas."},
+  {part:"NumPy", cat:"Arrays & Math", name:"Vectorized Operations", def:"Applying math across whole arrays in C-speed without manual Python loops.", syntax:"adjusted_sales = sales * 1.18", use:"Bulk numeric computations across hundreds of thousands of entries instantly."},
+  {part:"NumPy", cat:"Arrays & Math", name:"Indexing & Slicing", def:"Selecting individual array items or slices via positional coordinates.", syntax:"sales[0]     # first\nsales[1:3]   # items 1 and 2", use:"Extracting numeric windows, partitions, or coordinate matrices."},
 
-      <!-- Item 1: GROUP BY + HAVING -->
-      <div class="concept-card">
-        <h3>1. GROUP BY with HAVING</h3>
-        <div class="block-grid">
-          <div class="info-box">
-            <span class="label">Definition</span>
-            <p><code>GROUP BY</code> aggregates rows with identical values into summary rows. <code>HAVING</code> filters those aggregated groups based on a summary condition.</p>
-          </div>
-          <div class="info-box">
-            <span class="label">Plain-English Meaning</span>
-            <p>"Group transactions into buckets (like cities), calculate summary totals for each bucket, then show only the buckets that beat our target."</p>
-          </div>
-        </div>
+  {part:"Pandas", cat:"Data Wrangling", name:"pd.read_csv / pd.read_excel", def:"Loads flat files or spreadsheets into an in-memory DataFrame.", syntax:"df = pd.read_csv('sales.csv')", use:"Starting point for nearly every Python data analysis workflow."},
+  {part:"Pandas", cat:"Data Wrangling", name:"df.head() / df.tail()", def:"Returns the first or last N rows (default 5) for quick inspection.", syntax:"df.head(10)", use:"Sanity-checking structure, headers, and values right after ingestion."},
+  {part:"Pandas", cat:"Data Wrangling", name:"df.shape & df.info()", def:".shape gives (rows, cols); .info() prints memory, column types, and non-null counts.", syntax:"print(df.shape)\ndf.info()", use:"Diagnosing missing data and incorrect inferred types immediately."},
+  {part:"Pandas", cat:"Data Wrangling", name:"df.describe()", def:"Generates summary statistics (mean, std, min, quartiles, max) for numeric columns.", syntax:"df.describe()", use:"Detecting skewness, variance, and impossible outlier values."},
+  {part:"Pandas", cat:"Data Cleaning", name:"df.dropna() / df.fillna()", def:"dropna drops records containing nulls; fillna substitutes nulls with a fixed value or statistic.", syntax:"df.dropna()\ndf.fillna({'sales': 0, 'region': 'Unknown'})", use:"Handling incomplete entries cleanly before grouping or training models."},
+  {part:"Pandas", cat:"Data Cleaning", name:"df.drop_duplicates()", def:"Identifies and discards identical duplicate rows.", syntax:"df.drop_duplicates(subset=['order_id'])", use:"Preventing double-counting in transactions and customer tables."},
+  {part:"Pandas", cat:"Data Cleaning", name:".astype()", def:"Casts a Series to a specified data type.", syntax:"df['sales'] = df['sales'].astype(float)", use:"Fixing numeric columns parsed as strings or converting dates/categories."},
+  {part:"Pandas", cat:"Data Cleaning", name:".str Vectorized Methods", def:"String methods applied element-wise across text columns.", syntax:"df['city'] = df['city'].str.strip().str.title()", use:"Cleaning whitespace, inconsistent casings, and extracting sub-patterns."},
+  {part:"Pandas", cat:"Transformations", name:"Boolean Filtering", def:"Selecting subsets of rows using condition masks with & (AND), | (OR), and ~ (NOT).", syntax:"df[(df['sales'] > 1000) & (df['region'] == 'South')]", use:"The Pandas equivalent of SQL's WHERE clause."},
+  {part:"Pandas", cat:"Transformations", name:".groupby()", def:"Splits rows into groups and applies summary aggregations.", syntax:"df.groupby('region')['sales'].sum()\n# multi-agg:\ndf.groupby('region').agg({'sales': 'sum', 'customer_id': 'nunique'})", use:"Equivalent to SQL GROUP BY for aggregations and cohort KPIs."},
+  {part:"Pandas", cat:"Transformations", name:".sort_values()", def:"Sorts the DataFrame rows based on designated columns.", syntax:"df.sort_values(by='sales', ascending=False)", use:"Leaderboards, chronological ordering, and Top-N extractions."},
+  {part:"Pandas", cat:"Transformations", name:".merge()", def:"Relational join of two DataFrames using common keys.", syntax:"pd.merge(customers, orders, on='customer_id', how='left')", use:"Combining complementary entities (customers + orders, items + catalog)."},
+  {part:"Pandas", cat:"Transformations", name:"pd.concat()", def:"Stacks DataFrames vertically or horizontally along an axis.", syntax:"pd.concat([df_2024, df_2025], ignore_index=True)", use:"Stacking identical schemas from partitioned monthly/annual exports."},
 
-        <div class="info-box" style="margin-bottom: 12px;">
-          <span class="label">Exact Syntax</span>
-          <pre><code>SELECT column_name, AGG_FUNCTION(metric)
-FROM table_name
-WHERE individual_row_filter
-GROUP BY column_name
-HAVING AGG_FUNCTION(metric) > condition;</code></pre>
-        </div>
+  {part:"Visualization", cat:"Python Viz", name:"Matplotlib", def:"Foundational plotting library providing granular canvas and element control.", syntax:"import matplotlib.pyplot as plt\nplt.plot(df['month'], df['sales'])\nplt.title('Monthly Sales')\nplt.show()", use:"Custom scientific plots, static figures, and custom canvas formatting."},
+  {part:"Visualization", cat:"Python Viz", name:"Seaborn", def:"High-level statistical visualization library built on top of Matplotlib.", syntax:"import seaborn as sns\nsns.boxplot(data=df, x='region', y='sales')\nsns.heatmap(df.corr(), annot=True)", use:"Exploratory data analysis, distributions, correlation matrices, and variance checks."},
+  {part:"Visualization", cat:"Python Viz", name:"Plotly", def:"Interactive graphing library generating dynamic HTML/web charts.", syntax:"import plotly.express as px\nfig = px.line(df, x='month', y='sales', color='region')\nfig.show()", use:"Executive presentations and dashboards needing zoom, pan, and hover tooltips."},
 
-        <div class="interactive-header">
-          <span>Interactive Execution Sandbox</span>
-          <button class="run-btn" onclick="runSqlGroup()">Execute Query</button>
-        </div>
-        <div class="interactive-terminal" id="sqlGroupOutput">
-          Click "Execute Query" to run against live sample data...
-        </div>
-      </div>
+  {part:"Excel", cat:"Formulas", name:"SUM / AVERAGE / COUNT / MIN / MAX", def:"Core cell-range aggregation formulas.", syntax:"=SUM(B2:B100)\n=AVERAGE(C2:C50)", use:"Quick baseline totals, benchmarks, and summaries across tabular ranges."},
+  {part:"Excel", cat:"Formulas", name:"IF()", def:"Evaluates a logical test and returns distinct values for TRUE vs FALSE.", syntax:"=IF(B2>1000, 'High', 'Low')", use:"In-cell segmentation and flag generation."},
+  {part:"Excel", cat:"Formulas", name:"SUMIFS / COUNTIFS / AVERAGEIFS", def:"Aggregates cells that satisfy multiple conditional tests.", syntax:"=SUMIFS(Sales, Region, 'South', Product, 'Laptop')", use:"Multi-condition summary metrics without requiring a Pivot Table."},
+  {part:"Excel", cat:"Lookups", name:"XLOOKUP", def:"Modern lookup function searching a range and returning corresponding values from another.", syntax:"=XLOOKUP(A2, Customer_ID_range, Customer_Name_range)", use:"Pulling attributes across sheets safely (immune to column insertions, replaces VLOOKUP)."},
+  {part:"Excel", cat:"Lookups", name:"VLOOKUP / INDEX+MATCH", def:"Traditional lookup functions; VLOOKUP is left-to-right, INDEX+MATCH is flexible across directions.", syntax:"=VLOOKUP(A2, Table, 2, FALSE)\n=INDEX(Name_range, MATCH(A2, ID_range, 0))", use:"Maintaining backwards compatibility with legacy models and templates."},
+  {part:"Excel", cat:"Text Functions", name:"CONCAT / LEFT / RIGHT / MID / TRIM / &", def:"Formulas for splicing, trimming, and joining strings.", syntax:"=A2 & ' ' & B2\n=TRIM(A2)\n=LEFT(A2, 3)", use:"Sanitizing dirty text exports, creating composite keys, and cleaning spaces."},
+  {part:"Excel", cat:"Analysis & Modeling", name:"Pivot Tables", def:"Interactive drag-and-drop tool to slice, dice, and aggregate datasets.", syntax:"Insert > PivotTable. Place fields in Rows, Columns, and Values.", use:"Answering 'Metric by Dimension' questions in seconds without formulas."},
+  {part:"Excel", cat:"Analysis & Modeling", name:"Slicers", def:"Visual clickable buttons that filter Pivot Tables and Excel Tables.", syntax:"PivotTable Analyze > Insert Slicer", use:"Building accessible, interactive executive summary dashboards in Excel."},
+  {part:"Excel", cat:"Analysis & Modeling", name:"Ctrl + T (Excel Tables)", def:"Converts a raw range into a structured table with auto-expanding ranges and named references.", syntax:"Select cells > Press Ctrl + T", use:"Ensuring formulas and pivot sources automatically encompass new rows."},
 
-      <!-- Item 2: DENSE_RANK() -->
-      <div class="concept-card">
-        <h3>2. DENSE_RANK() Window Function</h3>
-        <div class="block-grid">
-          <div class="info-box">
-            <span class="label">Definition</span>
-            <p>Assigns a rank to each row within a partition ordered by a specific expression, without skipping any numbers when duplicate tie values occur.</p>
-          </div>
-          <div class="info-box">
-            <span class="label">Plain-English Meaning</span>
-            <p>"Rank items within separate groups from #1 to last place without gaps (1, 2, 2, 3 instead of 1, 2, 2, 4)."</p>
-          </div>
-        </div>
+  {part:"Power BI", cat:"Modeling & DAX", name:"Power Query (ETL)", def:"Visual data transformation engine to import, cleanse, and shape data before modeling.", syntax:"Home > Transform Data (M Language engine)", use:"Type casting, column removals, unpivoting, and joining source files upstream."},
+  {part:"Power BI", cat:"Modeling & DAX", name:"Star Schema (Fact & Dimensions)", def:"Architectural design separating quantitative transactions (Facts) from lookup attributes (Dimensions).", syntax:"Model View > Establish 1-to-many relationships (Dim [1] -> Fact [*])", use:"Optimal Power BI performance, fast DAX calculations, and clean visual filtering."},
+  {part:"Power BI", cat:"Modeling & DAX", name:"DAX Measure", def:"Dynamic formula evaluated on the fly based on report slicer/filter context.", syntax:"Total Sales = SUM(Sales[Sales])\nProfit Margin = DIVIDE([Total Profit], [Total Sales])", use:"Core report KPIs that must respond accurately across any visual breakdown."},
+  {part:"Power BI", cat:"Modeling & DAX", name:"CALCULATE()", def:"Evaluates an expression in an altered or overridden filter context. DAX's most essential function.", syntax:"Sales South = CALCULATE([Total Sales], Region[Region] = 'South')", use:"Forcing specific filters, creating benchmarks, and calculating shares of total."},
+  {part:"Power BI", cat:"Modeling & DAX", name:"FILTER()", def:"Iterator function returning a filtered table for complex condition logic.", syntax:"CALCULATE([Total Sales], FILTER(Orders, Orders[Profit] > 0))", use:"Row-by-row filtering conditions beyond the capabilities of simple boolean filters."},
+  {part:"Power BI", cat:"Modeling & DAX", name:"SUMX() & Iterator Functions", def:"Iterates through each table row, evaluates an expression, and sums the results.", syntax:"Total Revenue = SUMX(Orders, Orders[Quantity] * Orders[UnitPrice])", use:"Computing row-level calculations dynamically without adding memory-heavy calculated columns."},
+  {part:"Power BI", cat:"Modeling & DAX", name:"Time Intelligence (YTD, YoY)", def:"Specialized DAX functions for temporal comparisons across continuous date dimensions.", syntax:"Sales YTD = TOTALYTD([Total Sales], 'Date'[Date])\nSales PY = CALCULATE([Total Sales], SAMEPERIODLASTYEAR('Date'[Date]))", use:"Tracking year-to-date pace, previous-period comparisons, and growth rates."}
+];
 
-        <div class="info-box" style="margin-bottom: 12px;">
-          <span class="label">Exact Syntax</span>
-          <pre><code>DENSE_RANK() OVER (
-    PARTITION BY partition_column 
-    ORDER BY metric_column DESC
-) AS rank_alias</code></pre>
-        </div>
+const FLASHCARDS = {
+  sql: {
+    label: "🗄️ SQL",
+    cards: [
+      {t:"SELECT / WHERE", d:"Pick columns & filter rows.\nSELECT name, sales FROM orders WHERE sales > 10000;\nUse: Any 'give me X where Y' question."},
+      {t:"GROUP BY + HAVING", d:"Aggregate per group, then filter groups.\nSELECT region, SUM(sales) FROM orders GROUP BY region HAVING SUM(sales) > 1e5;\nUse: 'total by category', keeping only qualifying groups."},
+      {t:"JOINs", d:"INNER = only matches. LEFT = keep all from left table.\nFROM orders o LEFT JOIN customers c ON o.cid=c.cid;\nUse: Combine related tables while preventing silent record drops."},
+      {t:"CASE WHEN", d:"If/else conditional classification inside SQL.\nCASE WHEN profit < 0 THEN 'Loss' ELSE 'Profit' END\nUse: Bucketing numbers into readable analytical categories."},
+      {t:"Window Functions", d:"ROW_NUMBER(), RANK(), LAG() OVER(PARTITION BY... ORDER BY...)\nUse: Rank items inside groups, running totals, and period-over-period deltas without row collapse."},
+      {t:"CTE (WITH)", d:"WITH x AS (SELECT ...) SELECT * FROM x;\nUse: Break complex queries into readable, sequential building blocks."}
+    ]
+  },
+  python: {
+    label: "🐍 Python / Pandas",
+    cards: [
+      {t:"List / Dict / Tuple", d:"List=[1,2] (mutable)\nDict={'a':1} (key-value)\nTuple=(1,2) (immutable)\nUse: Dict for individual records, List for homogeneous sequences."},
+      {t:"df.groupby()", d:"df.groupby('region')['sales'].sum()\nPandas equivalent of SQL GROUP BY. Use for dimensional breakdowns."},
+      {t:".merge()", d:"pd.merge(a, b, on='id', how='left')\nPandas JOIN. Supports 'inner', 'left', 'right', and 'outer'."},
+      {t:"Boolean Masking", d:"df[(df.sales > 1000) & (df.region == 'South')]\nUse & (AND) and | (OR) — never the words 'and'/'or'."},
+      {t:"dropna / fillna", d:"df.dropna() removes rows with nulls.\ndf.fillna(0) substitutes missing values.\nUse: Clean missing data prior to calculations."},
+      {t:"List Comprehension", d:"[x * 2 for x in nums if x > 0]\nCompact, readable single-line transformation for lists."}
+    ]
+  },
+  excel: {
+    label: "📗 Excel",
+    cards: [
+      {t:"XLOOKUP", d:"=XLOOKUP(id, id_range, name_range)\nRetrieves matching records without column index dependencies. The modern replacement for VLOOKUP."},
+      {t:"SUMIFS / COUNTIFS", d:"=SUMIFS(Sales, Region, 'South', Product, 'Laptop')\nAggregate values across multiple criteria simultaneously."},
+      {t:"Pivot Tables", d:"Insert > PivotTable. Drag fields to Rows/Columns/Values.\nUse: Rapid, zero-formula dimensional cross-tabulations."},
+      {t:"IF() Logic", d:"=IF(B2>1000, 'High', 'Low')\nSingle-cell conditional categorization."},
+      {t:"Ctrl + T (Tables)", d:"Converts range into a structured table.\nUse: Guarantees downstream formulas and Pivot Tables expand with new rows."}
+    ]
+  },
+  powerbi: {
+    label: "📈 Power BI / DAX",
+    cards: [
+      {t:"DAX Measure", d:"Total Sales = SUM(Sales[Sales])\nDynamically calculated under current filter context. Reusable across all report visuals."},
+      {t:"CALCULATE()", d:"CALCULATE([Total Sales], Region[Region]='South')\nModifies/overrides filter context. DAX's core engine."},
+      {t:"Star Schema", d:"Central Fact table connected to surrounding Dimension lookup tables.\nUse: Essential for model performance, clean filters, and calculation speed."},
+      {t:"Time Intelligence", d:"TOTALYTD([Total Sales], 'Date'[Date])\nSAMEPERIODLASTYEAR(...)\nUse: Track YTD and YoY performance against a dedicated Date table."}
+    ]
+  }
+};
 
-        <div class="interactive-header">
-          <span>Interactive Execution Sandbox</span>
-          <button class="run-btn" onclick="runSqlRank()">Execute Query</button>
-        </div>
-        <div class="interactive-terminal" id="sqlRankOutput">
-          Click "Execute Query" to run against live sample data...
-        </div>
-      </div>
-    </div>
+const ANALYZE_STEPS = [
+  ["1. Understand the Business Problem", "Before opening any tool — clarify what the business wants to improve, what decision hinges on this analysis, and what the financial cost of inaction is."],
+  ["2. Frame the Precise Question", "Transform vague requests ('profit is down') into quantifiable, testable hypotheses ('why did net margin drop 320 bps in Q3 despite top-line revenue rising 8%?')."],
+  ["3. Run the 5W1H Diagnostic", "Identify What, Why, Who, When, Where, and How Much before writing queries. Ground the bounds of the investigation early."],
+  ["4. Establish Baselines & Benchmarks", "Revenue → Margin → Volumes → Customer Churn. Always compare current performance to prior year (YoY), prior period (MoM), and internal targets."],
+  ["5. Spot Anomalies & Outliers", "Look for sudden step-changes, spikes, distribution bi-modality, or divergence between related metrics (e.g. volume rising while gross revenue falls)."],
+  ["6. Segment Rather Than Averaging", "Simpson's Paradox and aggregated averages hide truth. Break performance down across geography, customer tier, product SKU, and sales channel."],
+  ["7. Execute the '5 Whys' Chain", "Margin dropped → Why? Higher discount depth → Why? Clearance in Category B → Why? Inventory overstock from delayed supply. Stop only when reaching an actionable lever."],
+  ["8. Distinguish Symptom from Root Cause", "Symptom: Net revenue slipped in Q2. Direct cause: Customer order frequency dipped. Root cause: Delivery delays from a newly onboarded carrier in the southern hub."],
+  ["9. Quantify the Business Impact", "Never say 'discounts hurt profit.' State: 'Uncapped promotional discounts on SKU family X reduced gross margin by ₹42L across 1,800 transactions.'"],
+  ["10. Formulate Actionable Recommendations", "Never recommend 'improve sales.' Provide a concrete initiative: 'Cap regional promotional discounts at 15% on products with gross margin under 25%, assign ownership to Regional Ops, and track margin weekly.'"]
+];
 
-    <!-- ================= PYTHON PANE ================= -->
-    <div id="python" class="tool-pane">
-      <div class="module-header">
-        <span class="badge" style="background: rgba(251, 191, 36, 0.15); color: var(--accent-yellow);">Data Wrangling Engine</span>
-        <h2>Python & Pandas Analytics</h2>
-        <p>Manipulate tabular data, impute missing values, and combine tables in memory.</p>
-      </div>
+const QUIZ = [
+  ["What is the fundamental difference between WHERE and HAVING?", "WHERE filters raw individual records BEFORE any aggregation takes place. HAVING filters aggregated bucket groups AFTER the GROUP BY clause runs."],
+  ["Why use a LEFT JOIN instead of an INNER JOIN?", "A LEFT JOIN preserves every single record from the left table even if no match exists on the right (yielding NULLs). It prevents silent data loss when related metadata might be missing."],
+  ["What does df.groupby('region')['sales'].sum() execute in Pandas?", "It splits the DataFrame into distinct subsets based on unique 'region' values, isolates the 'sales' series in each group, computes the sum, and returns a grouped Series."],
+  ["Why does correlation not imply causation?", "Two metrics can move together because both respond to a third latent variable (confounder) or random co-occurrence. Rigorous root-cause isolation or A/B testing is required to verify causality."],
+  ["An interviewer asks: 'Profit dropped 12% last quarter — walk me through your diagnostic approach.'", "State: 1) Clarify metric definition and data integrity; 2) Establish baseline vs prior periods; 3) Segment by geography, product line, and customer cohort; 4) Pinpoint where the drop concentrates; 5) Trace the 'Why' chain to the underlying operational cause; 6) Quantify the dollar impact; 7) Deliver a concrete, owner-assigned recommendation."],
+  ["What is a Common Table Expression (CTE) and why prefer it over deeply nested subqueries?", "A CTE (WITH query_name AS (...)) builds a temporary, named result set. It makes complex queries modular, sequential, and far easier to debug and optimize compared to nested subqueries."],
+  ["In DAX, what does CALCULATE() actually do under the hood?", "It modifies or replaces the current filter context under which an expression is evaluated, enabling targeted segment computations regardless of ambient report slicers."],
+  ["Why must an analyst segment data before trusting an aggregated average?", "A high-level average can mask severe negative trends within specific cohorts, or be distorted by small groups of massive outliers (e.g., an average transaction size looking healthy while 70% of accounts are declining)."]
+];
 
-      <!-- Item 1: df.groupby().agg() -->
-      <div class="concept-card">
-        <h3>1. df.groupby().agg()</h3>
-        <div class="block-grid">
-          <div class="info-box">
-            <span class="label">Definition</span>
-            <p>Splits a DataFrame into groups based on specified keys, executes distinct summary functions across different columns, and returns a grouped summary.</p>
-          </div>
-          <div class="info-box">
-            <span class="label">Plain-English Meaning</span>
-            <p>"Take a giant spreadsheet, group it by region, run different math formulas on different columns at the same time, and give me the clean summary."</p>
-          </div>
-        </div>
+let activeTab = "guide";
+let guideSearchTerm = "";
+let guideCategoryFilter = "ALL";
 
-        <div class="info-box" style="margin-bottom: 12px;">
-          <span class="label">Exact Syntax</span>
-          <pre><code>df.groupby('dimension_col').agg({
-    'numeric_col1': 'sum',
-    'numeric_col2': 'mean',
-    'id_col': 'nunique'
-}).reset_index()</code></pre>
-        </div>
+const tabs = [
+  ["guide", "📖 Complete Guide"],
+  ...Object.keys(FLASHCARDS).map(k => [k, FLASHCARDS[k].label]),
+  ["analyze", "🧠 How to Analyze"],
+  ["quiz", "🎯 Interview Prep"]
+];
 
-        <div class="interactive-header">
-          <span>Interactive Execution Sandbox</span>
-          <button class="run-btn" onclick="runPyAgg()">Run Script</button>
-        </div>
-        <div class="interactive-terminal" id="pyAggOutput">
-          Click "Run Script" to execute Pandas operation...
-        </div>
-      </div>
+function renderNav(){
+  const nav = document.getElementById('nav');
+  nav.innerHTML = tabs.map(([k, l]) =>
+    `<button data-tab="${k}" class="${k === activeTab ? 'active' : ''}">${l}</button>`
+  ).join('');
 
-      <!-- Item 2: df.fillna() -->
-      <div class="concept-card">
-        <h3>2. df.fillna()</h3>
-        <div class="block-grid">
-          <div class="info-box">
-            <span class="label">Definition</span>
-            <p>Imputes or replaces missing values (`NaN`/`None`) in a DataFrame using a specified scalar value, replacement dictionary, or computed statistic.</p>
-          </div>
-          <div class="info-box">
-            <span class="label">Plain-English Meaning</span>
-            <p>"Fill blank cells with a sensible number (like the median or zero) so downstream formulas and calculations don't break."</p>
-          </div>
-        </div>
+  nav.querySelectorAll('button').forEach(b => {
+    b.onclick = () => {
+      activeTab = b.dataset.tab;
+      renderNav();
+      renderMain();
+    };
+  });
+}
 
-        <div class="info-box" style="margin-bottom: 12px;">
-          <span class="label">Exact Syntax</span>
-          <pre><code>df['column_name'] = df['column_name'].fillna(df['column_name'].median())</code></pre>
-        </div>
+function copyCode(btn, text){
+  navigator.clipboard.writeText(text).then(() => {
+    const orig = btn.innerText;
+    btn.innerText = 'Copied!';
+    setTimeout(() => { btn.innerText = orig; }, 1400);
+  });
+}
 
-        <div class="interactive-header">
-          <span>Interactive Execution Sandbox</span>
-          <button class="run-btn" onclick="runPyClean()">Run Script</button>
-        </div>
-        <div class="interactive-terminal" id="pyCleanOutput">
-          Click "Run Script" to execute Pandas operation...
-        </div>
-      </div>
-    </div>
+function renderGuide(){
+  const parts = ["ALL", "SQL", "Python", "NumPy", "Pandas", "Visualization", "Excel", "Power BI"];
+  
+  const filtered = GUIDE_DATA.filter(item => {
+    const matchesPart = guideCategoryFilter === "ALL" || item.part.toLowerCase() === guideCategoryFilter.toLowerCase();
+    const q = guideSearchTerm.toLowerCase();
+    const matchesQuery = !q ||
+      item.name.toLowerCase().includes(q) ||
+      item.def.toLowerCase().includes(q) ||
+      item.use.toLowerCase().includes(q) ||
+      item.syntax.toLowerCase().includes(q) ||
+      item.cat.toLowerCase().includes(q);
+    return matchesPart && matchesQuery;
+  });
 
-    <!-- ================= EXCEL PANE ================= -->
-    <div id="excel" class="tool-pane">
-      <div class="module-header">
-        <span class="badge" style="background: rgba(52, 211, 153, 0.15); color: var(--accent-green);">The Quick Business Grid</span>
-        <h2>Excel Advanced Formulas</h2>
-        <p>Modern column matching, multi-criteria arithmetic, and cross-tabulation.</p>
-      </div>
-
-      <!-- Item 1: =XLOOKUP() -->
-      <div class="concept-card">
-        <h3>1. =XLOOKUP()</h3>
-        <div class="block-grid">
-          <div class="info-box">
-            <span class="label">Definition</span>
-            <p>Searches a range or an array for a match and returns the corresponding item from a second range or array. Defaults safely to exact match.</p>
-          </div>
-          <div class="info-box">
-            <span class="label">Plain-English Meaning</span>
-            <p>"Find this specific ID in Column A, and pull the corresponding value from Column B—regardless of whether Column B is to the left or right."</p>
-          </div>
-        </div>
-
-        <div class="info-box" style="margin-bottom: 12px;">
-          <span class="label">Exact Syntax</span>
-          <pre><code>=XLOOKUP(lookup_value, lookup_array, return_array, [if_not_found], [match_mode])</code></pre>
-        </div>
-
-        <div class="interactive-header">
-          <span>Interactive Execution Sandbox</span>
-          <button class="run-btn" onclick="runExcelLookup()">Recalculate Sheet</button>
-        </div>
-        <div class="interactive-terminal" id="excelLookupOutput">
-          Click "Recalculate Sheet" to run formula...
-        </div>
-      </div>
-
-      <!-- Item 2: =SUMIFS() -->
-      <div class="concept-card">
-        <h3>2. =SUMIFS()</h3>
-        <div class="block-grid">
-          <div class="info-box">
-            <span class="label">Definition</span>
-            <p>A math function that sums all arguments that meet multiple criteria across distinct ranges simultaneously.</p>
-          </div>
-          <div class="info-box">
-            <span class="label">Plain-English Meaning</span>
-            <p>"Add up numbers in a column, but only for rows matching multiple conditions at the same time."</p>
-          </div>
-        </div>
-
-        <div class="info-box" style="margin-bottom: 12px;">
-          <span class="label">Exact Syntax</span>
-          <pre><code>=SUMIFS(sum_range, criteria_range1, criteria1, criteria_range2, criteria2)</code></pre>
-        </div>
-
-        <div class="interactive-header">
-          <span>Interactive Execution Sandbox</span>
-          <button class="run-btn" onclick="runExcelSumifs()">Recalculate Sheet</button>
-        </div>
-        <div class="interactive-terminal" id="excelSumOutput">
-          Click "Recalculate Sheet" to run formula...
-        </div>
+  return `
+    <h2>📖 Complete Analyst Reference Guide</h2>
+    <p class="subhead">Definitions, syntax, and exact use cases across SQL, Python, Pandas, Excel, and Power BI/DAX.</p>
+    
+    <div class="guide-controls">
+      <input type="text" class="guide-search" id="guideSearch" placeholder="Search functions, syntax, or keywords (e.g., HAVING, XLOOKUP, .merge)..." value="${escapeHtml(guideSearchTerm)}">
+      <div class="guide-filter-pills">
+        ${parts.map(p => `
+          <button class="guide-pill ${guideCategoryFilter === p ? 'active' : ''}" data-part="${p}">${p}</button>
+        `).join('')}
       </div>
     </div>
 
-    <!-- ================= DAX PANE ================= -->
-    <div id="dax" class="tool-pane">
-      <div class="module-header">
-        <span class="badge" style="background: rgba(244, 114, 182, 0.15); color: var(--accent-pink);">Semantic Modeling Calculations</span>
-        <h2>Power BI DAX Expressions</h2>
-        <p>Manipulating filter contexts, overriding slicers, and safe percentage division.</p>
-      </div>
-
-      <!-- Item 1: CALCULATE() -->
-      <div class="concept-card">
-        <h3>1. CALCULATE()</h3>
-        <div class="block-grid">
-          <div class="info-box">
-            <span class="label">Definition</span>
-            <p>Evaluates an expression in an altered or overridden filter context. It is the only DAX function capable of mutating filter contexts.</p>
-          </div>
-          <div class="info-box">
-            <span class="label">Plain-English Meaning</span>
-            <p>"Calculate this metric, but force these specific filters onto the data regardless of what slicers the user clicked on the dashboard."</p>
-          </div>
+    <div class="guide-results">
+      ${filtered.length === 0 ? `<p style="opacity:.7;padding:20px 0;">No matching entries found for "${escapeHtml(guideSearchTerm)}".</p>` : ''}
+      ${filtered.map((item, idx) => `
+        <div class="guide-entry">
+          <h3>
+            <span>${escapeHtml(item.name)}</span>
+            <span class="category-badge">${escapeHtml(item.part)} ·${escapeHtml(item.cat)}</span>
+          </h3>
+          <div class="section-row"><strong>What it is:</strong> ${escapeHtml(item.def)}</div>
+          <div class="section-row"><strong>Syntax / Pattern:</strong></div>
+          <pre><code>${escapeHtml(item.syntax)}</code><button class="copy-btn" onclick="copyCode(this, \`${escapeJsString(item.syntax)}\`)">Copy</button></pre>
+          <div class="section-row"><strong>When & Where to use:</strong> ${escapeHtml(item.use)}</div>
         </div>
-
-        <div class="info-box" style="margin-bottom: 12px;">
-          <span class="label">Exact Syntax</span>
-          <pre><code>MeasureName = CALCULATE(<expression>, <filter1>, <filter2>, ...)</code></pre>
-        </div>
-
-        <div class="interactive-header">
-          <span>Interactive Execution Sandbox</span>
-          <button class="run-btn" onclick="runDaxCalc()">Evaluate Context</button>
-        </div>
-        <div class="interactive-terminal" id="daxCalcOutput">
-          Click "Evaluate Context" to simulate DAX engine...
-        </div>
-      </div>
-
-      <!-- Item 2: DIVIDE() -->
-      <div class="concept-card">
-        <h3>2. DIVIDE()</h3>
-        <div class="block-grid">
-          <div class="info-box">
-            <span class="label">Definition</span>
-            <p>Performs division with built-in alternate result handling for division by zero, preventing visual report crashes.</p>
-          </div>
-          <div class="info-box">
-            <span class="label">Plain-English Meaning</span>
-            <p>"Safely divide two numbers without generating ugly #DIV/0! errors when the denominator is zero or blank."</p>
-          </div>
-        </div>
-
-        <div class="info-box" style="margin-bottom: 12px;">
-          <span class="label">Exact Syntax</span>
-          <pre><code>DIVIDE(<numerator>, <denominator>, [<alternate_result>])</code></pre>
-        </div>
-
-        <div class="interactive-header">
-          <span>Interactive Execution Sandbox</span>
-          <button class="run-btn" onclick="runDaxDivide()">Evaluate Context</button>
-        </div>
-        <div class="interactive-terminal" id="daxDivideOutput">
-          Click "Evaluate Context" to simulate DAX engine...
-        </div>
-      </div>
+      `).join('')}
     </div>
+  `;
+}
 
-    <!-- ================= TABLEAU PANE ================= -->
-    <div id="tableau" class="tool-pane">
-      <div class="module-header">
-        <span class="badge" style="background: rgba(56, 189, 248, 0.15); color: var(--accent-blue);">Visual Calculations</span>
-        <h2>Tableau Level of Detail (LOD)</h2>
-        <p>Computing metrics at different levels of granularity from the visualization layout.</p>
-      </div>
+function escapeHtml(str){
+  if(!str) return '';
+  return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
 
-      <div class="concept-card">
-        <h3>1. { FIXED } LOD Expression</h3>
-        <div class="block-grid">
-          <div class="info-box">
-            <span class="label">Definition</span>
-            <p>Computes a value using the specified dimensions, without reference to the dimensions present in the visualization view.</p>
+function escapeJsString(str){
+  if(!str) return '';
+  return str.replace(/\\/g, '\\\\').replace(/`/g, '\\`').replace(/\$/g, '\\$');
+}
+
+function attachGuideEvents(){
+  const searchInput = document.getElementById('guideSearch');
+  if(searchInput){
+    searchInput.oninput = (e) => {
+      guideSearchTerm = e.target.value;
+      const resContainer = document.querySelector('.guide-results');
+      if(resContainer){
+        renderMain();
+        const reInput = document.getElementById('guideSearch');
+        if(reInput){
+          reInput.focus();
+          reInput.setSelectionRange(guideSearchTerm.length, guideSearchTerm.length);
+        }
+      }
+    };
+  }
+
+  document.querySelectorAll('.guide-pill').forEach(pill => {
+    pill.onclick = () => {
+      guideCategoryFilter = pill.dataset.part;
+      renderMain();
+    };
+  });
+}
+
+function renderMain(){
+  const main = document.getElementById('main');
+
+  if(activeTab === 'guide'){
+    main.innerHTML = renderGuide();
+    attachGuideEvents();
+  } else if(FLASHCARDS[activeTab]){
+    const d = FLASHCARDS[activeTab];
+    main.innerHTML = `
+      <h2>${d.label} Flashcards</h2>
+      <p class="subhead">Click any card to flip between concepts and application snippets.</p>
+      <div class="grid">
+        ${d.cards.map((c, i) => `
+          <div class="card" data-i="${i}">
+            <div class="front">
+              ${escapeHtml(c.t)}
+              <small>tap to flip ↴</small>
+            </div>
+            <div class="back">
+              <span class="tag">${escapeHtml(c.t)}</span>${escapeHtml(c.d)}
+            </div>
+            <div class="hint">↺ flip</div>
           </div>
-          <div class="info-box">
-            <span class="label">Plain-English Meaning</span>
-            <p>"Compute this summary number at the Region level and freeze it, no matter how many smaller states or cities the user clicks on."</p>
-          </div>
-        </div>
-
-        <div class="info-box" style="margin-bottom: 12px;">
-          <span class="label">Exact Syntax</span>
-          <pre><code>{ FIXED [Dimension1], [Dimension2] : AGGREGATION([Metric]) }</code></pre>
-        </div>
-
-        <div class="interactive-header">
-          <span>Interactive Execution Sandbox</span>
-          <button class="run-btn" onclick="runTableauLod()">Render Table</button>
-        </div>
-        <div class="interactive-terminal" id="tableauLodOutput">
-          Click "Render Table" to execute LOD calculation...
-        </div>
+        `).join('')}
       </div>
-    </div>
-  </main>
+    `;
+    main.querySelectorAll('.card').forEach(el => el.onclick = () => el.classList.toggle('flipped'));
+  } else if(activeTab === 'analyze'){
+    main.innerHTML = `
+      <h2>🧠 How to Analyze (Mental Frameworks)</h2>
+      <p class="subhead">How strong analysts decompose messy business problems during technical interviews and on the job.</p>
+      <div class="steps">
+        ${ANALYZE_STEPS.map(([t, d]) => `
+          <div class="step">
+            <b>${escapeHtml(t)}</b>
+            <div>${escapeHtml(d)}</div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+  } else if(activeTab === 'quiz'){
+    main.innerHTML = `
+      <h2>🎯 Interview Diagnostic Prep</h2>
+      <p class="subhead">Practice answering these high-frequency verbal scenario questions before clicking reveal.</p>
+      ${QUIZ.map(([q, a], i) => `
+        <div class="quiz-card">
+          <p class="q">Q${i + 1}.${escapeHtml(q)}</p>
+          <button class="reveal" data-i="${i}">Reveal Answer</button>
+          <div class="ans" id="ans${i}">${escapeHtml(a)}</div>
+        </div>
+      `).join('')}
+    `;
+    main.querySelectorAll('.reveal').forEach(b => {
+      b.onclick = () => {
+        const target = document.getElementById('ans' + b.dataset.i);
+        const isOpen = target.style.display === 'block';
+        target.style.display = isOpen ? 'none' : 'block';
+        b.innerText = isOpen ? 'Reveal Answer' : 'Hide Answer';
+      };
+    });
+  }
+}
 
-  <script>
-    // Tab switching
-    function openTool(toolId) {
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-      document.querySelectorAll('.tool-pane').forEach(p => p.classList.remove('active'));
-      event.currentTarget.classList.add('active');
-      document.getElementById(toolId).classList.add('active');
-    }
-
-    // SQL GROUP BY Runner
-    function runSqlGroup() {
-      document.getElementById('sqlGroupOutput').innerHTML = `
-<span style="color:#38BDF8">SELECT</span> region, <span style="color:#38BDF8">COUNT</span>(order_id) <span style="color:#38BDF8">AS</span> total_orders, <span style="color:#38BDF8">SUM</span>(sales_amount) <span style="color:#38BDF8">AS</span> total_revenue
-<span style="color:#38BDF8">FROM</span> orders
-<span style="color:#38BDF8">GROUP BY</span> region
-<span style="color:#FBBF24">HAVING</span> <span style="color:#38BDF8">SUM</span>(sales_amount) > 100000;
-
-<table>
-  <tr><th>region</th><th>total_orders</th><th>total_revenue</th></tr>
-  <tr class="hl-row"><td>West</td><td>1,420</td><td>$148,200</td></tr>
-  <tr class="hl-row"><td>South</td><td>980</td><td>$112,400</td></tr>
-</table>
-<div style="color: var(--text-muted); font-size: 0.78rem; margin-top: 6px;">[RESULT] North region ($82,000) excluded because it did not meet the HAVING threshold.</div>`;
-    }
-
-    // SQL RANK Runner
-    function runSqlRank() {
-      document.getElementById('sqlRankOutput').innerHTML = `
-<span style="color:#38BDF8">SELECT</span> employee_name, department, sales_amount,
-  <span style="color:#FBBF24">DENSE_RANK() OVER</span> (<span style="color:#38BDF8">PARTITION BY</span> department <span style="color:#38BDF8">ORDER BY</span> sales_amount <span style="color:#38BDF8">DESC</span>) <span style="color:#38BDF8">AS</span> rnk
-<span style="color:#38BDF8">FROM</span> sales_team;
-
-<table>
-  <tr><th>employee_name</th><th>department</th><th>sales_amount</th><th>rnk</th></tr>
-  <tr class="hl-row"><td>Sarah Connor</td><td>Enterprise</td><td>$240,000</td><td>1</td></tr>
-  <tr class="hl-row"><td>Priya Sharma</td><td>Enterprise</td><td>$195,000</td><td>2</td></tr>
-  <tr><td>John Doe</td><td>Mid-Market</td><td>$110,000</td><td>1</td></tr>
-</table>`;
-    }
-
-    // Python GroupBy Runner
-    function runPyAgg() {
-      document.getElementById('pyAggOutput').innerHTML = `
-<span style="color:#FBBF24">summary</span> = df.groupby(<span style="color:#34D399">'region'</span>).agg(
-    total_sales=(<span style="color:#34D399">'sales'</span>, <span style="color:#34D399">'sum'</span>),
-    avg_discount=(<span style="color:#34D399">'discount'</span>, <span style="color:#34D399">'mean'</span>),
-    buyers=(<span style="color:#34D399">'customer_id'</span>, <span style="color:#34D399">'nunique'</span>)
-).reset_index()
-
-<table>
-  <tr><th>region</th><th>total_sales ($)</th><th>avg_discount (%)</th><th>buyers</th></tr>
-  <tr><td>West</td><td>1,420,000</td><td>8.4%</td><td>4,120</td></tr>
-  <tr><td>East</td><td>980,000</td><td>24.2%</td><td>2,890</td></tr>
-</table>`;
-    }
-
-    // Python Clean Runner
-    function runPyClean() {
-      document.getElementById('pyCleanOutput').innerHTML = `
-<span style="color:#FBBF24">>>></span> median_val = df[<span style="color:#34D399">'wait_time'</span>].median()
-<span style="color:#FBBF24">>>></span> df[<span style="color:#34D399">'wait_time'</span>] = df[<span style="color:#34D399">'wait_time'</span>].fillna(median_val)
-<div style="color: var(--accent-green); margin-top: 8px;">✓ 42 NaN values successfully imputed with median (16.5 mins).</div>
-<div style="color: var(--text-muted); font-size: 0.78rem; margin-top: 4px;">Memory footprint: Preserved 100% of rows without dropping sample points.</div>`;
-    }
-
-    // Excel Lookup Runner
-    function runExcelLookup() {
-      document.getElementById('excelLookupOutput').innerHTML = `
-<span style="color:#34D399">=XLOOKUP(E2, A2:A500, C2:C500, "Customer Not Found", 0)</span>
-<table>
-  <tr><th>Lookup Cell (E2)</th><th>Found ID</th><th>Customer Name Returned (C2:C500)</th></tr>
-  <tr class="hl-row"><td>CUST-901</td><td>Row #48</td><td>"Apex Logistics Pvt Ltd"</td></tr>
-</table>`;
-    }
-
-    // Excel Sumifs Runner
-    function runExcelSumifs() {
-      document.getElementById('excelSumOutput').innerHTML = `
-<span style="color:#34D399">=SUMIFS(D2:D1000, A2:A1000, "West", B2:B1000, "Furniture")</span>
-<div style="font-size: 1.1rem; color: var(--accent-blue); margin-top: 8px;">Computed Total: <strong>$84,200.00</strong></div>
-<div style="color: var(--text-muted); font-size: 0.78rem; margin-top: 4px;">Evaluated 1,000 structured rows across both criteria in memory.</div>`;
-    }
-
-    // DAX Calculate Runner
-    function runDaxCalc() {
-      document.getElementById('daxCalcOutput').innerHTML = `
-<span style="color:#FBBF24">West Coast Sales =</span>
-<span style="color:#38BDF8">CALCULATE</span>(
-    <span style="color:#38BDF8">SUM</span>(Orders[SalesAmount]),
-    Orders[Region] = <span style="color:#34D399">"West"</span>
-)
-<div style="color: var(--accent-green); margin-top: 8px;">Context Mutation: Overrides visual filter context. Only Region="West" rows are evaluated.</div>`;
-    }
-
-    // DAX Divide Runner
-    function runDaxDivide() {
-      document.getElementById('daxDivideOutput').innerHTML = `
-<span style="color:#FBBF24">Gross Margin % =</span> <span style="color:#38BDF8">DIVIDE</span>([Total Profit], [Total Revenue], 0)
-<div style="color: var(--text-muted); margin-top: 8px;">Evaluation: If [Total Revenue] is 0 or NULL, the measure safely yields <strong>0.00%</strong> without throwing #DIV/0!</div>`;
-    }
-
-    // Tableau LOD Runner
-    function runTableauLod() {
-      document.getElementById('tableauLodOutput').innerHTML = `
-<span style="color:#F472B6">{ FIXED [Region] : AVG([Sales]) }</span>
-<table>
-  <tr><th>State (Visual Row)</th><th>Region</th><th>State Sales</th><th>Fixed Region Average</th></tr>
-  <tr><td>California</td><td>West</td><td>$457,000</td><td class="hl-row">$210,000</td></tr>
-  <tr><td>Washington</td><td>West</td><td>$180,000</td><td class="hl-row">$210,000</td></tr>
-</table>
-<div style="color: var(--text-muted); font-size: 0.78rem; margin-top: 6px;">[FIXED] retains the constant $210,000 benchmark regardless of individual state slicing.</div>`;
-    }
-  </script>
+renderNav();
+renderMain();
+</script>
 </body>
 </html>
+
+
