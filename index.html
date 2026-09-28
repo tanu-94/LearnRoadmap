@@ -1,610 +1,445 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>LearnRoadmap — Complete End-to-End Data Analyst Hub</title>
-<style>
-:root{
-  --cream:#f7f1e6; --cream2:#efe6d4; --denim:#2f4a63; --denim2:#3d5f7d;
-  --ink:#26313a; --accent:#d97b3f; --accent2:#6a8a5f; --card:#fffaf0; --border:#d9cdb3;
-  --code-bg:#232b32; --code-text:#e6edf3;
-  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
-}
-@media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){
-    --cream:#1c2128; --cream2:#242b33; --ink:#eee6d3; --card:#232a32; --border:#3a4653; --denim:#7fa5c4; --code-bg:#151b23; --code-text:#f0f6fc;
-  }
-}
-:root[data-theme="dark"]{
-  --cream:#1c2128; --cream2:#242b33; --ink:#eee6d3; --card:#232a32; --border:#3a4653; --denim:#7fa5c4; --code-bg:#151b23; --code-text:#f0f6fc;
-}
-html{scroll-padding-top:env(safe-area-inset-top,0px);}
-*{box-sizing:border-box;}
-body{margin:0;background:var(--cream);color:var(--ink);font-family:'Courier New',ui-monospace,monospace;min-height:100%;}
-header{background:var(--denim);color:#fdf6e8;padding:24px 16px calc(18px + env(safe-area-inset-top,0px));text-align:center;}
-header h1{margin:0 0 6px;font-size:1.65rem;}
-header p{margin:0 auto;opacity:.9;font-size:.88rem;max-width:760px;line-height:1.4;}
-nav{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;padding:10px 14px;background:var(--cream2);position:sticky;top:0;z-index:10;border-bottom:2px solid var(--border);}
-nav button{font-family:inherit;font-size:.8rem;padding:7px 12px;border-radius:20px;border:2px solid var(--border);background:var(--card);color:var(--ink);cursor:pointer;transition:all .15s ease;}
-nav button:hover{border-color:var(--accent);}
-nav button.active{background:var(--accent);color:#fff;border-color:var(--accent);}
-main{max-width:980px;margin:0 auto;padding:22px 16px 60px;}
-h2{color:var(--denim);border-bottom:3px solid var(--accent);display:inline-block;padding-bottom:3px;margin-top:0;}
-p.subhead{font-size:.86rem;opacity:.85;margin-top:4px;margin-bottom:18px;line-height:1.45;}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:14px;margin-top:14px;}
-.card{background:var(--card);border:2px solid var(--border);border-radius:10px;min-height:140px;padding:14px;cursor:pointer;position:relative;display:flex;flex-direction:column;justify-content:space-between;transition:transform .12s ease, box-shadow .12s ease;}
-.card:hover{transform:translateY(-2px);box-shadow:0 4px 10px rgba(0,0,0,0.06);}
-.card .front{font-weight:bold;color:var(--denim);font-size:.95rem;}
-.card .front small{display:block;font-weight:normal;color:var(--ink);opacity:.7;margin-top:8px;font-size:.75rem;}
-.card .back{display:none;font-size:.8rem;line-height:1.45;white-space:pre-wrap;}
-.card.flipped .front{display:none;}
-.card.flipped .back{display:block;}
-.card .tag{display:inline-block;background:var(--accent2);color:#fff;font-size:.65rem;padding:2px 8px;border-radius:10px;margin-bottom:8px;}
-.hint{font-size:.7rem;opacity:.6;align-self:flex-end;margin-top:10px;}
-.steps{margin-top:14px;}
-.step{background:var(--card);border-left:5px solid var(--accent);border-radius:6px;padding:14px;margin-bottom:12px;}
-.step b{color:var(--denim);font-size:.95rem;}
-.step div{margin-top:5px;font-size:.85rem;line-height:1.45;}
-.quiz-card{background:var(--card);border:2px solid var(--border);border-radius:10px;padding:16px;margin-bottom:14px;}
-.quiz-card p.q{font-weight:bold;color:var(--denim);margin-top:0;font-size:.92rem;}
-.quiz-card .ans{display:none;margin-top:10px;padding-top:10px;border-top:1px dashed var(--border);font-size:.85rem;line-height:1.45;}
-.quiz-card button.reveal{font-family:inherit;background:var(--accent);color:#fff;border:none;border-radius:20px;padding:6px 14px;cursor:pointer;font-size:.8rem;}
-.guide-controls{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:18px;align-items:center;}
-.guide-search{flex:1;min-width:240px;padding:9px 14px;border:2px solid var(--border);border-radius:8px;font-family:inherit;font-size:.85rem;background:var(--card);color:var(--ink);}
-.guide-search:focus{outline:none;border-color:var(--accent);}
-.guide-filter-pills{display:flex;flex-wrap:wrap;gap:6px;}
-.guide-pill{font-family:inherit;font-size:.75rem;padding:5px 10px;border-radius:14px;border:1px solid var(--border);background:var(--card);color:var(--ink);cursor:pointer;}
-.guide-pill.active{background:var(--denim2);color:#fff;border-color:var(--denim2);}
-.guide-entry{background:var(--card);border:2px solid var(--border);border-radius:10px;padding:16px;margin-bottom:14px;}
-.guide-entry h3{margin:0 0 6px;color:var(--denim);font-size:1.02rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;}
-.guide-entry .category-badge{font-size:.65rem;background:var(--accent2);color:#fff;padding:2px 8px;border-radius:10px;font-weight:normal;}
-.guide-entry .section-row{margin:6px 0;font-size:.84rem;line-height:1.45;}
-.guide-entry .section-row strong{color:var(--denim2);}
-.guide-entry pre{background:var(--code-bg);color:var(--code-text);padding:10px 12px;border-radius:6px;font-size:.8rem;overflow-x:auto;position:relative;margin:8px 0;}
-.guide-entry code{font-family:'Courier New',ui-monospace,monospace;}
-.copy-btn{position:absolute;top:6px;right:6px;background:rgba(255,255,255,0.2);border:none;border-radius:4px;color:#fff;font-size:.7rem;padding:3px 7px;cursor:pointer;}
-.copy-btn:hover{background:rgba(255,255,255,0.4);}
-.flow-box{background:var(--card);border:2px solid var(--border);border-radius:10px;padding:18px;margin-bottom:16px;}
-.flow-diagram{display:flex;flex-direction:column;align-items:center;margin:18px 0;}
-.flow-node{background:var(--cream2);border:2px solid var(--denim);color:var(--denim);padding:8px 16px;border-radius:8px;font-weight:bold;font-size:.85rem;text-align:center;width:80%;max-width:400px;}
-.flow-arrow{color:var(--accent);font-size:1.2rem;font-weight:bold;margin:3px 0;}
-table.road-table{width:100%;border-collapse:collapse;margin:14px 0;font-size:.83rem;}
-table.road-table th, table.road-table td{border:1px solid var(--border);padding:8px 10px;text-align:left;}
-table.road-table th{background:var(--cream2);color:var(--denim);}
-footer{text-align:center;padding:20px;font-size:.75rem;opacity:.65;}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LearnRoadmap - Data Analyst Hub</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Font for Typewriter / Monospace Visual Identity -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Courier Prime', 'Courier New', Courier, monospace;
+      background-color: #111823;
+      color: #cbd5e1;
+    }
+    .mono-title {
+      font-family: 'Space Mono', 'Courier New', monospace;
+    }
+    .steel-banner {
+      background-color: #557597;
+    }
+    .pill-inactive {
+      background-color: #172230;
+      border: 1px solid #293a4f;
+      color: #94a3b8;
+    }
+    .pill-inactive:hover {
+      background-color: #1f2d3f;
+      color: #f1f5f9;
+      border-color: #3f5573;
+    }
+    .pill-active {
+      background-color: #dc6a33;
+      border: 1px solid #dc6a33;
+      color: #ffffff;
+      font-weight: 700;
+    }
+    .orange-divider {
+      border-bottom: 2px solid #dc6a33;
+    }
+    .card-bg {
+      background-color: #16202c;
+      border: 1px solid #243447;
+    }
+    .code-box {
+      background-color: #0b1118;
+      border: 1px solid #1c2938;
+      font-family: 'Space Mono', monospace;
+    }
+  </style>
 </head>
-<body>
-<header>
-  <h1>📊 LearnRoadmap — Data Analyst Hub</h1>
-  <p>The definitive syllabus: Mindset → Excel → SQL → Python → Visualization → APIs & DBs → Power BI → Tableau → Business Diagnostics & Projects.</p>
-</header>
-<nav id="nav"></nav>
-<main id="main"></main>
-<footer>Complete Data Analyst Curriculum & Reference Hub. Based on the LearnRoadmap architecture.</footer>
+<body class="p-4 sm:p-6 md:p-10 max-w-4xl mx-auto min-h-screen">
 
-<script>
-const GUIDE_DATA = [
-  // 1. EXCEL
-  {part:"Excel", cat:"Basic Calculations", name:"SUM / AVERAGE / COUNT / COUNTA / MIN / MAX", def:"Core summary formulas to calculate aggregates across tabular cell ranges.", syntax:"=SUM(B2:B100)\n=AVERAGE(B2:B100)\n=COUNT(B2:B100)\n=COUNTA(A2:A100)", use:"Quick baseline totals, averages, and volume counts on raw data exports."},
-  {part:"Excel", cat:"Conditional Calculations", name:"IF / SUMIF / SUMIFS / COUNTIFS / AVERAGEIFS", def:"Formulas that evaluate criteria before aggregating values.", syntax:"=IF(B2>1000, \"High\", \"Low\")\n=SUMIFS(Sales, Region, \"South\", Product, \"Laptop\")\n=COUNTIFS(Status, \"Completed\", Region, \"West\")", use:"Multi-condition answers like 'How much did we sell in the South for laptops?'"},
-  {part:"Excel", cat:"Lookups", name:"XLOOKUP", def:"Modern lookup function searching a range and returning a corresponding item from another.", syntax:"=XLOOKUP(A2, Customer_ID, Customer_Name)", use:"Joining metadata across sheets without left-to-right lookup constraints or index breakages."},
-  {part:"Excel", cat:"Lookups", name:"VLOOKUP / INDEX + MATCH", def:"Legacy lookup methods; VLOOKUP matches left-to-right; INDEX+MATCH provides dynamic coordinate lookup.", syntax:"=VLOOKUP(A2, Table, 2, FALSE)\n=INDEX(Name_range, MATCH(A2, ID_range, 0))", use:"Working with legacy spreadsheets and models prior to Office 365."},
-  {part:"Excel", cat:"Text Manipulation", name:"CONCAT / LEFT / RIGHT / MID / LEN / TRIM / UPPER / LOWER / &", def:"Text functions to split, clean, format, and join string columns.", syntax:"=A2 & \" \" & B2\n=TRIM(A2)\n=LEFT(A2, 3)\n=UPPER(TRIM(A2))", use:"Cleaning dirty addresses, stripping irregular spaces, and standardizing product codes."},
-  {part:"Excel", cat:"Data Cleaning", name:"Remove Duplicates & Text to Columns", def:"Inbuilt data tools to parse delimiters and clean redundant rows.", syntax:"Data Tab > Text to Columns (Delimited by comma/tab)\nData Tab > Remove Duplicates (Select primary key)", use:"Cleaning exported CSV dumps and separating concatenated full names/addresses."},
-  {part:"Excel", cat:"Data Cleaning", name:"Ctrl + T (Excel Tables)", def:"Converts an arbitrary cell range into a structured table with auto-expanding formulas.", syntax:"Select range > Press Ctrl + T", use:"Ensuring formulas, calculated columns, and Pivot Tables automatically adapt to new rows."},
-  {part:"Excel", cat:"Analysis", name:"Pivot Tables & Slicers", def:"Drag-and-drop aggregation engine combined with interactive visual filtering buttons.", syntax:"Insert > PivotTable (Place fields in Rows, Columns, Values, Filters)\nPivotTable Analyze > Insert Slicer", use:"Answering 'Sales by Region', 'Profit by Category', and building clickable desktop reporting."},
+  <!-- TOP HEADER CARD (Matches Screenshot Banner) -->
+  <header class="steel-banner text-white p-6 sm:p-8 rounded-xl shadow-lg text-center mb-6">
+    <div class="flex items-center justify-center gap-3 mb-3">
+      <span class="text-3xl">📊</span>
+      <h1 class="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight mono-title">
+        LearnRoadmap - Data Analyst Hub
+      </h1>
+    </div>
+    <p class="text-xs sm:text-sm text-slate-100 max-w-2xl mx-auto leading-relaxed opacity-95">
+      The definitive syllabus: Mindset &rarr; Excel &rarr; SQL &rarr; Python &rarr; Visualization &rarr; APIs &amp; DBs &rarr; Power BI &rarr; Tableau &rarr; Business Diagnostics &amp; Projects.
+    </p>
+  </header>
 
-  // 2. SQL
-  {part:"SQL", cat:"Level 1: Querying", name:"SELECT / FROM / DISTINCT / LIMIT", def:"Picks columns, targets tables, removes duplicates, and restricts returned rows.", syntax:"SELECT DISTINCT customer_name, sales, profit\nFROM orders\nLIMIT 10;", use:"Initial data extraction, inspection, and previewing high-volume tables."},
-  {part:"SQL", cat:"Level 2: Filtering", name:"WHERE / AND / OR / NOT / IN / BETWEEN / LIKE", def:"Row-level filtering criteria evaluated before any aggregation takes place.", syntax:"SELECT *\nFROM orders\nWHERE region IN ('South', 'West')\n  AND sales BETWEEN 1000 AND 5000\n  AND customer_name LIKE 'A%';", use:"Restricting analysis to targeted cohorts, geographic zones, or search patterns."},
-  {part:"SQL", cat:"Level 3: Sorting", name:"ORDER BY (ASC / DESC)", def:"Sorts the final result set sequentially or reverse-sequentially.", syntax:"SELECT * FROM orders\nORDER BY profit DESC, sales ASC;", use:"Creating leaderboards, finding top/bottom performing accounts, and sorting chronologically."},
-  {part:"SQL", cat:"Level 4 & 5: Aggregation", name:"GROUP BY & HAVING", def:"GROUP BY collapses rows by category; HAVING filters the aggregated buckets post-calculation.", syntax:"SELECT customer_id, SUM(sales) AS total_sales\nFROM orders\nGROUP BY customer_id\nHAVING SUM(sales) > 100000;", use:"Computing total/average metrics per segment and filtering to keep only qualifying groups."},
-  {part:"SQL", cat:"Level 6: JOINs", name:"INNER / LEFT / RIGHT / SELF JOIN", def:"Combines records from two tables based on related keys. LEFT keeps all left records.", syntax:"SELECT o.order_id, c.customer_name\nFROM orders o\nLEFT JOIN customers c ON o.customer_id = c.customer_id;", use:"Merging transactions with dimensions while avoiding silent dropping of unmatched entries."},
-  {part:"SQL", cat:"Level 7: Set Ops", name:"UNION vs UNION ALL", def:"Stacks query outputs vertically. UNION dedupes; UNION ALL retains all rows.", syntax:"SELECT customer_id FROM orders_2024\nUNION ALL\nSELECT customer_id FROM orders_2025;", use:"Combining partitioned chronological tables or disparate transaction streams."},
-  {part:"SQL", cat:"Level 8: Logic", name:"CASE WHEN", def:"SQL conditional if/else statement returning custom values based on conditions.", syntax:"SELECT sales,\n  CASE\n    WHEN profit < 0 THEN 'Loss'\n    WHEN profit < 1000 THEN 'Low Profit'\n    ELSE 'High Profit'\n  END AS profit_category\nFROM orders;", use:"Categorizing continuous numbers, grouping transaction amounts, or flagging edge cases."},
-  {part:"SQL", cat:"Level 9 & 10: Subqueries & CTEs", name:"WITH (Common Table Expressions) & Subqueries", def:"Named modular temporary tables (CTEs) or nested queries that streamline multi-phase calculations.", syntax:"WITH customer_sales AS (\n  SELECT customer_id, SUM(sales) AS total_sales\n  FROM orders\n  GROUP BY customer_id\n)\nSELECT * FROM customer_sales WHERE total_sales > 100000;", use:"Breaking complex multi-step queries into readable, debuggable building blocks."},
-  {part:"SQL", cat:"Level 11: Window Functions", name:"ROW_NUMBER / RANK / LAG / LEAD / OVER()", def:"Performs calculations across a set of table rows related to the current row without grouping.", syntax:"SELECT order_id, region, sales,\n  ROW_NUMBER() OVER(PARTITION BY region ORDER BY sales DESC) as rank_in_region,\n  LAG(sales, 1) OVER(ORDER BY order_date) as prev_sales\nFROM orders;", use:"Running totals, period-over-period delta comparisons, and extracting Top-N per group."},
+  <!-- NAVIGATION PILLS (Identical arrangement to your layout) -->
+  <nav class="flex flex-wrap justify-center gap-2.5 sm:gap-3 mb-10 text-xs sm:text-sm">
+    <button onclick="switchTab('roadmap')" id="btn-roadmap" class="pill-active px-4 py-2 rounded-full transition flex items-center gap-1.5 shadow-sm">
+      <span>🗺️</span> Full Roadmap
+    </button>
+    <button onclick="switchTab('guide')" id="btn-guide" class="pill-inactive px-4 py-2 rounded-full transition flex items-center gap-1.5">
+      <span>📖</span> Complete Guide
+    </button>
+    <button onclick="switchTab('excel')" id="btn-excel" class="pill-inactive px-4 py-2 rounded-full transition flex items-center gap-1.5">
+      <span>📗</span> Excel
+    </button>
+    <button onclick="switchTab('sql')" id="btn-sql" class="pill-inactive px-4 py-2 rounded-full transition flex items-center gap-1.5">
+      <span>🗄️</span> SQL
+    </button>
+    <button onclick="switchTab('python')" id="btn-python" class="pill-inactive px-4 py-2 rounded-full transition flex items-center gap-1.5">
+      <span>🐍</span> Python / Pandas
+    </button>
+    <button onclick="switchTab('bi')" id="btn-bi" class="pill-inactive px-4 py-2 rounded-full transition flex items-center gap-1.5">
+      <span>📈</span> Power BI / Tableau
+    </button>
+    <button onclick="switchTab('diagnostics')" id="btn-diagnostics" class="pill-inactive px-4 py-2 rounded-full transition flex items-center gap-1.5">
+      <span>🧠</span> Diagnostics &amp; Portfolio
+    </button>
+    <button onclick="switchTab('interview')" id="btn-interview" class="pill-inactive px-4 py-2 rounded-full transition flex items-center gap-1.5">
+      <span>🎯</span> Interview Prep
+    </button>
+  </nav>
 
-  // 3. PYTHON & NUMPY
-  {part:"Python", cat:"Fundamentals", name:"Data Types & Data Structures", def:"int, float, str, bool along with List (mutable), Dict (key-value), and Tuple (immutable).", syntax:"age = 25\nsales = [100, 200, 300]\ncustomer = {'name': 'A', 'sales': 5000}\ncoords = (10, 20)", use:"Representing tabular rows, in-memory lists, coordinates, and configuration dictionaries."},
-  {part:"Python", cat:"Control Flow", name:"if/elif/else, for/while, def Functions", def:"Core branching, iteration loops, and reusable modular functions.", syntax:"def calculate_profit(sales, cost):\n    return sales - cost\n\nfor s in sales:\n    if s > 1000: print('High')", use:"Building data transformation pipelines and repetitive validation logic."},
-  {part:"Python", cat:"Comprehensions", name:"List Comprehension & Lambda", def:"Compact inline loops and anonymous throwaway lambda functions.", syntax:"doubled = [x * 2 for x in numbers if x > 0]\ndouble_fn = lambda x: x * 2", use:"Lightweight feature engineering, inline data conversions, and Pandas apply statements."},
-  {part:"NumPy", cat:"Arrays & Math", name:"NumPy Arrays & Vectorization", def:"Fast C-based n-dimensional arrays performing mathematical operations across entire arrays at once.", syntax:"import numpy as np\nsales = np.array([100, 200, 300])\nadjusted_sales = sales * 1.18", use:"High-speed numerical array manipulations, matrix math, and underlying Pandas calculations."},
+  <!-- ============================================================== -->
+  <!-- TAB 1: DEFAULT ROADMAP VIEW (From your screenshot)            -->
+  <!-- ============================================================== -->
+  <section id="view-roadmap" class="space-y-6">
+    <div class="border-b-2 orange-divider pb-3">
+      <h2 class="text-lg sm:text-xl font-bold text-white mono-title flex items-center gap-2">
+        <span>🗺️</span> Complete Data Analyst Learning Progression
+      </h2>
+    </div>
+    <p class="text-xs sm:text-sm text-slate-400">
+      A clear step-by-step roadmap from baseline analyst thinking to advanced BI tools. Click on <strong>🗄️ SQL</strong> in the navigation above to open the complete interactive MySQL study handbook.
+    </p>
 
-  // 4. PANDAS
-  {part:"Pandas", cat:"Ingestion & Inspection", name:"read_csv / head / info / describe / shape", def:"Loads datasets and inspects shape, data types, memory, and baseline statistics.", syntax:"import pandas as pd\ndf = pd.read_csv('sales.csv')\nprint(df.shape)\ndf.info()\nprint(df.describe())", use:"Initial inspection of schema, null concentrations, and numeric distributions."},
-  {part:"Pandas", cat:"Data Cleaning", name:"dropna / fillna / drop_duplicates / astype", def:"Discards or substitutes missing values, dedupes records, and coerces column types.", syntax:"df = df.drop_duplicates()\ndf['sales'] = df['sales'].fillna(0).astype(float)\ndf['city'] = df['city'].str.strip().str.title()", use:"Sanitizing dirty CSV data, casting numeric columns stored as strings, and text normalization."},
-  {part:"Pandas", cat:"Filtering & Grouping", name:"Boolean Indexing & groupby().agg()", def:"Subsetting rows via boolean masks and computing multi-metric aggregations per segment.", syntax:"filtered_df = df[(df['sales'] > 10000) & (df['region'] == 'South')]\nsummary = df.groupby('region').agg({\n  'sales': 'sum',\n  'profit': 'sum',\n  'customer_id': 'nunique'\n})", use:"Pandas equivalents of SQL WHERE, GROUP BY, and multi-metric summaries."},
-  {part:"Pandas", cat:"Merging & Concat", name:"pd.merge() & pd.concat()", def:"Relational joins between DataFrames and vertical/horizontal stacking.", syntax:"merged = pd.merge(customers, orders, on='customer_id', how='left')\nstacked = pd.concat([df_2024, df_2025], ignore_index=True)", use:"Pandas equivalents of SQL JOINs (left/inner/right/outer) and UNION ALL."},
-
-  // 5. VISUALIZATION & APIS & DBS
-  {part:"Visualization", cat:"Python Viz", name:"Matplotlib & Seaborn", def:"Matplotlib gives explicit chart control; Seaborn delivers rapid statistical visual patterns.", syntax:"import matplotlib.pyplot as plt\nimport seaborn as sns\nplt.plot(df['month'], df['sales'])\nsns.boxplot(data=df, x='region', y='sales')\nplt.show()", use:"Exploratory data analysis, distributions, correlation heatmaps, and trend evaluation."},
-  {part:"Visualization", cat:"Interactive Viz", name:"Plotly", def:"Interactive browser-based graphing library featuring tooltips, zoom, and dynamic filtering.", syntax:"import plotly.express as px\nfig = px.line(df, x='month', y='sales', color='region')\nfig.show()", use:"Interactive executive dashboards and stakeholder presentation plots."},
-  {part:"APIs & Databases", cat:"Connectivity", name:"requests, sqlite3 & SQLAlchemy", def:"Programmatically extracting web API JSON responses and pulling SQL data into DataFrames.", syntax:"import requests\nimport sqlalchemy\nres = requests.get('https://api.example.com/data').json()\nengine = sqlalchemy.create_engine('sqlite:///data.db')\ndf = pd.read_sql('SELECT * FROM orders', engine)", use:"End-to-end extraction from web endpoints and enterprise relational databases."},
-
-  // 6. POWER BI & DAX
-  {part:"Power BI", cat:"Power Query (ETL)", def:"Power BI's extraction and transformation engine for shaping data before loading.", name:"Power Query Transformations", syntax:"Home > Transform Data (Remove nulls, split columns, unpivot, type cast)", use:"Upstream data cleansing, denormalization, and multi-file folder merges."},
-  {part:"Power BI", cat:"Data Modeling", name:"Star Schema & Relationships", def:"Connecting quantitative Fact tables (Sales) to Dimension lookup tables (Customer, Date).", syntax:"Model View: Connect Dim[Customer_ID] (1) to Fact[Customer_ID] (*)", use:"Enabling performant DAX evaluations and avoiding ambiguous circular relationship filtering."},
-  {part:"Power BI", cat:"DAX Foundations", name:"Measures & CALCULATE()", def:"Dynamic calculations evaluated in ambient filter context. CALCULATE modifies context.", syntax:"Total Sales = SUM(Sales[Sales])\nProfit Margin = DIVIDE([Total Profit], [Total Sales])\nSales South = CALCULATE([Total Sales], Region[Region] = \"South\")", use:"Defining standard KPIs and evaluating benchmarks across specific segments."},
-  {part:"Power BI", cat:"DAX Advanced", name:"Time Intelligence & SUMX()", def:"Date calculations (YTD, YoY) and row-by-row iterators.", syntax:"Sales YTD = TOTALYTD([Total Sales], 'Date'[Date])\nTotal Rev = SUMX(Orders, Orders[Qty] * Orders[UnitPrice])", use:"Period-over-period tracking, fiscal paced reports, and dynamic row-level math."},
-
-  // 7. TABLEAU
-  {part:"Tableau", cat:"Calculations & LOD", name:"Tableau Calculated Fields & LOD Expressions", def:"Row-level calcs, Table calcs, and FIXED / INCLUDE / EXCLUDE LOD formulas.", syntax:"// FIXED LOD:\n{ FIXED [Customer ID] : MIN([Order Date]) }\n// Percent of Total:\nSUM([Sales]) / TOTAL(SUM([Sales]))", use:"Computing metrics at granularities different from the visual's display dimensions."}
-];
-
-const FLASHCARDS = {
-  excel: {
-    label: "📗 Excel",
-    cards: [
-      {t:"XLOOKUP", d:"=XLOOKUP(id, id_range, return_range)\nMatches a key and returns corresponding values without column orientation constraints."},
-      {t:"SUMIFS / COUNTIFS", d:"=SUMIFS(Sales, Region, 'South', Product, 'Laptop')\nAggregates values matching multiple simultaneous conditions."},
-      {t:"Pivot Table", d:"Insert > PivotTable\nDrag fields to Rows, Columns, and Values for rapid dimensional rollups."},
-      {t:"Ctrl + T (Tables)", d:"Converts range into a structured table with auto-expanding formulas and dynamic ranges."},
-      {t:"Text Cleaning", d:"TRIM() removes spaces, CONCAT()/& joins strings, and LEFT()/MID() extract substrings."}
-    ]
-  },
-  sql: {
-    label: "🗄️ SQL",
-    cards: [
-      {t:"WHERE vs HAVING", d:"WHERE filters individual rows BEFORE aggregation.\nHAVING filters aggregated bucket groups AFTER GROUP BY."},
-      {t:"JOINs", d:"INNER = matching only.\nLEFT = keep all rows from left table (fills unmatched right with NULL)."},
-      {t:"GROUP BY", d:"SELECT region, SUM(sales) FROM orders GROUP BY region;\nEssential for breakdown questions."},
-      {t:"CASE WHEN", d:"CASE WHEN profit < 0 THEN 'Loss' ELSE 'Profit' END\nCategorizes numeric metrics into labeled buckets."},
-      {t:"Window Functions", d:"ROW_NUMBER(), RANK(), LAG() OVER(PARTITION BY ... ORDER BY ...)\nComputes ranks and running deltas without collapsing rows."},
-      {t:"WITH (CTEs)", d:"WITH cte AS (SELECT ...) SELECT * FROM cte;\nBreaks complex nested queries into readable, sequential steps."}
-    ]
-  },
-  python: {
-    label: "🐍 Python / Pandas",
-    cards: [
-      {t:"Data Structures", d:"List = [1, 2] (mutable)\nDict = {'k': 'v'} (key-value)\nTuple = (1, 2) (immutable)"},
-      {t:"df.groupby()", d:"df.groupby('region').agg({'sales': 'sum', 'customer_id': 'nunique'})\nPandas equivalent of SQL GROUP BY."},
-      {t:".merge()", d:"pd.merge(customers, orders, on='cid', how='left')\nPandas relational JOIN engine."},
-      {t:"Boolean Masking", d:"df[(df['sales'] > 1000) & (df['region'] == 'South')]\nUse & (AND) and | (OR) — never the words 'and' / 'or'."},
-      {t:"Vectorization (NumPy)", d:"sales_arr * 1.18\nComputes operations across entire arrays instantly without Python loops."}
-    ]
-  },
-  powerbi: {
-    label: "📈 Power BI / Tableau",
-    cards: [
-      {t:"Star Schema", d:"Fact table (Sales) connected to Dimension tables (Customer, Product, Date).\nKeeps models performant."},
-      {t:"CALCULATE()", d:"CALCULATE([Total Sales], Region[Region]='South')\nDAX's engine: modifies the filter context of an expression."},
-      {t:"SUMX()", d:"SUMX(Orders, Orders[Qty] * Orders[Price])\nRow-by-row iterator that evaluates expressions before summing."},
-      {t:"Time Intelligence", d:"TOTALYTD([Total Sales], 'Date'[Date])\nComputes Year-to-Date against a continuous Date table."},
-      {t:"Tableau LOD", d:"{ FIXED [Customer ID] : MIN([Order Date]) }\nComputes metrics at explicit levels of detail independent of sheet layout."}
-    ]
-  }
-};
-
-const ROADMAP_SECTIONS = [
-  {
-    title: "0. The Analyst Mindset — Learn This First",
-    content: `
-      <p>Before SQL, Python, Power BI, or Tableau, learn to think like an analyst.</p>
-      <div class="flow-diagram">
-        <div class="flow-node">Business Problem</div>
-        <div class="flow-arrow">↓</div>
-        <div class="flow-node">Question Formulation</div>
-        <div class="flow-arrow">↓</div>
-        <div class="flow-node">Data Validation & Cleaning</div>
-        <div class="flow-arrow">↓</div>
-        <div class="flow-node">Exploration & Segmentation</div>
-        <div class="flow-arrow">↓</div>
-        <div class="flow-node">Diagnostic Analysis</div>
-        <div class="flow-arrow">↓</div>
-        <div class="flow-node">Explanation & Recommendation</div>
+    <!-- Architecture Card (From your screenshot) -->
+    <div class="card-bg p-6 rounded-xl space-y-4">
+      <h3 class="text-sm sm:text-base font-bold text-slate-200 mono-title">
+        The Skill Stack Architecture
+      </h3>
+      <div class="p-3 bg-[#111823] border border-[#2b3a4e] rounded-lg text-center text-xs sm:text-sm text-slate-300">
+        Business Mindset &amp; Problem Framing
       </div>
-      <p><strong>Ask the 5W1H diagnostic questions before touching the data:</strong></p>
-      <table class="road-table">
-        <tr><th>Question</th><th>What you're trying to understand</th></tr>
-        <tr><td><strong>What?</strong></td><td>What exactly is happening?</td></tr>
-        <tr><td><strong>Why?</strong></td><td>What could explain it?</td></tr>
-        <tr><td><strong>Who?</strong></td><td>Which customers/products/segments are affected?</td></tr>
-        <tr><td><strong>When?</strong></td><td>When did it start?</td></tr>
-        <tr><td><strong>Where?</strong></td><td>Where is it happening?</td></tr>
-        <tr><td><strong>How much?</strong></td><td>How large is the financial / metric impact?</td></tr>
-      </table>
-      <p><strong>Worked Scenario:</strong> Business says <em>"Profit is falling."</em> Don't immediately open Power BI. Convert it into an analytical inquiry: <em>"Why did profit decline during the last two quarters even though sales increased?"</em> Establish baselines (Sales, Orders, Margin, Discounts), then compare actuals vs targets, current vs previous periods, and segment by region, SKU, and customer tier.</p>
-    `
-  },
-  {
-    title: "1-4. Excel — The First Practical Tool",
-    content: `
-      <p>Excel teaches you tabular data manipulation, formula logic, and zero-code dimensional analysis.</p>
-      <ul>
-        <li><strong>Formulas:</strong> SUM, AVERAGE, COUNT, COUNTA, MIN, MAX. Conditional totals via IF, SUMIFS, COUNTIFS, AVERAGEIFS.</li>
-        <li><strong>Lookup Logic:</strong> Master <code>XLOOKUP</code> conceptually: <em>"Find this key in another dataset and bring back the corresponding value."</em> This directly mirrors SQL JOINs, Pandas merges, and Power BI relationships.</li>
-        <li><strong>Data Cleaning:</strong> Remove duplicates, Text to Columns, Flash Fill, Data Validation, and converting ranges to <code>Ctrl + T</code> structured tables.</li>
-        <li><strong>Analysis & Viz:</strong> Pivot Tables (Rows, Columns, Values, Filters), Slicers, and intentional chart selection (Trends → Line; Categories → Bar; Relationships → Scatter; Distributions → Histogram).</li>
-      </ul>
-    `
-  },
-  {
-    title: "5. SQL — The Core Data Skill",
-    content: `
-      <p>SQL is how you query relational databases directly. Progress through 11 core levels:</p>
-      <ol>
-        <li><strong>Basic Querying:</strong> SELECT, FROM, DISTINCT, LIMIT</li>
-        <li><strong>Filtering:</strong> WHERE, AND, OR, NOT, IN, BETWEEN, LIKE</li>
-        <li><strong>Sorting:</strong> ORDER BY (ASC / DESC)</li>
-        <li><strong>Aggregation:</strong> COUNT, SUM, AVG, MIN, MAX with GROUP BY</li>
-        <li><strong>Group Filtering:</strong> HAVING (filters aggregated groups) vs WHERE (filters rows before aggregation)</li>
-        <li><strong>JOINs:</strong> INNER, LEFT, RIGHT, SELF JOINs across primary/foreign keys</li>
-        <li><strong>Set Operations:</strong> UNION (deduplicated) vs UNION ALL (retains all rows)</li>
-        <li><strong>Conditional Logic:</strong> CASE WHEN ... THEN ... ELSE ... END</li>
-        <li><strong>Subqueries:</strong> Nested queries for dynamic filtering</li>
-        <li><strong>CTEs:</strong> <code>WITH</code> clauses for modular, readable query architecture</li>
-        <li><strong>Window Functions:</strong> ROW_NUMBER(), RANK(), DENSE_RANK(), LAG(), LEAD(), and SUM() OVER(PARTITION BY...)</li>
-      </ol>
-    `
-  },
-  {
-    title: "6-8. Python, NumPy & Pandas",
-    content: `
-      <p>You don't need to be a software engineer; you need Python for reproducible wrangling and analysis.</p>
-      <ul>
-        <li><strong>Python Basics:</strong> Data types (int, float, str, bool), structures (List, Dict, Tuple), control flow (if/else, for loops), and custom functions (<code>def</code>).</li>
-        <li><strong>NumPy:</strong> Fixed-type arrays and vectorized arithmetic (<code>sales * 2</code>) that eliminate slow loops.</li>
-        <li><strong>Pandas:</strong> The core analyst library. Loading data (<code>read_csv</code>), inspecting (<code>head</code>, <code>info</code>, <code>describe</code>), cleaning (<code>dropna</code>, <code>fillna</code>, <code>drop_duplicates</code>, <code>astype</code>), boolean filtering, grouping (<code>df.groupby().agg()</code>), and merging (<code>pd.merge()</code>, <code>pd.concat()</code>).</li>
-      </ul>
-    `
-  },
-  {
-    title: "9-11. Visualizations, APIs & Databases from Python",
-    content: `
-      <p>Move beyond flat files to programmatic extraction and visualization.</p>
-      <ul>
-        <li><strong>Visualization:</strong> Matplotlib (foundational figure/axes), Seaborn (statistical distributions, heatmaps, box plots), and Plotly (interactive charts with hover details).</li>
-        <li><strong>APIs:</strong> Using <code>requests</code> to call endpoints, parse JSON responses, and ingest them directly into Pandas DataFrames.</li>
-        <li><strong>Databases from Python:</strong> Using <code>sqlite3</code> and <code>SQLAlchemy</code> to pull query outputs directly into Pandas DataFrames for automated analytical runs.</li>
-      </ul>
-    `
-  },
-  {
-    title: "12-15. Power BI & DAX",
-    content: `
-      <p>Data preparation + modeling + dynamic calculations + reporting.</p>
-      <ul>
-        <li><strong>Power Query (ETL):</strong> Data type assignment, column cleaning, pivoting, and merging source feeds.</li>
-        <li><strong>Data Modeling:</strong> Designing Star Schemas separating quantitative Fact tables (Sales, Orders) from lookup Dimension tables (Customers, Dates, SKUs) via 1-to-many relationships.</li>
-        <li><strong>DAX:</strong> Measures vs calculated columns, Evaluation Context (Row vs Filter context), <code>CALCULATE()</code>, <code>FILTER()</code>, <code>SUMX()</code>, and Time Intelligence (YTD, MTD, YoY).</li>
-        <li><strong>Visual Storytelling:</strong> Executive overview → Drill-down breakdown → Root cause exploration.</li>
-        <li><strong>Service & Governance:</strong> Scheduled refresh, workspaces, Row-Level Security (RLS), and PL-300 prep.</li>
-      </ul>
-    `
-  },
-  {
-    title: "16. Tableau",
-    content: `
-      <p>Learn once Power BI concepts are solid. Core concepts transfer smoothly:</p>
-      <ul>
-        <li><strong>Foundations:</strong> Worksheets, Marks card (Color, Size, Detail, Tooltip), Dimensions vs Measures.</li>
-        <li><strong>Calculations:</strong> Calculated fields, table calculations (Running Total, % of Total).</li>
-        <li><strong>LOD Expressions:</strong> <code>FIXED</code>, <code>INCLUDE</code>, and <code>EXCLUDE</code> to compute values at specific detail levels regardless of the sheet's display layout.</li>
-        <li><strong>Dashboards:</strong> Containers, parameters, URL/filter actions, and Tableau Cloud deployment.</li>
-      </ul>
-    `
-  },
-  {
-    title: "17-24. Business Analysis, Diagnostics & Data Quality",
-    content: `
-      <p>This is what separates a tool-operator from an indispensable Data Analyst.</p>
-      <ul>
-        <li><strong>The Why Chain:</strong> Follow metrics down from Profit ↓ → Margin ↓ → Discount Depth ↑ → Category Clearance → Low demand in Region X.</li>
-        <li><strong>Symptom vs Cause vs Root Cause:</strong> Symptom = profit slipped; Cause = average discounts jumped; Root Cause = high promotional discounts were applied to negative-margin SKUs in one logistics hub.</li>
-        <li><strong>Levels of Analysis:</strong> Descriptive (What happened?) → Diagnostic (Why did it happen?) → Prescriptive (What should we do?).</li>
-        <li><strong>Data Validation Checks:</strong> Null/blank checks, primary key duplicates, type sanity, impossible values (negative quantities, 300% discounts), and category consolidation ('BLR' vs 'Bangalore').</li>
-        <li><strong>Analytical Traps:</strong> Don't trust raw averages (segment first), and remember that Correlation ≠ Causation.</li>
-        <li><strong>Actionable Recommendations:</strong> Frame every takeaway using: <em>Action → Owner → Metric → Timeframe</em>. Quantify the dollar impact clearly.</li>
-      </ul>
-    `
-  }
-];
-
-const ANALYTIC_STEPS = [
-  ["1. Understand the Business Problem", "Before opening any tool, clarify the business context: What decision is being made? What is the cost of inaction?"],
-  ["2. Frame the Analytical Question", "Turn vague problem statements ('profit dropped') into quantifiable hypotheses ('why did gross margins contract 320 bps despite 18% sales growth?')."],
-  ["3. 5W1H Diagnostics", "Ground the bounds of inquiry early: What, Why, Who, When, Where, and How Much."],
-  ["4. Establish Baselines & Benchmarks", "Compare current metrics against targets, historical periods (YoY, MoM), and across parallel segments."],
-  ["5. Spot Anomalies & Discrepancies", "Identify step-change drops, variance spikes, or divergences between correlated metrics (e.g. volumes climbing while net revenue declines)."],
-  ["6. Segment Rather Than Averaging", "Aggregates conceal reality. Always slice the data by customer cohort, product line, channel, and geography."],
-  ["7. Execute the 'Why?' Chain", "Trace the causal thread from symptom to operational driver. Stop only when arriving at an actionable business lever."],
-  ["8. Separate Symptom from Root Cause", "Discounts rising is a symptom; discounting low-margin items to liquidate aged inventory is the underlying root cause."],
-  ["9. Quantify Business Impact", "Avoid qualitative remarks. Say: 'High-discount orders generated ₹45L in revenue but ₹12L lower net profit compared to standard orders.'"],
-  ["10. Prescribe Measurable Actions", "Deliver a concrete proposal: Action + Owner + Success Metric + Review Frequency."]
-];
-
-const QUIZ = [
-  ["What is the fundamental difference between WHERE and HAVING in SQL?", "WHERE filters raw individual records before aggregation takes place. HAVING filters aggregated bucket groups after the GROUP BY clause runs."],
-  ["Why use a LEFT JOIN instead of an INNER JOIN?", "A LEFT JOIN preserves every row from the left table even if there is no matching record in the right table (filling unmatched columns with NULL). It avoids silently dropping transaction data."],
-  ["How does XLOOKUP in Excel conceptually connect to SQL and Pandas?", "XLOOKUP searches a key in a dataset and returns an associated attribute. This is conceptually identical to an indexed SQL LEFT JOIN and a Pandas pd.merge(..., how='left')."],
-  ["Why does correlation not equal causation in business analytics?", "Two variables may move together due to a third confounding factor (e.g., promotional campaigns and seasonal holiday demand both boosting volume) or coincidence. Causal claims require controlled experimentation or isolated root-cause proof."],
-  ["Interviewer asks: 'Profit dropped 12% last quarter — walk me through your diagnostic approach.'", "1) Validate data integrity & metric definitions; 2) Establish baseline vs prior quarters; 3) Segment across geography, product lines, and channels; 4) Pinpoint where the margin deterioration concentrates; 5) Trace the 'Why' chain to the operational root cause; 6) Quantify the financial impact; 7) Deliver an actionable recommendation with owner and success metric."],
-  ["What is the difference between Row Context and Filter Context in DAX?", "Row Context means evaluating an expression row by row (e.g. in calculated columns or iterator functions like SUMX). Filter Context refers to the ambient filters active in the report (slicers, visual dimensions) defining which subset of data is evaluated."],
-  ["What does a CTE (Common Table Expression) do, and why choose it over nested subqueries?", "A CTE creates a named temporary result set using the WITH keyword. It makes complex multi-stage calculations sequential, easy to read, and simpler to debug than deeply nested subqueries."],
-  ["Why should an analyst never trust high-level averages blindly?", "Averages conceal underlying variance and can fall victim to Simpson's Paradox. An overall healthy average can hide a collapsing regional market offset by a temporary outlier in another."]
-];
-
-const PORTFOLIO_STEPS = [
-  ["1. Business Problem", "Define the core operational challenge, stakeholder question, or revenue risk being explored."],
-  ["2. Dataset Overview", "Source schema, transaction volumes, period coverage, and collection method."],
-  ["3. Data Cleaning & Validation", "Document handling of missing data, deduplication, schema casting, and outlier resolution."],
-  ["4. Key Performance Indicators (KPIs)", "Explicit definitions and formulas for Revenue, Margin %, AOV, Churn, and Retention."],
-  ["5. Analytical Exploration", "Deep querying via SQL and Python/Pandas showing dimensional breakdowns and cohort behavior."],
-  ["6. Interactive Visualization", "Power BI or Tableau dashboards illustrating high-level KPIs down to root-cause breakdowns."],
-  ["7. Core Findings", "Concise, data-backed evidence showing where anomalies or drops concentrate."],
-  ["8. Root Cause Identification", "Clear demonstration of the operational driver behind the performance numbers."],
-  ["9. Quantified Business Impact", "Precise financial or unit quantification of the problem and potential upside."],
-  ["10. Actionable Recommendations", "Concrete proposals structured with: Action → Owner → Metric → Timeframe."],
-  ["11. Measurement & Review Plan", "How the business will track post-implementation success over subsequent review cycles."]
-];
-
-let activeTab = "roadmap";
-let guideSearchTerm = "";
-let guideCategoryFilter = "ALL";
-
-const tabs = [
-  ["roadmap", "🗺️ Full Roadmap"],
-  ["guide", "📖 Complete Guide"],
-  ...Object.keys(FLASHCARDS).map(k => [k, FLASHCARDS[k].label]),
-  ["frameworks", "🧠 Diagnostics & Portfolio"],
-  ["quiz", "🎯 Interview Prep"]
-];
-
-function renderNav(){
-  const nav = document.getElementById('nav');
-  nav.innerHTML = tabs.map(([k, l]) =>
-    `<button data-tab="${k}" class="${k === activeTab ? 'active' : ''}">${l}</button>`
-  ).join('');
-
-  nav.querySelectorAll('button').forEach(b => {
-    b.onclick = () => {
-      activeTab = b.dataset.tab;
-      renderNav();
-      renderMain();
-    };
-  });
-}
-
-function copyCode(btn, text){
-  navigator.clipboard.writeText(text).then(() => {
-    const orig = btn.innerText;
-    btn.innerText = 'Copied!';
-    setTimeout(() => { btn.innerText = orig; }, 1400);
-  });
-}
-
-function escapeHtml(str){
-  if(!str) return '';
-  return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-}
-
-function escapeJsString(str){
-  if(!str) return '';
-  return str.replace(/\\/g, '\\\\').replace(/`/g, '\\`').replace(/\$/g, '\\$');
-}
-
-function renderGuide(){
-  const parts = ["ALL", "Excel", "SQL", "Python", "NumPy", "Pandas", "Visualization", "APIs & Databases", "Power BI", "Tableau"];
-  
-  const filtered = GUIDE_DATA.filter(item => {
-    const matchesPart = guideCategoryFilter === "ALL" || item.part.toLowerCase() === guideCategoryFilter.toLowerCase();
-    const q = guideSearchTerm.toLowerCase();
-    const matchesQuery = !q ||
-      item.name.toLowerCase().includes(q) ||
-      item.def.toLowerCase().includes(q) ||
-      item.use.toLowerCase().includes(q) ||
-      item.syntax.toLowerCase().includes(q) ||
-      item.cat.toLowerCase().includes(q);
-    return matchesPart && matchesQuery;
-  });
-
-  return `
-    <h2>📖 Complete Reference Guide</h2>
-    <p class="subhead">Definitions, syntax, and exact use cases across Excel, SQL, Python, Pandas, Power BI, DAX, and Tableau.</p>
-    
-    <div class="guide-controls">
-      <input type="text" class="guide-search" id="guideSearch" placeholder="Search functions, syntax, or concepts (e.g. XLOOKUP, HAVING, .merge, CALCULATE)..." value="${escapeHtml(guideSearchTerm)}">
-      <div class="guide-filter-pills">
-        ${parts.map(p => `
-          <button class="guide-pill ${guideCategoryFilter === p ? 'active' : ''}" data-part="${p}">${p}</button>
-        `).join('')}
+      <div class="flex justify-center text-slate-500 text-xs">↓</div>
+      <div class="p-3 bg-[#111823] border border-[#2b3a4e] rounded-lg text-center text-xs sm:text-sm text-slate-300">
+        Modern Excel (Data Hygiene &amp; Pivot Explorations)
+      </div>
+      <div class="flex justify-center text-slate-500 text-xs">↓</div>
+      <div class="p-3 bg-[#111823] border border-orange-500/40 rounded-lg text-center text-xs sm:text-sm text-orange-300 cursor-pointer hover:bg-orange-950/20 transition" onclick="switchTab('sql')">
+        Essential MySQL Engine (Querying, Aggregations &amp; Windows) &rarr; <span class="underline">Click to view</span>
+      </div>
+      <div class="flex justify-center text-slate-500 text-xs">↓</div>
+      <div class="p-3 bg-[#111823] border border-[#2b3a4e] rounded-lg text-center text-xs sm:text-sm text-slate-300">
+        Python Analytics Stack (NumPy, Pandas, Plotly &amp; APIs)
+      </div>
+      <div class="flex justify-center text-slate-500 text-xs">↓</div>
+      <div class="p-3 bg-[#111823] border border-[#2b3a4e] rounded-lg text-center text-xs sm:text-sm text-slate-300">
+        Power BI / Tableau (Star Schema, DAX &amp; Decision Dashboards)
       </div>
     </div>
+  </section>
 
-    <div class="guide-results">
-      ${filtered.length === 0 ? `<p style="opacity:.7;padding:20px 0;">No matching entries found for "${escapeHtml(guideSearchTerm)}".</p>` : ''}
-      ${filtered.map(item => `
-        <div class="guide-entry">
-          <h3>
-            <span>${escapeHtml(item.name)}</span>
-            <span class="category-badge">${escapeHtml(item.part)} ·${escapeHtml(item.cat)}</span>
-          </h3>
-          <div class="section-row"><strong>What it is:</strong> ${escapeHtml(item.def)}</div>
-          <div class="section-row"><strong>Syntax / Pattern:</strong></div>
-          <pre><code>${escapeHtml(item.syntax)}</code><button class="copy-btn" onclick="copyCode(this, \`${escapeJsString(item.syntax)}\`)">Copy</button></pre>
-          <div class="section-row"><strong>When & Where to use:</strong> ${escapeHtml(item.use)}</div>
+  <!-- ============================================================== -->
+  <!-- TAB 2: DETAILED MYSQL STUDY HANDBOOK (Loads when clicked)      -->
+  <!-- ============================================================== -->
+  <section id="view-sql" class="hidden space-y-8">
+    <div class="border-b-2 orange-divider pb-3">
+      <h2 class="text-lg sm:text-xl font-bold text-white mono-title flex items-center gap-2">
+        <span>🗄️</span> Essential MySQL Master Study Notes
+      </h2>
+    </div>
+    <p class="text-xs sm:text-sm text-slate-400">
+      Production notes with definitions, business intuition, canonical syntax, runnable queries, interview traps, and cross-tool translations.
+    </p>
+
+    <!-- SECTION 1: BASIC QUERYING & FILTERING -->
+    <div class="space-y-4">
+      <h3 class="text-sm font-bold text-orange-400 uppercase tracking-wider mono-title">
+        1. Basic Querying &amp; Row Filtering
+      </h3>
+
+      <!-- Card: SELECT, DISTINCT, LIMIT -->
+      <div class="card-bg p-5 rounded-xl space-y-3">
+        <div class="flex justify-between items-center border-b border-slate-700/60 pb-2">
+          <h4 class="font-bold text-white text-sm mono-title">SELECT, DISTINCT, LIMIT</h4>
+          <span class="text-[10px] px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">DQL</span>
         </div>
-      `).join('')}
-    </div>
-  `;
-}
+        <p class="text-xs text-slate-300"><strong class="text-orange-300">📌 Definition &amp; Meaning:</strong> <code>SELECT</code> specifies which columns to fetch. <code>DISTINCT</code> eliminates duplicate rows from results. <code>LIMIT</code> caps row count to safely audit schemas without crashing systems.</p>
+        <div class="text-xs text-slate-400 space-y-1">
+          <div class="text-[11px] text-slate-500 uppercase">💻 Canonical Syntax:</div>
+          <pre class="code-box p-3 rounded text-slate-200 overflow-x-auto"><code>SELECT DISTINCT column1, column2 FROM table_name LIMIT 10;</code></pre>
+        </div>
+        <div class="text-xs text-slate-400 space-y-1">
+          <div class="text-[11px] text-slate-500 uppercase">⚡ Runnable Business Example:</div>
+          <pre class="code-box p-3 rounded text-emerald-400 overflow-x-auto"><code>-- Preview top 5 active customer regions
+SELECT DISTINCT region 
+FROM customer_profiles 
+WHERE is_active = 1 
+LIMIT 5;</code></pre>
+        </div>
+        <p class="text-xs text-amber-300/90 bg-amber-950/20 border border-amber-900/40 p-2.5 rounded">
+          ⚠️ <strong>Interview Trap:</strong> <code>DISTINCT</code> operates on <em>all</em> selected columns combined, not just the first column listed.
+        </p>
+        <p class="text-xs text-slate-400">
+          🔗 <strong>Cross-Tool:</strong> Excel: Remove Duplicates / <code>=UNIQUE()</code> | Pandas: <code>df[['col']].drop_duplicates().head(5)</code>
+        </p>
+      </div>
 
-function attachGuideEvents(){
-  const searchInput = document.getElementById('guideSearch');
-  if(searchInput){
-    searchInput.oninput = (e) => {
-      guideSearchTerm = e.target.value;
-      renderMain();
-      const reInput = document.getElementById('guideSearch');
-      if(reInput){
-        reInput.focus();
-        reInput.setSelectionRange(guideSearchTerm.length, guideSearchTerm.length);
+      <!-- Card: WHERE & LOGICAL OPERATORS -->
+      <div class="card-bg p-5 rounded-xl space-y-3">
+        <div class="flex justify-between items-center border-b border-slate-700/60 pb-2">
+          <h4 class="font-bold text-white text-sm mono-title">WHERE with AND, OR, NOT, BETWEEN, IN</h4>
+          <span class="text-[10px] px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">Filtering</span>
+        </div>
+        <p class="text-xs text-slate-300"><strong class="text-orange-300">📌 Definition &amp; Meaning:</strong> Filters atomic records before aggregations occur. Logical operators chain multiple business criteria together.</p>
+        <div class="text-xs text-slate-400 space-y-1">
+          <div class="text-[11px] text-slate-500 uppercase">⚡ Runnable Business Example:</div>
+          <pre class="code-box p-3 rounded text-emerald-400 overflow-x-auto"><code>SELECT order_id, customer_id, sales_amount 
+FROM orders 
+WHERE (region IN ('West', 'South'))
+  AND sales_amount BETWEEN 500 AND 5000
+  AND NOT order_status = 'Returned'
+ORDER BY sales_amount DESC;</code></pre>
+        </div>
+        <p class="text-xs text-amber-300/90 bg-amber-950/20 border border-amber-900/40 p-2.5 rounded">
+          ⚠️ <strong>Interview Trap:</strong> <code>BETWEEN</code> is inclusive of both boundaries (e.g. 500 and 5000 are included). In operator precedence, <code>AND</code> executes before <code>OR</code>; always wrap <code>OR</code> conditions in parentheses!
+        </p>
+      </div>
+    </div>
+
+    <!-- SECTION 2: AGGREGATIONS & GROUPING -->
+    <div class="space-y-4">
+      <h3 class="text-sm font-bold text-orange-400 uppercase tracking-wider mono-title">
+        2. Aggregations &amp; Grouping
+      </h3>
+
+      <!-- Card: GROUP BY & HAVING -->
+      <div class="card-bg p-5 rounded-xl space-y-3">
+        <div class="flex justify-between items-center border-b border-slate-700/60 pb-2">
+          <h4 class="font-bold text-white text-sm mono-title">GROUP BY &amp; HAVING (The Pipeline Rule)</h4>
+          <span class="text-[10px] px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">Core Aggregation</span>
+        </div>
+        <p class="text-xs text-slate-300"><strong class="text-orange-300">📌 Definition &amp; Meaning:</strong> <code>GROUP BY</code> collapses rows sharing identical values into summary buckets. <code>HAVING</code> filters aggregated summaries <em>after</em> grouping occurs.</p>
+        <div class="text-xs text-slate-400 space-y-1">
+          <div class="text-[11px] text-slate-500 uppercase">💻 Canonical Syntax:</div>
+          <pre class="code-box p-3 rounded text-slate-200 overflow-x-auto"><code>SELECT dimension, COUNT(*), SUM(metric)
+FROM table_name
+WHERE row_filter = 1
+GROUP BY dimension
+HAVING SUM(metric) > 10000;</code></pre>
+        </div>
+        <div class="text-xs text-slate-400 space-y-1">
+          <div class="text-[11px] text-slate-500 uppercase">⚡ Runnable Business Example:</div>
+          <pre class="code-box p-3 rounded text-emerald-400 overflow-x-auto"><code>-- Find enterprise regions with over $250k revenue from delivered orders
+SELECT 
+    region,
+    COUNT(order_id)             AS total_orders,
+    ROUND(SUM(sales_amount), 2) AS total_revenue,
+    ROUND(AVG(sales_amount), 2) AS avg_order_value
+FROM orders
+WHERE order_status = 'Delivered'       -- Step 1: Discard unfulfilled rows
+GROUP BY region                       -- Step 2: Bucket remaining rows
+HAVING SUM(sales_amount) > 250000;     -- Step 3: Filter calculated sums</code></pre>
+        </div>
+        <p class="text-xs text-amber-300/90 bg-amber-950/20 border border-amber-900/40 p-2.5 rounded">
+          ⚠️ <strong>Interview Trap:</strong> <code>COUNT(*)</code> counts rows including NULLs; <code>COUNT(col)</code> counts only non-null records. <code>AVG()</code> ignores NULLs! Never use column aliases in a <code>WHERE</code> clause because <code>WHERE</code> executes before <code>SELECT</code>.
+        </p>
+        <p class="text-xs text-slate-400">
+          🔗 <strong>Cross-Tool:</strong> Excel: Pivot Table (Rows &amp; Values) | Pandas: <code>df.groupby('region').agg({'sales_amount': 'sum'})</code>
+        </p>
+      </div>
+    </div>
+
+    <!-- SECTION 3: TABLE JOINS & COMBINATIONS -->
+    <div class="space-y-4">
+      <h3 class="text-sm font-bold text-orange-400 uppercase tracking-wider mono-title">
+        3. Table Joins &amp; Set Combinations
+      </h3>
+
+      <!-- Card: Relational Joins -->
+      <div class="card-bg p-5 rounded-xl space-y-3">
+        <div class="flex justify-between items-center border-b border-slate-700/60 pb-2">
+          <h4 class="font-bold text-white text-sm mono-title">INNER, LEFT, SELF JOIN &amp; UNION ALL</h4>
+          <span class="text-[10px] px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">Relational</span>
+        </div>
+        <p class="text-xs text-slate-300"><strong class="text-orange-300">📌 Definition &amp; Meaning:</strong> Joins stitch normalized tables horizontally along common keys. <code>UNION ALL</code> stacks identical schemas vertically without performing deduplication sorts.</p>
+        <div class="text-xs text-slate-400 space-y-1">
+          <div class="text-[11px] text-slate-500 uppercase">⚡ Runnable Business Example: Detect Zero-Purchase Accounts</div>
+          <pre class="code-box p-3 rounded text-emerald-400 overflow-x-auto"><code>-- Isolate churned or registered customers who have never placed an order
+SELECT 
+    c.customer_id, 
+    c.customer_name, 
+    c.created_at,
+    o.order_id
+FROM customers c 
+LEFT JOIN orders o ON c.customer_id = o.customer_id 
+WHERE o.order_id IS NULL;</code></pre>
+        </div>
+        <p class="text-xs text-amber-300/90 bg-amber-950/20 border border-amber-900/40 p-2.5 rounded">
+          ⚠️ <strong>Interview Trap (Accidental Inner Join):</strong> Placing right-table filter conditions in the <code>WHERE</code> clause converts a <code>LEFT JOIN</code> into an <code>INNER JOIN</code>. Move right-table conditions into the <code>ON</code> clause to keep all left records!
+        </p>
+      </div>
+    </div>
+
+    <!-- SECTION 4: CTES & ADVANCED ANALYSIS -->
+    <div class="space-y-4">
+      <h3 class="text-sm font-bold text-orange-400 uppercase tracking-wider mono-title">
+        4. CTEs &amp; Analytical Window Functions
+      </h3>
+
+      <!-- Card: CTEs & Windows -->
+      <div class="card-bg p-5 rounded-xl space-y-3">
+        <div class="flex justify-between items-center border-b border-slate-700/60 pb-2">
+          <h4 class="font-bold text-white text-sm mono-title">CTEs (WITH) &amp; Ranking (DENSE_RANK, LAG)</h4>
+          <span class="text-[10px] px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">Advanced Analytics</span>
+        </div>
+        <p class="text-xs text-slate-300"><strong class="text-orange-300">📌 Definition &amp; Meaning:</strong> CTEs create clean, modular data pipelines. Window functions evaluate rankings, cohort shares, and historical lags without collapsing raw rows into summaries.</p>
+        <div class="text-xs text-slate-400 space-y-1">
+          <div class="text-[11px] text-slate-500 uppercase">⚡ Runnable Business Example: Top 2 Products Per Category</div>
+          <pre class="code-box p-3 rounded text-emerald-400 overflow-x-auto"><code>WITH ranked_products AS (
+    SELECT 
+        category,
+        product_name,
+        revenue,
+        DENSE_RANK() OVER (
+            PARTITION BY category 
+            ORDER BY revenue DESC
+        ) AS rank_in_cat
+    FROM product_performance
+)
+SELECT category, product_name, revenue
+FROM ranked_products
+WHERE rank_in_cat <= 2;</code></pre>
+        </div>
+        <div class="text-xs text-slate-400 space-y-1">
+          <div class="text-[11px] text-slate-500 uppercase">⚡ Month-over-Month Revenue Growth with LAG():</div>
+          <pre class="code-box p-3 rounded text-emerald-400 overflow-x-auto"><code>SELECT 
+    order_month,
+    monthly_sales,
+    LAG(monthly_sales, 1) OVER (ORDER BY order_month) AS prev_month_sales,
+    ROUND(
+        (monthly_sales - LAG(monthly_sales, 1) OVER (ORDER BY order_month)) 
+        / NULLIF(LAG(monthly_sales, 1) OVER (ORDER BY order_month), 0) * 100, 
+        2
+    ) AS mom_growth_pct
+FROM monthly_summary;</code></pre>
+        </div>
+        <p class="text-xs text-amber-300/90 bg-amber-950/20 border border-amber-900/40 p-2.5 rounded">
+          ⚠️ <strong>Interview Trap:</strong> Window functions are strictly forbidden in <code>WHERE</code> and <code>HAVING</code> clauses. You must calculate them inside a CTE or subquery first, then filter the result in the outer query.
+        </p>
+      </div>
+    </div>
+
+    <!-- SECTION 5: DATA CLEANING -->
+    <div class="space-y-4">
+      <h3 class="text-sm font-bold text-orange-400 uppercase tracking-wider mono-title">
+        5. Data Cleaning &amp; Null Handling
+      </h3>
+
+      <div class="card-bg p-5 rounded-xl space-y-3">
+        <div class="flex justify-between items-center border-b border-slate-700/60 pb-2">
+          <h4 class="font-bold text-white text-sm mono-title">COALESCE, CAST, NULLIF &amp; CASE WHEN</h4>
+          <span class="text-[10px] px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700">Data Hygiene</span>
+        </div>
+        <div class="text-xs text-slate-400 space-y-1">
+          <div class="text-[11px] text-slate-500 uppercase">⚡ Runnable Business Example: Production Hygiene</div>
+          <pre class="code-box p-3 rounded text-emerald-400 overflow-x-auto"><code>SELECT 
+    order_id,
+    UPPER(TRIM(city)) AS cleaned_city,
+    COALESCE(work_phone, mobile_phone, 'Unreachable') AS primary_phone,
+    -- Division by zero safety
+    ROUND(refund_amount / NULLIF(total_sales, 0) * 100, 2) AS refund_pct,
+    -- Conditional business categorization
+    CASE 
+        WHEN total_sales >= 10000 THEN 'Enterprise'
+        WHEN total_sales >= 2000  THEN 'Mid-Market'
+        ELSE 'Standard'
+    END AS tier
+FROM raw_orders;</code></pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECTION 6: SQL ENGINE EXECUTION ORDER -->
+    <div class="card-bg p-5 rounded-xl space-y-3">
+      <h4 class="font-bold text-white text-sm mono-title text-orange-400">
+        Engine Logical Order of Execution (Why Aliases Fail)
+      </h4>
+      <div class="text-xs text-slate-300 leading-relaxed font-mono">
+        1. <strong>FROM / JOIN</strong> &rarr; 
+        2. <strong>WHERE</strong> &rarr; 
+        3. <strong>GROUP BY</strong> &rarr; 
+        4. <strong>HAVING</strong> &rarr; 
+        5. <strong>SELECT</strong> &rarr; 
+        6. <strong>WINDOW</strong> &rarr; 
+        7. <strong>DISTINCT</strong> &rarr; 
+        8. <strong>ORDER BY</strong> &rarr; 
+        9. <strong>LIMIT</strong>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================== -->
+  <!-- TAB 3: OTHER TABS PLACEHOLDER (Excel, Python, BI, etc.)        -->
+  <!-- ============================================================== -->
+  <section id="view-placeholder" class="hidden space-y-6">
+    <div class="border-b-2 orange-divider pb-3">
+      <h2 id="placeholder-title" class="text-lg sm:text-xl font-bold text-white mono-title">
+        Module Notes
+      </h2>
+    </div>
+    <div class="card-bg p-8 rounded-xl text-center space-y-3">
+      <p class="text-sm text-slate-300" id="placeholder-desc">Notes loading...</p>
+      <button onclick="switchTab('sql')" class="px-4 py-2 bg-orange-600 hover:bg-orange-500 text-white rounded-full text-xs font-bold transition">
+        Switch to SQL Master Notes &rarr;
+      </button>
+    </div>
+  </section>
+
+  <!-- JAVASCRIPT FOR DYNAMIC TAB SWITCHING -->
+  <script>
+    const tabs = ['roadmap', 'guide', 'excel', 'sql', 'python', 'bi', 'diagnostics', 'interview'];
+
+    function switchTab(activeId) {
+      // 1. Update button styling
+      tabs.forEach(tab => {
+        const btn = document.getElementById('btn-' + tab);
+        if (btn) {
+          if (tab === activeId) {
+            btn.className = "pill-active px-4 py-2 rounded-full transition flex items-center gap-1.5 shadow-sm";
+          } else {
+            btn.className = "pill-inactive px-4 py-2 rounded-full transition flex items-center gap-1.5";
+          }
+        }
+      });
+
+      // 2. Hide all view containers
+      document.getElementById('view-roadmap').classList.add('hidden');
+      document.getElementById('view-sql').classList.add('hidden');
+      document.getElementById('view-placeholder').classList.add('hidden');
+
+      // 3. Render appropriate container
+      if (activeId === 'roadmap') {
+        document.getElementById('view-roadmap').classList.remove('hidden');
+      } else if (activeId === 'sql') {
+        document.getElementById('view-sql').classList.remove('hidden');
+        window.scrollTo({ top: 150, behavior: 'smooth' });
+      } else {
+        // Fallback placeholder for other modules
+        const placeholder = document.getElementById('view-placeholder');
+        const title = document.getElementById('placeholder-title');
+        const desc = document.getElementById('placeholder-desc');
+        placeholder.classList.remove('hidden');
+
+        const labels = {
+          'guide': '📖 Complete Guide & Curated Resources',
+          'excel': '📗 Modern Excel for Analytics (XLOOKUP & Pivots)',
+          'python': '🐍 Python, NumPy, Pandas & Data Visualization',
+          'bi': '📈 Power BI & Tableau (Star Schema & DAX / LODs)',
+          'diagnostics': '🧠 Root Cause Diagnostics & Business Analysis',
+          'interview': '🎯 Technical Interview Traps & Live Whiteboard Challenges'
+        };
+        title.innerText = labels[activeId] || 'Module Notes';
+        desc.innerText = `Detailed notes for ${labels[activeId]} are ready to be expanded in your study guide.`;
       }
-    };
-  }
-
-  document.querySelectorAll('.guide-pill').forEach(pill => {
-    pill.onclick = () => {
-      guideCategoryFilter = pill.dataset.part;
-      renderMain();
-    };
-  });
-}
-
-function renderRoadmap(){
-  return `
-    <h2>🗺️ Complete Data Analyst Learning Progression</h2>
-    <p class="subhead">A clear step-by-step roadmap from baseline analyst thinking to advanced BI tools.</p>
-    
-    <div class="flow-box">
-      <h3 style="margin-top:0;color:var(--denim);">The Skill Stack Architecture</h3>
-      <div class="flow-diagram">
-        <div class="flow-node">Business Mindset & Problem Framing</div>
-        <div class="flow-arrow">↓</div>
-        <div class="flow-node">Excel (Formulas, XLOOKUP, Pivot Tables)</div>
-        <div class="flow-arrow">↓</div>
-        <div class="flow-node">SQL (SELECT to Window Functions & CTEs)</div>
-        <div class="flow-arrow">↓</div>
-        <div class="flow-node">Python Fundamentals</div>
-        <div class="flow-arrow">↓</div>
-        <div class="flow-node">NumPy & Pandas (Wrangling & Cleaning)</div>
-        <div class="flow-arrow">↓</div>
-        <div class="flow-node">Data Visualization (Matplotlib, Seaborn, Plotly)</div>
-        <div class="flow-arrow">↓</div>
-        <div class="flow-node">APIs & SQL-to-Python Workflows</div>
-        <div class="flow-arrow">↓</div>
-        <div class="flow-node">Power BI (Power Query, Star Schema, DAX)</div>
-        <div class="flow-arrow">↓</div>
-        <div class="flow-node">Tableau (LOD, Calculated Fields, Dashboards)</div>
-        <div class="flow-arrow">↓</div>
-        <div class="flow-node">Diagnostic Business Storytelling & Impact</div>
-      </div>
-    </div>
-
-    <div class="steps">
-      ${ROADMAP_SECTIONS.map(s => `
-        <div class="step">
-          <b>${s.title}</b>
-          <div>${s.content}</div>
-        </div>
-      `).join('')}
-    </div>
-
-    <div class="flow-box" style="margin-top:24px;">
-      <h3 style="margin-top:0;color:var(--denim);">Learning Priority Tiers</h3>
-      <table class="road-table">
-        <tr><th>Tier</th><th>Skills & Tools</th><th>Strategy</th></tr>
-        <tr>
-          <td><strong>Tier 1 — Must Master</strong></td>
-          <td>Excel (XLOOKUP, SUMIFS, Pivots), SQL (CTEs, Joins, Group By, Window Funcs), Python/Pandas, Power BI (Star Schema, CALCULATE, Measures), Business Analysis Frameworks.</td>
-          <td>80% of daily analyst work. Focus practice here until second nature.</td>
-        </tr>
-        <tr>
-          <td><strong>Tier 2 — Important</strong></td>
-          <td>APIs (requests), SQLAlchemy, Plotly, Advanced DAX, Tableau (LOD expressions), Power BI Service & Governance.</td>
-          <td>Learn after foundational tools are fluent to expand versatility.</td>
-        </tr>
-        <tr>
-          <td><strong>Tier 3 — As Needed</strong></td>
-          <td>Advanced NumPy, Fabric, Copilot capabilities, complex spatial analytics, database administration.</td>
-          <td>Don't stall progress for these; learn on the job when required.</td>
-        </tr>
-      </table>
-    </div>
-  `;
-}
-
-function renderFrameworks(){
-  return `
-    <h2>🧠 Diagnostic Frameworks & Project Architecture</h2>
-    <p class="subhead">The operational frameworks that separate junior tool users from strategic business analysts.</p>
-
-    <div class="flow-box">
-      <h3 style="margin-top:0;color:var(--denim);">The 10-Step Problem Diagnostic Checklist</h3>
-      <div class="steps">
-        ${ANALYTIC_STEPS.map(([t, d]) => `
-          <div class="step">
-            <b>${escapeHtml(t)}</b>
-            <div>${escapeHtml(d)}</div>
-          </div>
-        `).join('')}
-      </div>
-    </div>
-
-    <div class="flow-box" style="margin-top:20px;">
-      <h3 style="margin-top:0;color:var(--denim);">Structuring Job-Ready Portfolio Projects</h3>
-      <p style="font-size:.85rem;line-height:1.45;">Every project in your portfolio should be structured as an investigation that drove a decision, not just a technical showcase of code:</p>
-      <div class="steps">
-        ${PORTFOLIO_STEPS.map(([t, d]) => `
-          <div class="step" style="border-left-color:var(--accent2);">
-            <b>${escapeHtml(t)}</b>
-            <div>${escapeHtml(d)}</div>
-          </div>
-        `).join('')}
-      </div>
-    </div>
-  `;
-}
-
-function renderMain(){
-  const main = document.getElementById('main');
-
-  if(activeTab === 'roadmap'){
-    main.innerHTML = renderRoadmap();
-  } else if(activeTab === 'guide'){
-    main.innerHTML = renderGuide();
-    attachGuideEvents();
-  } else if(FLASHCARDS[activeTab]){
-    const d = FLASHCARDS[activeTab];
-    main.innerHTML = `
-      <h2>${d.label} Flashcards</h2>
-      <p class="subhead">Tap any card to flip between syntax patterns and applied concepts.</p>
-      <div class="grid">
-        ${d.cards.map((c, i) => `
-          <div class="card" data-i="${i}">
-            <div class="front">
-              ${escapeHtml(c.t)}
-              <small>tap to flip ↴</small>
-            </div>
-            <div class="back">
-              <span class="tag">${escapeHtml(c.t)}</span>${escapeHtml(c.d)}
-            </div>
-            <div class="hint">↺ flip</div>
-          </div>
-        `).join('')}
-      </div>
-    `;
-    main.querySelectorAll('.card').forEach(el => el.onclick = () => el.classList.toggle('flipped'));
-  } else if(activeTab === 'frameworks'){
-    main.innerHTML = renderFrameworks();
-  } else if(activeTab === 'quiz'){
-    main.innerHTML = `
-      <h2>🎯 Interview Diagnostic Prep</h2>
-      <p class="subhead">Practice answering these conceptual and scenario-based interview questions.</p>
-      ${QUIZ.map(([q, a], i) => `
-        <div class="quiz-card">
-          <p class="q">Q${i + 1}.${escapeHtml(q)}</p>
-          <button class="reveal" data-i="${i}">Reveal Answer</button>
-          <div class="ans" id="ans${i}">${escapeHtml(a)}</div>
-        </div>
-      `).join('')}
-    `;
-    main.querySelectorAll('.reveal').forEach(b => {
-      b.onclick = () => {
-        const target = document.getElementById('ans' + b.dataset.i);
-        const isOpen = target.style.display === 'block';
-        target.style.display = isOpen ? 'none' : 'block';
-        b.innerText = isOpen ? 'Reveal Answer' : 'Hide Answer';
-      };
-    });
-  }
-}
-
-renderNav();
-renderMain();
-</script>
+    }
+  </script>
 </body>
 </html>
