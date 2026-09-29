@@ -79,7 +79,7 @@ Root Cause: Inefficient scheduling allocation.`,
   // MODULE 1: MYSQL MASTERY (PARTS 1 TO 8: TOPICS 1 TO 54)
   // =========================================================================
   {
-    module: "Module 1: MySQL Mastery",
+    module: "Module 1: MySQL",
     section: "Part 1: Introduction",
     title: "1. Data",
     definition: "Data is a collection of raw facts, figures, or details about people, things, or events.",
@@ -89,7 +89,7 @@ Root Cause: Inefficient scheduling allocation.`,
     example: "-- Example: Staff records\n-- Name: 'Asha', Role: 'Nurse', Salary: 32000"
   },
   {
-    module: "Module 1: MySQL Mastery",
+    module: "Module 1: MySQL",
     section: "Part 1: Introduction",
     title: "2. Database",
     definition: "A database is an organised collection of data stored electronically so it can be easily accessed, managed, and updated.",
@@ -99,7 +99,7 @@ Root Cause: Inefficient scheduling allocation.`,
     example: "-- A hospital database holds tables: departments, staff, and shifts."
   },
   {
-    module: "Module 1: MySQL Mastery",
+    module: "Module 1: MySQL",
     section: "Part 1: Introduction",
     title: "3. DBMS and RDBMS",
     definition: "A DBMS creates and manages databases. An RDBMS stores data in related tables linked by common keys.",
@@ -109,7 +109,7 @@ Root Cause: Inefficient scheduling allocation.`,
     example: "-- staff.dept_id = 1 links directly to departments.dept_id = 1 (Emergency)"
   },
   {
-    module: "Module 1: MySQL Mastery",
+    module: "Module 1: MySQL",
     section: "Part 1: Introduction",
     title: "4. SQL",
     definition: "SQL (Structured Query Language) is the standard language used to communicate with relational databases.",
@@ -119,7 +119,7 @@ Root Cause: Inefficient scheduling allocation.`,
     example: "SELECT staff_name, salary FROM staff WHERE salary > 35000;"
   },
   {
-    module: "Module 1: MySQL Mastery",
+    module: "Module 1: MySQL",
     section: "Part 1: Introduction",
     title: "5. MySQL & Workbench Setup",
     definition: "MySQL is a free, open-source RDBMS. MySQL Workbench is the graphical desktop tool to write and run queries.",
@@ -129,7 +129,7 @@ Root Cause: Inefficient scheduling allocation.`,
     example: "SELECT 'Hello SQL' AS test_message;"
   },
   {
-    module: "Module 1: MySQL Mastery",
+    module: "Module 1: MySQL",
     section: "Part 1: Introduction",
     title: "6. Types of SQL Commands",
     definition: "SQL commands are grouped into five categories based on what they do.",
@@ -139,7 +139,7 @@ Root Cause: Inefficient scheduling allocation.`,
     example: "-- DDL: CREATE TABLE ...\n-- DML: INSERT INTO ...\n-- DQL: SELECT * FROM ..."
   },
   {
-    module: "Module 1: MySQL Mastery",
+    module: "Module 1: MySQL",
     section: "Part 1: Introduction",
     title: "7. Sample Hospital Tables Setup",
     definition: "The standardized database schema used across every query in the curriculum.",
@@ -180,7 +180,8 @@ INSERT INTO staff VALUES
 (3,'Meena','Pharmacist',2,40000,'2021-09-10'),
 (4,'John','Technician',3,38000,'2023-01-20'),
 (5,'Priya','Nurse',4,33000,'2022-08-05'),
-(6,'Kiran','Doctor',1,90000,'2019-11-12'),
+(6,'Kiran','Doctor',1,90000,
+'2019-11-12'),
 (7,'Sara','Nurse',NULL,31000,'2024-02-01');
 
 INSERT INTO shifts VALUES
@@ -192,7 +193,7 @@ INSERT INTO shifts VALUES
 (6,6,'2026-09-02','Night',12);`
   },
   {
-    module: "Module 1: MySQL Mastery",
+    module: "Module 1: MySQL",
     section: "Part 2: Data Types & DDL",
     title: "8. Numeric Data Types",
     definition: "Data types that store numbers in a column.",
@@ -202,7 +203,7 @@ INSERT INTO shifts VALUES
     example: "salary DECIMAL(10,2)   -- up to 8 digits before decimal, 2 after\nage INT\nphone_number BIGINT"
   },
   {
-    module: "Module 1: MySQL Mastery",
+    module: "Module 1: MySQL",
     section: "Part 2: Data Types & DDL",
     title: "9. String (Text) Data Types",
     definition: "Data types used to store text characters.",
@@ -212,7 +213,7 @@ INSERT INTO shifts VALUES
     example: "state_code CHAR(2)\nstaff_name VARCHAR(50)\nremarks TEXT"
   },
   {
-    module: "Module 1: MySQL Mastery",
+    module: "Module 1: MySQL",
     section: "Part 2: Data Types & DDL",
     title: "10. Date and Time Data Types",
     definition: "Data types specifically structured to store calendar dates and clock times.",
@@ -222,7 +223,7 @@ INSERT INTO shifts VALUES
     example: "join_date DATE                -- '2026-09-29'\nshift_start TIME              -- '08:30:00'\ncreated_at DATETIME           -- '2026-09-29 10:15:00'"
   },
   {
-    module: "Module 1: MySQL Mastery",
+    module: "Module 1: MySQL",
     section: "Part 2: Data Types & DDL",
     title: "11. Boolean Data Type",
     definition: "Stores True or False logic in MySQL.",
@@ -237,7 +238,7 @@ INSERT INTO test_flags VALUES (1, TRUE), (2, FALSE);
 SELECT * FROM test_flags WHERE is_active = 1;`
   },
   {
-    module: "Module 1: MySQL Mastery",
+    module: "Module 1: MySQL",
     section: "Part 2: Data Types & DDL",
     title: "12. NULL (Missing Values)",
     definition: "NULL means a missing, unknown, or unrecorded value.",
@@ -247,7 +248,7 @@ SELECT * FROM test_flags WHERE is_active = 1;`
     example: "SELECT staff_name FROM staff WHERE dept_id IS NULL; -- Returns Sara"
   },
   {
-    module: "Module 1: MySQL Mastery",
+    module: "Module 1: MySQL",
     section: "Part 2: Data Types & DDL",
     title: "13. Constraints",
     definition: "Rules enforced on columns to ensure only clean, valid data enters the database.",
@@ -265,7 +266,7 @@ SELECT * FROM test_flags WHERE is_active = 1;`
 );`
   },
   {
-    module: "Module 1: MySQL Mastery",
+    module: "Module 1: MySQL",
     section: "Part 2: Data Types & DDL",
     title: "14. CREATE DATABASE and USE",
     definition: "Commands used to initialize a new database and set it as the active working context.",
@@ -275,7 +276,7 @@ SELECT * FROM test_flags WHERE is_active = 1;`
     example: "CREATE DATABASE hospital_db;\nUSE hospital_db;\nSHOW DATABASES;"
   },
   {
-    module: "Module 1: MySQL Mastery",
+    module: "Module 1: MySQL",
     section: "Part 2: Data Types & DDL",
     title: "15. CREATE TABLE",
     definition: "Defines a new table structure with column names, data types, and rules.",
@@ -290,7 +291,7 @@ SELECT * FROM test_flags WHERE is_active = 1;`
 );`
   },
   {
-    module: "Module 1: MySQL Mastery",
+    module: "Module 1: MySQL",
     section: "Part 2: Data Types & DDL",
     title: "16. DESCRIBE and SHOW TABLES",
     definition: "Inspection commands to see all existing tables and check a table's schema.",
@@ -300,7 +301,7 @@ SELECT * FROM test_flags WHERE is_active = 1;`
     example: "SHOW TABLES;\nDESCRIBE staff;"
   },
   {
-    module: "Module 1: MySQL Mastery",
+    module: "Module 1: MySQL",
     section: "Part 2: Data Types & DDL",
     title: "17. ALTER TABLE",
     definition: "Modifies the structure of an existing table without deleting the data inside it.",
@@ -313,7 +314,7 @@ ALTER TABLE staff RENAME COLUMN phone TO contact_no;
 ALTER TABLE staff DROP COLUMN contact_no;`
   },
   {
-    module: "Module 1: MySQL Mastery",
+    module: "Module 1: MySQL",
     section: "Part 2: Data Types & DDL",
     title: "18. DROP, TRUNCATE, and DELETE",
     definition: "The three ways to remove data or tables in SQL.",
@@ -325,7 +326,7 @@ TRUNCATE TABLE patients;
 DELETE FROM shifts WHERE shift_id = 6;`
   },
   {
-    module: "Module 1: MySQL Mastery",
+    module: "Module 1: MySQL",
     section: "Part 2: Data Types & DDL",
     title: "19. INSERT",
     definition: "Adds new rows of data into a table.",
@@ -340,7 +341,7 @@ INSERT INTO patients VALUES
 (3, 'Suresh', 60, '2026-09-12');`
   },
   {
-    module: "Module 1: MySQL Mastery",
+    module: "Module 1: MySQL",
     section: "Part 2: Data Types & DDL",
     title: "20. UPDATE",
     definition: "Modifies existing values inside a table.",
@@ -352,7 +353,7 @@ SET salary = 35000
 WHERE staff_id = 1;`
   },
   {
-    module: "Module 1: MySQL Mastery",
+    module: "Module 1: MySQL",
     section: "Part 3: Querying Data",
     title: "21. SELECT",
     definition: "SELECT reads data from one or more tables.",
@@ -362,7 +363,7 @@ WHERE staff_id = 1;`
     example: "SELECT staff_name, role FROM staff;\nSELECT * FROM departments;"
   },
   {
-    module: "Module 1: MySQL Mastery",
+    module: "Module 1: MySQL",
     section: "Part 3: Querying Data",
     title: "22. WHERE",
     definition: "WHERE filters rows based on a condition.",
@@ -372,7 +373,7 @@ WHERE staff_id = 1;`
     example: "SELECT staff_name, salary FROM staff WHERE salary > 35000;"
   },
   {
-    module: "Module 1: MySQL Mastery",
+    module: "Module 1: MySQL",
     section: "Part 3: Querying Data",
     title: "23. AND, OR, NOT",
     definition: "Logical operators used to combine or reverse conditions in a WHERE clause.",
@@ -383,7 +384,7 @@ WHERE staff_id = 1;`
 SELECT staff_name, role FROM staff WHERE role = 'Doctor' OR role = 'Pharmacist';`
   },
   {
-    module: "Module 1: MySQL Mastery",
+    module: "Module 1: MySQL",
     section: "Part 3: Querying Data",
     title: "24. IN",
     definition: "IN checks whether a value matches any value in a specified list.",
@@ -393,7 +394,7 @@ SELECT staff_name, role FROM staff WHERE role = 'Doctor' OR role = 'Pharmacist';
     example: "SELECT staff_name, role FROM staff WHERE role IN ('Doctor', 'Pharmacist');"
   },
   {
-    module: "Module 1: MySQL Mastery",
+    module: "Module 1: MySQL",
     section: "Part 3: Querying Data",
     title: "25. BETWEEN",
     definition: "BETWEEN checks whether a value falls within a range, including both boundary values.",
@@ -404,7 +405,7 @@ SELECT staff_name, role FROM staff WHERE role = 'Doctor' OR role = 'Pharmacist';
 SELECT staff_name, join_date FROM staff WHERE join_date BETWEEN '2022-01-01' AND '2022-12-31';`
   },
   {
-    module: "Module 1: MySQL Mastery",
+    module: "Module 1: MySQL",
     section: "Part 3: Querying Data",
     title: "26. LIKE",
     definition: "LIKE searches for a specified text pattern.",
@@ -416,7 +417,7 @@ SELECT staff_name FROM staff WHERE staff_name LIKE '%a';   -- ends with a
 SELECT staff_name FROM staff WHERE staff_name LIKE '_ara'; -- 4 letters ending in ara`
   },
   {
-    module: "Module 1: MySQL Mastery",
+    module: "Module 1: MySQL",
     section: "Part 3: Querying Data",
     title: "27. ORDER BY",
     definition: "ORDER BY sorts the returned result rows.",
@@ -426,7 +427,7 @@ SELECT staff_name FROM staff WHERE staff_name LIKE '_ara'; -- 4 letters ending i
     example: "SELECT staff_name, salary FROM staff ORDER BY salary DESC;"
   },
   {
-    module: "Module 1: MySQL Mastery",
+    module: "Module 1: MySQL",
     section: "Part 3: Querying Data",
     title: "28. LIMIT and OFFSET",
     definition: "LIMIT restricts the maximum number of rows returned.",
@@ -436,7 +437,7 @@ SELECT staff_name FROM staff WHERE staff_name LIKE '_ara'; -- 4 letters ending i
     example: "SELECT staff_name, salary FROM staff ORDER BY salary DESC LIMIT 3;"
   },
   {
-    module: "Module 1: MySQL Mastery",
+    module: "Module 1: MySQL",
     section: "Part 3: Querying Data",
     title: "29. DISTINCT",
     definition: "DISTINCT eliminates duplicate values from the output.",
@@ -447,7 +448,7 @@ SELECT staff_name FROM staff WHERE staff_name LIKE '_ara'; -- 4 letters ending i
 SELECT COUNT(DISTINCT role) AS total_roles FROM staff;`
   },
   {
-    module: "Module 1: MySQL Mastery",
+    module: "Module 1: MySQL",
     section: "Part 3: Querying Data",
     title: "30. Aliases (AS)",
     definition: "An alias provides a temporary name for a column or table in a query.",
@@ -457,7 +458,7 @@ SELECT COUNT(DISTINCT role) AS total_roles FROM staff;`
     example: "SELECT staff_name AS employee, salary * 12 AS yearly_salary FROM staff AS s;"
   },
   {
-    module: "Module 1: MySQL Mastery",
+    module: "Module 1: MySQL",
     section: "Part 4: Summarizing Data",
     title: "31. Aggregate Functions",
     definition: "Aggregate functions compute a single summary result across multiple rows.",
@@ -472,7 +473,7 @@ SELECT COUNT(DISTINCT role) AS total_roles FROM staff;`
 FROM staff;`
   },
   {
-    module: "Module 1: MySQL Mastery",
+    module: "Module 1: MySQL",
     section: "Part 4: Summarizing Data",
     title: "32. GROUP BY",
     definition: "GROUP BY partitions rows into summary buckets so aggregates run per group.",
@@ -482,7 +483,7 @@ FROM staff;`
     example: "SELECT role, COUNT(*) AS total, AVG(salary) AS avg_salary FROM staff GROUP BY role;"
   },
   {
-    module: "Module 1: MySQL Mastery",
+    module: "Module 1: MySQL",
     section: "Part 4: Summarizing Data",
     title: "33. HAVING",
     definition: "HAVING filters groups after GROUP BY aggregation takes place.",
@@ -492,7 +493,7 @@ FROM staff;`
     example: "SELECT dept_id, AVG(salary) AS avg_salary FROM staff GROUP BY dept_id HAVING AVG(salary) > 35000;"
   },
   {
-    module: "Module 1: MySQL Mastery",
+    module: "Module 1: MySQL",
     section: "Part 4: Summarizing Data",
     title: "34. CASE WHEN",
     definition: "Applies if-else conditional logic directly inside a SQL query.",
@@ -508,7 +509,7 @@ FROM staff;`
 FROM staff;`
   },
   {
-    module: "Module 1: MySQL Mastery",
+    module: "Module 1: MySQL",
     section: "Part 5: Joins & UNION",
     title: "35. INNER JOIN",
     definition: "INNER JOIN returns only rows that have matching values in both tables.",
@@ -518,7 +519,7 @@ FROM staff;`
     example: "SELECT s.staff_name, d.dept_name FROM staff s INNER JOIN departments d ON s.dept_id = d.dept_id;"
   },
   {
-    module: "Module 1: MySQL Mastery",
+    module: "Module 1: MySQL",
     section: "Part 5: Joins & UNION",
     title: "36. LEFT JOIN & Anti-Join",
     definition: "LEFT JOIN returns all rows from the left table, plus matching rows from the right table.",
@@ -532,7 +533,7 @@ SELECT s.staff_name, d.dept_name FROM staff s LEFT JOIN departments d ON s.dept_
 SELECT s.staff_name FROM staff s LEFT JOIN shifts sh ON s.staff_id = sh.staff_id WHERE sh.shift_id IS NULL;`
   },
   {
-    module: "Module 1: MySQL Mastery",
+    module: "Module 1: MySQL",
     section: "Part 5: Joins & UNION",
     title: "37. RIGHT JOIN",
     definition: "Returns all rows from the right table, plus matches from the left table.",
@@ -542,7 +543,7 @@ SELECT s.staff_name FROM staff s LEFT JOIN shifts sh ON s.staff_id = sh.staff_id
     example: "SELECT d.dept_name, s.staff_name FROM staff s RIGHT JOIN departments d ON s.dept_id = d.dept_id;"
   },
   {
-    module: "Module 1: MySQL Mastery",
+    module: "Module 1: MySQL",
     section: "Part 5: Joins & UNION",
     title: "38. Joining Multiple Tables",
     definition: "Chaining multiple JOIN clauses to combine three or more related tables.",
@@ -555,7 +556,7 @@ JOIN departments d ON s.dept_id = d.dept_id
 JOIN shifts sh ON s.staff_id = sh.staff_id;`
   },
   {
-    module: "Module 1: MySQL Mastery",
+    module: "Module 1: MySQL",
     section: "Part 5: Joins & UNION",
     title: "39. SELF JOIN",
     definition: "A self join joins a table to itself using distinct aliases.",
@@ -567,7 +568,7 @@ FROM staff a
 JOIN staff b ON a.dept_id = b.dept_id AND a.staff_id < b.staff_id;`
   },
   {
-    module: "Module 1: MySQL Mastery",
+    module: "Module 1: MySQL",
     section: "Part 5: Joins & UNION",
     title: "40. UNION and UNION ALL",
     definition: "Combines the result sets of two or more SELECT queries into a single output.",
@@ -579,7 +580,7 @@ UNION
 SELECT staff_id FROM shifts WHERE shift_type = 'Night';`
   },
   {
-    module: "Module 1: MySQL Mastery",
+    module: "Module 1: MySQL",
     section: "Part 6: Functions & Cleaning",
     title: "41. String Functions",
     definition: "Built-in SQL functions that manipulate text values.",
@@ -593,7 +594,7 @@ SELECT staff_id FROM shifts WHERE shift_type = 'Night';`
 FROM staff;`
   },
   {
-    module: "Module 1: MySQL Mastery",
+    module: "Module 1: MySQL",
     section: "Part 6: Functions & Cleaning",
     title: "42. Numeric Functions",
     definition: "Functions used to perform mathematical calculations and rounding on numbers.",
@@ -606,7 +607,7 @@ FROM staff;`
 FROM staff;`
   },
   {
-    module: "Module 1: MySQL Mastery",
+    module: "Module 1: MySQL",
     section: "Part 6: Functions & Cleaning",
     title: "43. Date Functions",
     definition: "Functions that extract date parts, format dates, and calculate intervals.",
@@ -621,7 +622,7 @@ FROM staff;`
 FROM staff;`
   },
   {
-    module: "Module 1: MySQL Mastery",
+    module: "Module 1: MySQL",
     section: "Part 6: Functions & Cleaning",
     title: "44. IFNULL and COALESCE",
     definition: "Functions that replace NULL values with a readable default.",
@@ -633,7 +634,7 @@ FROM staff s
 LEFT JOIN departments d ON s.dept_id = d.dept_id;`
   },
   {
-    module: "Module 1: MySQL Mastery",
+    module: "Module 1: MySQL",
     section: "Part 6: Functions & Cleaning",
     title: "45. Finding Duplicates",
     definition: "Identifying duplicate values across columns that should be unique.",
@@ -643,7 +644,7 @@ LEFT JOIN departments d ON s.dept_id = d.dept_id;`
     example: "SELECT role, COUNT(*) AS total FROM staff GROUP BY role HAVING COUNT(*) > 1;"
   },
   {
-    module: "Module 1: MySQL Mastery",
+    module: "Module 1: MySQL",
     section: "Part 7: Intermediate SQL",
     title: "46. Subquery",
     definition: "A query nested inside another SQL statement.",
@@ -653,7 +654,7 @@ LEFT JOIN departments d ON s.dept_id = d.dept_id;`
     example: "SELECT staff_name, salary FROM staff WHERE salary > (SELECT AVG(salary) FROM staff);"
   },
   {
-    module: "Module 1: MySQL Mastery",
+    module: "Module 1: MySQL",
     section: "Part 7: Intermediate SQL",
     title: "47. CTE (Common Table Expression)",
     definition: "A named temporary result set defined with WITH at the beginning of a query.",
@@ -671,7 +672,7 @@ JOIN dept_avg d ON s.dept_id = d.dept_id
 WHERE s.salary > d.avg_salary;`
   },
   {
-    module: "Module 1: MySQL Mastery",
+    module: "Module 1: MySQL",
     section: "Part 7: Intermediate SQL",
     title: "48. Window Functions: ROW_NUMBER",
     definition: "Performs calculations across related row subsets without collapsing rows into a single summary line.",
@@ -683,7 +684,7 @@ WHERE s.salary > d.avg_salary;`
 FROM staff;`
   },
   {
-    module: "Module 1: MySQL Mastery",
+    module: "Module 1: MySQL",
     section: "Part 7: Intermediate SQL",
     title: "49. RANK and DENSE_RANK",
     definition: "Assigns numerical rankings to rows, handling duplicate values differently.",
@@ -696,7 +697,7 @@ FROM staff;`
 FROM staff;`
   },
   {
-    module: "Module 1: MySQL Mastery",
+    module: "Module 1: MySQL",
     section: "Part 7: Intermediate SQL",
     title: "50. LAG and LEAD",
     definition: "LAG accesses values from previous rows; LEAD accesses values from subsequent rows.",
@@ -708,7 +709,7 @@ FROM staff;`
 FROM shifts;`
   },
   {
-    module: "Module 1: MySQL Mastery",
+    module: "Module 1: MySQL",
     section: "Part 7: Intermediate SQL",
     title: "51. Running Total (Cumulative Sum)",
     definition: "Calculates an ongoing cumulative sum row by row.",
@@ -720,7 +721,7 @@ FROM shifts;`
 FROM shifts;`
   },
   {
-    module: "Module 1: MySQL Mastery",
+    module: "Module 1: MySQL",
     section: "Part 8: Views & Indexes",
     title: "52. Views",
     definition: "A saved SQL query that functions as a virtual table.",
@@ -735,7 +736,7 @@ LEFT JOIN departments d ON s.dept_id = d.dept_id;
 SELECT * FROM staff_with_dept WHERE role = 'Nurse';`
   },
   {
-    module: "Module 1: MySQL Mastery",
+    module: "Module 1: MySQL",
     section: "Part 8: Views & Indexes",
     title: "53. Indexes",
     definition: "Data structures that accelerate search and retrieval speeds in MySQL.",
@@ -745,7 +746,7 @@ SELECT * FROM staff_with_dept WHERE role = 'Nurse';`
     example: "CREATE INDEX idx_staff_role ON staff (role);"
   },
   {
-    module: "Module 1: MySQL Mastery",
+    module: "Module 1: MySQL",
     section: "Part 8: Views & Indexes",
     title: "54. Order of Writing vs Execution",
     definition: "SQL clauses are written in a specific syntax order, but the MySQL database engine executes them in a completely different sequence.",
