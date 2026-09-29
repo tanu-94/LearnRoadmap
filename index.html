@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Roadmap to Become Data Analyst</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
@@ -14,12 +14,12 @@
     .custom-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
   </style>
 </head>
-<body class="bg-slate-50 text-slate-800 flex h-screen overflow-hidden relative">
+<body class="bg-slate-50 text-slate-800 flex h-[100dvh] overflow-hidden relative">
 
   <!-- MOBILE OVERLAY BACKDROP -->
   <div id="mobileBackdrop" class="fixed inset-0 bg-slate-900/60 z-40 hidden md:hidden transition-opacity"></div>
 
-  <!-- SIDEBAR (Off-canvas drawer on mobile, static sidebar on desktop) -->
+  <!-- SIDEBAR DRAWER -->
   <aside id="sidebar" class="fixed md:static inset-y-0 left-0 z-50 w-72 sm:w-80 bg-slate-900 text-slate-300 flex flex-col flex-shrink-0 border-r border-slate-800 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out">
     <div class="p-4 sm:p-5 border-b border-slate-800 flex items-center justify-between">
       <div>
@@ -29,7 +29,7 @@
         </div>
         <p class="text-xs text-slate-400 mt-1">Learn. Practice. Analyze. Grow.</p>
       </div>
-      <!-- Close button on mobile -->
+      <!-- Close drawer button on mobile -->
       <button id="closeSidebarBtn" class="md:hidden text-slate-400 hover:text-white p-1 rounded-lg">
         <i data-lucide="x" class="w-5 h-5"></i>
       </button>
@@ -60,9 +60,9 @@
   </aside>
 
   <!-- MAIN VIEW -->
-  <main class="flex-1 flex flex-col h-full overflow-hidden bg-white w-full">
+  <main class="flex-1 flex flex-col h-[100dvh] overflow-hidden bg-white w-full">
     <!-- Header -->
-    <header class="h-14 sm:h-16 border-b border-slate-200 px-4 sm:px-8 flex items-center justify-between bg-white flex-shrink-0">
+    <header class="h-14 sm:h-16 border-b border-slate-200 px-4 sm:px-8 flex items-center justify-between bg-white flex-shrink-0 z-10">
       <div class="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm text-slate-500 min-w-0">
         <!-- Hamburger Menu Button on Mobile -->
         <button id="menuToggleBtn" class="md:hidden text-slate-700 hover:text-sky-600 p-1.5 rounded-lg border border-slate-200 flex-shrink-0">
@@ -77,19 +77,19 @@
 
     <!-- Scrollable Content -->
     <div class="flex-1 overflow-y-auto p-4 sm:p-8 custom-scroll bg-slate-50" id="contentContainer">
-      <div class="max-w-4xl mx-auto space-y-5" id="lessonContent"></div>
+      <div class="max-w-4xl mx-auto space-y-6" id="lessonContent"></div>
     </div>
 
-    <!-- Continuous Pagination Footer -->
-    <footer class="h-16 sm:h-20 border-t border-slate-200 px-4 sm:px-8 flex items-center justify-between bg-white flex-shrink-0">
-      <button id="prevBtn" class="flex items-center gap-1.5 sm:gap-2 px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-lg border border-slate-300 text-slate-700 font-medium text-xs sm:text-sm hover:bg-slate-50 disabled:opacity-30">
+    <!-- Fixed Bottom Bar -->
+    <footer class="h-14 sm:h-16 border-t border-slate-200 px-4 sm:px-8 flex items-center justify-between bg-white flex-shrink-0 z-10">
+      <button onclick="goToPrev()" id="prevBtn" class="flex items-center gap-1 sm:gap-2 px-3 sm:px-5 py-1.5 sm:py-2 rounded-lg border border-slate-300 text-slate-700 font-medium text-xs sm:text-sm hover:bg-slate-50 disabled:opacity-30 disabled:pointer-events-none">
         <i data-lucide="arrow-left" class="w-4 h-4"></i>
-        <span>Previous</span>
+        <span>Prev</span>
       </button>
 
-      <span class="text-[11px] text-slate-400 hidden lg:inline">Use arrow keys (← / →) to navigate</span>
+      <span class="text-[11px] text-slate-400 hidden sm:inline">Use arrow keys (← / →) to navigate</span>
 
-      <button id="nextBtn" class="flex items-center gap-1.5 sm:gap-2 px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-lg bg-sky-600 text-white font-medium text-xs sm:text-sm hover:bg-sky-700 disabled:opacity-30">
+      <button onclick="goToNext()" id="nextBtn" class="flex items-center gap-1 sm:gap-2 px-3 sm:px-5 py-1.5 sm:py-2 rounded-lg bg-sky-600 text-white font-medium text-xs sm:text-sm hover:bg-sky-700 disabled:opacity-30 disabled:pointer-events-none">
         <span>Next</span>
         <i data-lucide="arrow-right" class="w-4 h-4"></i>
       </button>
@@ -99,7 +99,6 @@
   <!-- External Data File -->
   <script src="topics.js"></script>
 
-  <!-- Viewer Script with Mobile Drawer Logic -->
   <script>
     let currentIndex = 0;
     let isCueMode = false;
@@ -119,9 +118,17 @@
       mobileBackdrop.classList.add("hidden");
     }
 
+    function goToPrev() {
+      if (currentIndex > 0) renderPage(currentIndex - 1);
+    }
+
+    function goToNext() {
+      if (currentIndex < curriculum.length - 1) renderPage(currentIndex + 1);
+    }
+
     function init() {
       if (typeof curriculum === 'undefined' || !curriculum.length) {
-        document.getElementById('lessonContent').innerHTML = '<p class="text-red-500 font-medium">Curriculum data not found in topics.js. Check that topics.js is committed to the same folder.</p>';
+        document.getElementById('lessonContent').innerHTML = '<p class="text-red-500 font-medium p-4">Curriculum data not found in topics.js. Ensure topics.js is in the root repository folder.</p>';
         return;
       }
       renderSidebar();
@@ -168,6 +175,7 @@
       document.getElementById("breadcrumbTitle").innerText = data.title;
       document.getElementById("pageProgress").innerText = `Topic ${idx + 1} of ${curriculum.length}`;
 
+      // Update bottom fixed buttons
       document.getElementById("prevBtn").disabled = (idx === 0);
       document.getElementById("nextBtn").disabled = (idx === curriculum.length - 1);
 
@@ -209,6 +217,18 @@
           ` : ''}
 
           ${data.extra ? `<div class="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-700">${data.extra}</div>` : ''}
+
+          <!-- IN-PAGE NAVIGATION BUTTONS (Guaranteed to be visible at end of topic on phones) -->
+          <div class="pt-6 border-t border-slate-200 flex flex-col sm:flex-row gap-3 justify-between items-center mt-8 pb-4">
+            <button onclick="goToPrev()" class="w-full sm:w-auto flex items-center justify-center gap-2 px-5 py-3 rounded-xl border border-slate-300 text-slate-700 font-semibold text-sm hover:bg-slate-100 disabled:opacity-30 disabled:pointer-events-none shadow-sm transition-all" ${idx === 0 ? 'disabled' : ''}>
+              <i data-lucide="arrow-left" class="w-4 h-4"></i>
+              <span>Previous Topic</span>
+            </button>
+            <button onclick="goToNext()" class="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-sky-600 text-white font-semibold text-sm hover:bg-sky-700 disabled:opacity-30 disabled:pointer-events-none shadow-md transition-all" ${idx === curriculum.length - 1 ? 'disabled' : ''}>
+              <span>Next Topic</span>
+              <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </button>
+          </div>
         </div>
       `;
 
@@ -231,29 +251,21 @@
     }
 
     function setupEvents() {
-      // Mobile Drawer Events
       menuToggleBtn.onclick = openMobileSidebar;
       closeSidebarBtn.onclick = closeMobileSidebar;
       mobileBackdrop.onclick = closeMobileSidebar;
 
-      // Navigation
-      document.getElementById("prevBtn").onclick = () => { if (currentIndex > 0) renderPage(currentIndex - 1); };
-      document.getElementById("nextBtn").onclick = () => { if (currentIndex < curriculum.length - 1) renderPage(currentIndex + 1); };
-
-      // Cue Toggle
       document.getElementById("cueModeToggle").onchange = (e) => {
         isCueMode = e.target.checked;
         const c = document.getElementById("cueCard");
         if (c) c.classList.toggle("hidden", !isCueMode);
       };
 
-      // Search
       document.getElementById("searchInput").oninput = (e) => renderSidebar(e.target.value);
 
-      // Keyboard navigation
       window.addEventListener("keydown", (e) => {
-        if (e.key === "ArrowRight" && currentIndex < curriculum.length - 1) renderPage(currentIndex + 1);
-        if (e.key === "ArrowLeft" && currentIndex > 0) renderPage(currentIndex - 1);
+        if (e.key === "ArrowRight") goToNext();
+        if (e.key === "ArrowLeft") goToPrev();
       });
     }
 
