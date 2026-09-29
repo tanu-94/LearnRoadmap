@@ -14,16 +14,25 @@
     .custom-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
   </style>
 </head>
-<body class="bg-slate-50 text-slate-800 flex h-screen overflow-hidden">
+<body class="bg-slate-50 text-slate-800 flex h-screen overflow-hidden relative">
 
-  <!-- SIDEBAR -->
-  <aside class="w-80 bg-slate-900 text-slate-300 flex flex-col flex-shrink-0 border-r border-slate-800">
-    <div class="p-5 border-b border-slate-800">
-      <div class="flex items-center gap-2 text-sky-400 font-bold text-lg">
-        <i data-lucide="database" class="w-5 h-5"></i>
-        <span>Roadmap to Become Data Analyst</span>
+  <!-- MOBILE OVERLAY BACKDROP -->
+  <div id="mobileBackdrop" class="fixed inset-0 bg-slate-900/60 z-40 hidden md:hidden transition-opacity"></div>
+
+  <!-- SIDEBAR (Off-canvas drawer on mobile, static sidebar on desktop) -->
+  <aside id="sidebar" class="fixed md:static inset-y-0 left-0 z-50 w-72 sm:w-80 bg-slate-900 text-slate-300 flex flex-col flex-shrink-0 border-r border-slate-800 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out">
+    <div class="p-4 sm:p-5 border-b border-slate-800 flex items-center justify-between">
+      <div>
+        <div class="flex items-center gap-2 text-sky-400 font-bold text-base sm:text-lg">
+          <i data-lucide="database" class="w-5 h-5 flex-shrink-0"></i>
+          <span>Data Analyst Roadmap</span>
+        </div>
+        <p class="text-xs text-slate-400 mt-1">Learn. Practice. Analyze. Grow.</p>
       </div>
-      <p class="text-xs text-slate-400 mt-1">Learn. Practice. Analyze. Grow.</p>
+      <!-- Close button on mobile -->
+      <button id="closeSidebarBtn" class="md:hidden text-slate-400 hover:text-white p-1 rounded-lg">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
     </div>
 
     <!-- Search Box -->
@@ -38,7 +47,7 @@
     <!-- Navigation List -->
     <nav class="flex-1 overflow-y-auto custom-scroll p-4 space-y-4" id="sidebarNav"></nav>
 
-    <!-- Instructor Cue Mode -->
+    <!-- Instructor Cue Mode Toggle -->
     <div class="p-4 border-t border-slate-800 bg-slate-950">
       <label class="flex items-center justify-between cursor-pointer">
         <span class="text-xs font-semibold text-slate-300 flex items-center gap-1.5">
@@ -51,40 +60,68 @@
   </aside>
 
   <!-- MAIN VIEW -->
-  <main class="flex-1 flex flex-col h-full overflow-hidden bg-white">
-    <header class="h-16 border-b border-slate-200 px-8 flex items-center justify-between bg-white flex-shrink-0">
-      <div class="flex items-center gap-2 text-sm text-slate-500">
-        <span id="breadcrumbModule" class="font-medium text-slate-700">Module</span>
-        <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400"></i>
-        <span id="breadcrumbTitle" class="text-sky-600 font-medium">Topic Title</span>
+  <main class="flex-1 flex flex-col h-full overflow-hidden bg-white w-full">
+    <!-- Header -->
+    <header class="h-14 sm:h-16 border-b border-slate-200 px-4 sm:px-8 flex items-center justify-between bg-white flex-shrink-0">
+      <div class="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm text-slate-500 min-w-0">
+        <!-- Hamburger Menu Button on Mobile -->
+        <button id="menuToggleBtn" class="md:hidden text-slate-700 hover:text-sky-600 p-1.5 rounded-lg border border-slate-200 flex-shrink-0">
+          <i data-lucide="menu" class="w-5 h-5"></i>
+        </button>
+        <span id="breadcrumbModule" class="font-medium text-slate-700 truncate hidden sm:inline">Module</span>
+        <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-slate-400 flex-shrink-0 hidden sm:inline"></i>
+        <span id="breadcrumbTitle" class="text-sky-600 font-medium truncate">Topic Title</span>
       </div>
-      <span id="pageProgress" class="text-xs text-slate-400 font-medium"></span>
+      <span id="pageProgress" class="text-[11px] sm:text-xs text-slate-400 font-medium flex-shrink-0 pl-2"></span>
     </header>
 
-    <div class="flex-1 overflow-y-auto p-8 custom-scroll bg-slate-50" id="contentContainer">
-      <div class="max-w-4xl mx-auto space-y-6" id="lessonContent"></div>
+    <!-- Scrollable Content -->
+    <div class="flex-1 overflow-y-auto p-4 sm:p-8 custom-scroll bg-slate-50" id="contentContainer">
+      <div class="max-w-4xl mx-auto space-y-5" id="lessonContent"></div>
     </div>
 
-    <footer class="h-20 border-t border-slate-200 px-8 flex items-center justify-between bg-white flex-shrink-0">
-      <button id="prevBtn" class="flex items-center gap-2 px-5 py-2.5 rounded-lg border border-slate-300 text-slate-700 font-medium text-sm hover:bg-slate-50 disabled:opacity-30">
-        <i data-lucide="arrow-left" class="w-4 h-4"></i> Previous Topic
+    <!-- Continuous Pagination Footer -->
+    <footer class="h-16 sm:h-20 border-t border-slate-200 px-4 sm:px-8 flex items-center justify-between bg-white flex-shrink-0">
+      <button id="prevBtn" class="flex items-center gap-1.5 sm:gap-2 px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-lg border border-slate-300 text-slate-700 font-medium text-xs sm:text-sm hover:bg-slate-50 disabled:opacity-30">
+        <i data-lucide="arrow-left" class="w-4 h-4"></i>
+        <span>Previous</span>
       </button>
-      <button id="nextBtn" class="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-sky-600 text-white font-medium text-sm hover:bg-sky-700 disabled:opacity-30">
-        Next Topic <i data-lucide="arrow-right" class="w-4 h-4"></i>
+
+      <span class="text-[11px] text-slate-400 hidden lg:inline">Use arrow keys (← / →) to navigate</span>
+
+      <button id="nextBtn" class="flex items-center gap-1.5 sm:gap-2 px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-lg bg-sky-600 text-white font-medium text-xs sm:text-sm hover:bg-sky-700 disabled:opacity-30">
+        <span>Next</span>
+        <i data-lucide="arrow-right" class="w-4 h-4"></i>
       </button>
     </footer>
   </main>
 
-  <!-- Load the external curriculum data file -->
+  <!-- External Data File -->
   <script src="topics.js"></script>
 
+  <!-- Viewer Script with Mobile Drawer Logic -->
   <script>
     let currentIndex = 0;
     let isCueMode = false;
 
+    const sidebar = document.getElementById("sidebar");
+    const mobileBackdrop = document.getElementById("mobileBackdrop");
+    const menuToggleBtn = document.getElementById("menuToggleBtn");
+    const closeSidebarBtn = document.getElementById("closeSidebarBtn");
+
+    function openMobileSidebar() {
+      sidebar.classList.remove("-translate-x-full");
+      mobileBackdrop.classList.remove("hidden");
+    }
+
+    function closeMobileSidebar() {
+      sidebar.classList.add("-translate-x-full");
+      mobileBackdrop.classList.add("hidden");
+    }
+
     function init() {
       if (typeof curriculum === 'undefined' || !curriculum.length) {
-        document.getElementById('lessonContent').innerHTML = '<p class="text-red-500">curriculum data not found in topics.js</p>';
+        document.getElementById('lessonContent').innerHTML = '<p class="text-red-500 font-medium">Curriculum data not found in topics.js. Check that topics.js is committed to the same folder.</p>';
         return;
       }
       renderSidebar();
@@ -111,10 +148,13 @@
 
         const btn = document.createElement("button");
         btn.className = `w-full text-left px-3 py-2 rounded-lg text-xs font-medium transition-all ${
-          idx === currentIndex ? "bg-sky-600 text-white" : "text-slate-400 hover:bg-slate-800 hover:text-slate-200"
+          idx === currentIndex ? "bg-sky-600 text-white font-semibold" : "text-slate-400 hover:bg-slate-800 hover:text-slate-200"
         }`;
         btn.innerText = item.title;
-        btn.onclick = () => renderPage(idx);
+        btn.onclick = () => {
+          renderPage(idx);
+          if (window.innerWidth < 768) closeMobileSidebar();
+        };
         nav.appendChild(btn);
       });
       lucide.createIcons();
@@ -133,28 +173,28 @@
 
       document.getElementById("lessonContent").innerHTML = `
         <div class="space-y-4">
-          <div class="flex items-center gap-3">
+          <div class="flex flex-wrap items-center gap-2">
             <span class="px-2.5 py-1 rounded-full text-xs font-bold bg-sky-100 text-sky-700">${data.section || 'Core Topic'}</span>
-            <h1 class="text-2xl font-bold text-slate-900">${data.title}</h1>
+            <h1 class="text-xl sm:text-2xl font-bold text-slate-900">${data.title}</h1>
           </div>
 
-          <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-3">
+          <div class="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-sm space-y-3">
             <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400">Definition & Meaning</h4>
-            <p class="text-slate-700 text-sm leading-relaxed">${data.definition}</p>
-            <p class="text-slate-600 text-sm leading-relaxed">${data.meaning}</p>
+            <p class="text-slate-700 text-xs sm:text-sm leading-relaxed">${data.definition}</p>
+            <p class="text-slate-600 text-xs sm:text-sm leading-relaxed">${data.meaning}</p>
           </div>
 
           <div id="cueCard" class="p-4 bg-amber-50 border-l-4 border-amber-500 rounded-r-lg ${isCueMode ? 'block' : 'hidden'}">
             <div class="flex items-center gap-2 text-amber-900 font-bold text-xs uppercase">
               <i data-lucide="mic" class="w-4 h-4"></i> Instructor Speaking Script
             </div>
-            <p class="text-amber-800 text-sm mt-1">${data.instructorCue || data.meaning}</p>
+            <p class="text-amber-800 text-xs sm:text-sm mt-1">${data.instructorCue || data.meaning}</p>
           </div>
 
           ${data.syntax ? `
             <div class="bg-slate-900 rounded-xl overflow-hidden border border-slate-800">
               <div class="bg-slate-950 px-4 py-2 text-xs font-mono text-slate-400 border-b border-slate-800">Syntax / Steps</div>
-              <pre class="p-4 text-xs font-mono text-emerald-400 overflow-x-auto">${escapeHtml(data.syntax)}</pre>
+              <pre class="p-3 sm:p-4 text-xs font-mono text-emerald-400 overflow-x-auto">${escapeHtml(data.syntax)}</pre>
             </div>
           ` : ''}
 
@@ -162,13 +202,13 @@
             <div class="bg-slate-900 rounded-xl overflow-hidden border border-slate-800 shadow-sm">
               <div class="bg-slate-950 px-4 py-2 text-xs font-mono text-slate-400 border-b border-slate-800 flex justify-between items-center">
                 <span>Code Example (How to Use)</span>
-                <button onclick="copyCode()" class="text-sky-400 hover:text-sky-300 text-xs">Copy</button>
+                <button onclick="copyCode(this)" class="text-sky-400 hover:text-sky-300 text-xs font-sans font-medium">Copy</button>
               </div>
-              <pre class="p-4 text-xs font-mono text-slate-200 overflow-x-auto"><code id="codeBlock">${escapeHtml(data.example)}</code></pre>
+              <pre class="p-3 sm:p-4 text-xs font-mono text-slate-200 overflow-x-auto"><code id="codeBlock">${escapeHtml(data.example)}</code></pre>
             </div>
           ` : ''}
 
-          ${data.extra ? `<div class="bg-white p-5 rounded-xl border border-slate-200 text-sm text-slate-700">${data.extra}</div>` : ''}
+          ${data.extra ? `<div class="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-700">${data.extra}</div>` : ''}
         </div>
       `;
 
@@ -181,20 +221,40 @@
       return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
     }
 
-    function copyCode() {
+    function copyCode(btn) {
       const code = document.getElementById("codeBlock").innerText;
-      navigator.clipboard.writeText(code);
+      navigator.clipboard.writeText(code).then(() => {
+        const originalText = btn.innerText;
+        btn.innerText = "Copied!";
+        setTimeout(() => { btn.innerText = originalText; }, 2000);
+      });
     }
 
     function setupEvents() {
+      // Mobile Drawer Events
+      menuToggleBtn.onclick = openMobileSidebar;
+      closeSidebarBtn.onclick = closeMobileSidebar;
+      mobileBackdrop.onclick = closeMobileSidebar;
+
+      // Navigation
       document.getElementById("prevBtn").onclick = () => { if (currentIndex > 0) renderPage(currentIndex - 1); };
       document.getElementById("nextBtn").onclick = () => { if (currentIndex < curriculum.length - 1) renderPage(currentIndex + 1); };
+
+      // Cue Toggle
       document.getElementById("cueModeToggle").onchange = (e) => {
         isCueMode = e.target.checked;
         const c = document.getElementById("cueCard");
         if (c) c.classList.toggle("hidden", !isCueMode);
       };
+
+      // Search
       document.getElementById("searchInput").oninput = (e) => renderSidebar(e.target.value);
+
+      // Keyboard navigation
+      window.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowRight" && currentIndex < curriculum.length - 1) renderPage(currentIndex + 1);
+        if (e.key === "ArrowLeft" && currentIndex > 0) renderPage(currentIndex - 1);
+      });
     }
 
     window.onload = init;
