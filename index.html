@@ -3,10 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LearnRoadmap</title>
-  <!-- Tailwind CSS CDN -->
+  <title>Data Analyst Teaching Portal</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Lucide Icons CDN -->
   <script src="https://unpkg.com/lucide@latest"></script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap');
@@ -14,38 +12,33 @@
     pre, code { font-family: 'Fira Code', monospace; }
     .custom-scroll::-webkit-scrollbar { width: 6px; }
     .custom-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-    .custom-scroll::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
   </style>
 </head>
 <body class="bg-slate-50 text-slate-800 flex h-screen overflow-hidden">
 
-  <!-- SIDEBAR NAVIGATION -->
+  <!-- SIDEBAR -->
   <aside class="w-80 bg-slate-900 text-slate-300 flex flex-col flex-shrink-0 border-r border-slate-800">
-    <div class="p-5 border-b border-slate-800 flex items-center justify-between">
-      <div>
-        <div class="flex items-center gap-2 text-sky-400 font-bold text-lg">
-          <i data-lucide="database" class="w-5 h-5"></i>
-          <span>Data Analyst Portal</span>
-        </div>
-        <p class="text-xs text-slate-400 mt-1">Unified Hospital Case Study</p>
+    <div class="p-5 border-b border-slate-800">
+      <div class="flex items-center gap-2 text-sky-400 font-bold text-lg">
+        <i data-lucide="database" class="w-5 h-5"></i>
+        <span>Data Analyst Portal</span>
       </div>
+      <p class="text-xs text-slate-400 mt-1">Classroom Teaching Roadmap</p>
     </div>
 
     <!-- Search Box -->
     <div class="px-4 py-3 border-b border-slate-800">
       <div class="relative">
         <i data-lucide="search" class="w-4 h-4 absolute left-3 top-3 text-slate-500"></i>
-        <input type="text" id="searchInput" placeholder="Search topic or function..." 
+        <input type="text" id="searchInput" placeholder="Search any topic..." 
           class="w-full bg-slate-800 text-slate-200 text-sm rounded-lg pl-9 pr-3 py-2 focus:outline-none focus:ring-2 focus:ring-sky-500">
       </div>
     </div>
 
-    <!-- Lesson Menu List -->
-    <nav class="flex-1 overflow-y-auto custom-scroll p-4 space-y-6" id="sidebarNav">
-      <!-- Populated dynamically by JavaScript -->
-    </nav>
+    <!-- Navigation List -->
+    <nav class="flex-1 overflow-y-auto custom-scroll p-4 space-y-4" id="sidebarNav"></nav>
 
-    <!-- Instructor Cue Toggle (For Anxiety / Stage Fear) -->
+    <!-- Instructor Cue Mode -->
     <div class="p-4 border-t border-slate-800 bg-slate-950">
       <label class="flex items-center justify-between cursor-pointer">
         <span class="text-xs font-semibold text-slate-300 flex items-center gap-1.5">
@@ -54,823 +47,156 @@
         <input type="checkbox" id="cueModeToggle" class="sr-only">
         <div class="w-9 h-5 bg-slate-700 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-amber-500 relative"></div>
       </label>
-      <p class="text-[11px] text-slate-500 mt-1">Shows simple speaking lines & classroom explanations.</p>
     </div>
   </aside>
 
-  <!-- MAIN CONTENT AREA -->
+  <!-- MAIN VIEW -->
   <main class="flex-1 flex flex-col h-full overflow-hidden bg-white">
-    <!-- Top Header -->
     <header class="h-16 border-b border-slate-200 px-8 flex items-center justify-between bg-white flex-shrink-0">
       <div class="flex items-center gap-2 text-sm text-slate-500">
         <span id="breadcrumbModule" class="font-medium text-slate-700">Module</span>
         <i data-lucide="chevron-right" class="w-4 h-4 text-slate-400"></i>
         <span id="breadcrumbTitle" class="text-sky-600 font-medium">Topic Title</span>
       </div>
-      <div class="flex items-center gap-3">
-        <span id="pageProgress" class="text-xs text-slate-400 font-medium">Page 1 of 18</span>
-      </div>
+      <span id="pageProgress" class="text-xs text-slate-400 font-medium"></span>
     </header>
 
-    <!-- Scrollable Lesson Body -->
     <div class="flex-1 overflow-y-auto p-8 custom-scroll bg-slate-50" id="contentContainer">
-      <div class="max-w-4xl mx-auto space-y-6" id="lessonContent">
-        <!-- Rendered by JavaScript -->
-      </div>
+      <div class="max-w-4xl mx-auto space-y-6" id="lessonContent"></div>
     </div>
 
-    <!-- Bottom Continuous Pagination -->
     <footer class="h-20 border-t border-slate-200 px-8 flex items-center justify-between bg-white flex-shrink-0">
-      <button id="prevBtn" class="flex items-center gap-2 px-5 py-2.5 rounded-lg border border-slate-300 text-slate-700 font-medium text-sm hover:bg-slate-50 transition-all disabled:opacity-30 disabled:cursor-not-allowed">
-        <i data-lucide="arrow-left" class="w-4 h-4"></i>
-        <span>Previous Topic</span>
+      <button id="prevBtn" class="flex items-center gap-2 px-5 py-2.5 rounded-lg border border-slate-300 text-slate-700 font-medium text-sm hover:bg-slate-50 disabled:opacity-30">
+        <i data-lucide="arrow-left" class="w-4 h-4"></i> Previous Topic
       </button>
-
-      <div class="text-center hidden sm:block">
-        <p class="text-xs text-slate-400">Use arrow keys (← / →) or click to advance</p>
-      </div>
-
-      <button id="nextBtn" class="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-sky-600 text-white font-medium text-sm hover:bg-sky-700 shadow-sm transition-all disabled:opacity-30 disabled:cursor-not-allowed">
-        <span>Next Topic</span>
-        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+      <button id="nextBtn" class="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-sky-600 text-white font-medium text-sm hover:bg-sky-700 disabled:opacity-30">
+        Next Topic <i data-lucide="arrow-right" class="w-4 h-4"></i>
       </button>
     </footer>
   </main>
 
-  <!-- JAVASCRIPT DATA & LOGIC -->
+  <!-- Load the external curriculum data file -->
+  <script src="topics.js"></script>
+
   <script>
-    const curriculum = [
-      // MODULE 0: BUSINESS FIRST
-      {
-        id: "biz-01",
-        module: "Module 0: Business Analytics",
-        title: "01. Business Problem & 5W1H Framework",
-        badge: "Business First",
-        definition: "Before touching Excel, SQL, or Python, an analyst must translate vague business complaints into a measurable, investigative question.",
-        instructorCue: "Say this to class: 'Never open SQL Workbench first. If management says staffing costs are high, ask who, when, and where. Our job is answering business questions, not just writing code.'",
-        concept: `
-          <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
-            <h3 class="font-bold text-slate-900 text-base flex items-center gap-2">
-              <i data-lucide="help-circle" class="w-5 h-5 text-sky-500"></i> The 5W1H Questioning Method
-            </h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-              <div class="p-3 bg-slate-50 rounded-lg border border-slate-100">
-                <span class="font-semibold text-slate-700">What?</span>
-                <p class="text-slate-600 mt-1">What exactly is happening? (Emergency staffing costs are exceeding monthly budgets).</p>
-              </div>
-              <div class="p-3 bg-slate-50 rounded-lg border border-slate-100">
-                <span class="font-semibold text-slate-700">Why?</span>
-                <p class="text-slate-600 mt-1">Why is it happening? (Senior doctors are scheduled for long 12-hour night shifts).</p>
-              </div>
-              <div class="p-3 bg-slate-50 rounded-lg border border-slate-100">
-                <span class="font-semibold text-slate-700">Who?</span>
-                <p class="text-slate-600 mt-1">Who is affected? (Doctors Ravi and Kiran, while Sara remains unassigned).</p>
-              </div>
-              <div class="p-3 bg-slate-50 rounded-lg border border-slate-100">
-                <span class="font-semibold text-slate-700">When?</span>
-                <p class="text-slate-600 mt-1">When did it begin? (September 2026 shift scheduling cycle).</p>
-              </div>
-              <div class="p-3 bg-slate-50 rounded-lg border border-slate-100">
-                <span class="font-semibold text-slate-700">Where?</span>
-                <p class="text-slate-600 mt-1">Where is the issue localized? (Emergency department versus Nursing and Pharmacy).</p>
-              </div>
-              <div class="p-3 bg-slate-50 rounded-lg border border-slate-100">
-                <span class="font-semibold text-slate-700">How Much?</span>
-                <p class="text-slate-600 mt-1">What is the measured impact? (24 out of 58 total hospital shift hours worked).</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-3">
-            <h3 class="font-bold text-slate-900 text-base">The 3 Levels of Analytics</h3>
-            <ul class="space-y-2 text-sm text-slate-600">
-              <li class="flex items-start gap-2"><strong class="text-slate-800 min-w-32">1. Descriptive:</strong> "What happened?" → Emergency logged 24 night hours.</li>
-              <li class="flex items-start gap-2"><strong class="text-slate-800 min-w-32">2. Diagnostic:</strong> "Why did it happen?" → Doctors earning ₹85,000–₹90,000 are covering shifts without junior staff.</li>
-              <li class="flex items-start gap-2"><strong class="text-slate-800 min-w-32">3. Prescriptive:</strong> "What should we do?" → Assign nurses to night shifts and fill Sara's department.</li>
-            </ul>
-          </div>
-        `
-      },
-      {
-        id: "biz-02",
-        module: "Module 0: Business Analytics",
-        title: "02. The 10 Golden Rules for Analysts",
-        badge: "Mindset",
-        definition: "Core principles that protect you from delivering misleading metrics or solving the wrong problem.",
-        instructorCue: "Tell them: 'Rule 4 is huge. If you take the average salary of the hospital, you get ₹49,857. But 5 out of 7 staff earn under ₹40,000! Two doctors skew the average. Never trust averages alone.'",
-        concept: `
-          <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-              <div class="p-3 border-l-4 border-sky-500 bg-slate-50">
-                <p class="font-bold text-slate-800">1. Business question first, data second</p>
-                <p class="text-slate-600 mt-0.5">Never write random queries without a defined goal.</p>
-              </div>
-              <div class="p-3 border-l-4 border-sky-500 bg-slate-50">
-                <p class="font-bold text-slate-800">2. Correlation ≠ Causation</p>
-                <p class="text-slate-600 mt-0.5">Two things moving together does not mean one caused the other.</p>
-              </div>
-              <div class="p-3 border-l-4 border-sky-500 bg-slate-50">
-                <p class="font-bold text-slate-800">3. Always validate the data</p>
-                <p class="text-slate-600 mt-0.5">Check for NULLs, duplicates, and impossible dates first.</p>
-              </div>
-              <div class="p-3 border-l-4 border-sky-500 bg-slate-50">
-                <p class="font-bold text-slate-800">4. Don't trust averages alone</p>
-                <p class="text-slate-600 mt-0.5">Outliers pull the mean up; always compare mean vs median.</p>
-              </div>
-              <div class="p-3 border-l-4 border-sky-500 bg-slate-50">
-                <p class="font-bold text-slate-800">5. Segment before concluding</p>
-                <p class="text-slate-600 mt-0.5">Slice numbers by department, role, and shift type.</p>
-              </div>
-              <div class="p-3 border-l-4 border-sky-500 bg-slate-50">
-                <p class="font-bold text-slate-800">6. Quantify the exact impact</p>
-                <p class="text-slate-600 mt-0.5">Give rupees or hours, not vague words like 'a lot'.</p>
-              </div>
-              <div class="p-3 border-l-4 border-sky-500 bg-slate-50">
-                <p class="font-bold text-slate-800">7. Root cause, not biggest number</p>
-                <p class="text-slate-600 mt-0.5">The largest department isn't always the broken one.</p>
-              </div>
-              <div class="p-3 border-l-4 border-sky-500 bg-slate-50">
-                <p class="font-bold text-slate-800">8. Recommendations must be actionable</p>
-                <p class="text-slate-600 mt-0.5">Tell stakeholders exact steps, not generic advice.</p>
-              </div>
-              <div class="p-3 border-l-4 border-sky-500 bg-slate-50">
-                <p class="font-bold text-slate-800">9. Pass the "So What?" test</p>
-                <p class="text-slate-600 mt-0.5">If a chart doesn't help make a decision, delete it.</p>
-              </div>
-              <div class="p-3 border-l-4 border-sky-500 bg-slate-50">
-                <p class="font-bold text-slate-800">10. Tell a complete story</p>
-                <p class="text-slate-600 mt-0.5">Problem → Evidence → Root Cause → Solution.</p>
-              </div>
-            </div>
-          </div>
-        `
-      },
-
-      // MODULE 1: MYSQL MASTERY
-      {
-        id: "sql-01",
-        module: "Module 1: MySQL Mastery",
-        title: "03. Hospital Database Setup (DDL & DML)",
-        badge: "MySQL Setup",
-        definition: "The standardized hospital schema used across every query, Python script, and Power BI report.",
-        instructorCue: "Have students copy this entire code box and paste it into MySQL Workbench. Point out: 'Notice Sara has no department (NULL), and John has worked zero shifts. This is intentional to test joins later!'",
-        code: `-- Run this once in MySQL Workbench
-CREATE DATABASE hospital_db;
-USE hospital_db;
-
-CREATE TABLE departments (
-  dept_id INT PRIMARY KEY,
-  dept_name VARCHAR(50)
-);
-
-CREATE TABLE staff (
-  staff_id INT PRIMARY KEY,
-  staff_name VARCHAR(50),
-  role VARCHAR(30),
-  dept_id INT,
-  salary DECIMAL(10,2),
-  join_date DATE
-);
-
-CREATE TABLE shifts (
-  shift_id INT PRIMARY KEY,
-  staff_id INT,
-  shift_date DATE,
-  shift_type VARCHAR(10),
-  hours_worked INT
-);
-
-INSERT INTO departments VALUES
-(1,'Emergency'),(2,'Pharmacy'),(3,'Radiology'),(4,'Nursing');
-
-INSERT INTO staff VALUES
-(1,'Asha','Nurse',4,32000,'2022-03-15'),
-(2,'Ravi','Doctor',1,85000,'2020-06-01'),
-(3,'Meena','Pharmacist',2,40000,'2021-09-10'),
-(4,'John','Technician',3,38000,'2023-01-20'),
-(5,'Priya','Nurse',4,33000,'2022-08-05'),
-(6,'Kiran','Doctor',1,90000,'2019-11-12'),
-(7,'Sara','Nurse',NULL,31000,'2024-02-01');
-
-INSERT INTO shifts VALUES
-(1,1,'2026-09-01','Morning',8),
-(2,1,'2026-09-02','Night',10),
-(3,2,'2026-09-01','Night',12),
-(4,3,'2026-09-01','Morning',8),
-(5,5,'2026-09-02','Morning',8),
-(6,6,'2026-09-02','Night',12);`,
-        output: `
-| Table | Rows | Key Notes |
-| :--- | :--- | :--- |
-| departments | 4 | Emergency, Pharmacy, Radiology, Nursing |
-| staff | 7 | Sara has NULL dept_id |
-| shifts | 6 | 58 total hours worked (John & Sara have 0 shifts) |
-        `
-      },
-      {
-        id: "sql-02",
-        module: "Module 1: MySQL Mastery",
-        title: "04. Basic Querying & Filtering (SELECT & WHERE)",
-        badge: "DQL Basics",
-        definition: "Reading specific columns and filtering records with comparison and logical operators.",
-        instructorCue: "Remind students: 'Never write dept_id = NULL. In SQL, NULL means missing, so you must always write IS NULL.'",
-        code: `-- 1. Find all staff earning more than 35,000
-SELECT staff_name, role, salary
-FROM staff
-WHERE salary > 35000;
-
--- 2. Nurses earning above 32,000
-SELECT staff_name, role, salary
-FROM staff
-WHERE role = 'Nurse' AND salary > 32000;
-
--- 3. Staff with missing department
-SELECT staff_name, role
-FROM staff
-WHERE dept_id IS NULL;`,
-        output: `
--- Output of Query 1 (salary > 35000):
-| staff_name | role | salary |
-| :--- | :--- | :--- |
-| Ravi | Doctor | 85000.00 |
-| Meena | Pharmacist | 40000.00 |
-| John | Technician | 38000.00 |
-| Kiran | Doctor | 90000.00 |
-
--- Output of Query 3 (dept_id IS NULL):
-| staff_name | role |
-| :--- | :--- |
-| Sara | Nurse |
-        `
-      },
-      {
-        id: "sql-03",
-        module: "Module 1: MySQL Mastery",
-        title: "05. Aggregations & Grouping (GROUP BY & HAVING)",
-        badge: "Summarizing",
-        definition: "GROUP BY summarizes rows into categories. HAVING filters aggregated numbers (WHERE cannot filter aggregates).",
-        instructorCue: "Write on the board: 'WHERE filters rows before grouping. HAVING filters groups after grouping.' This is the #1 interview question.",
-        code: `-- 1. Staff count and average salary by role
-SELECT role, 
-       COUNT(*) AS total_staff, 
-       AVG(salary) AS avg_salary
-FROM staff
-GROUP BY role;
-
--- 2. Departments with average salary > 35000
-SELECT dept_id, AVG(salary) AS avg_sal
-FROM staff
-GROUP BY dept_id
-HAVING AVG(salary) > 35000;
-
--- 3. Categorize staff into Salary Bands (CASE WHEN)
-SELECT staff_name, salary,
-  CASE
-    WHEN salary >= 80000 THEN 'High'
-    WHEN salary >= 35000 THEN 'Medium'
-    ELSE 'Low'
-  END AS salary_band
-FROM staff;`,
-        output: `
--- Output of Query 1 (GROUP BY role):
-| role | total_staff | avg_salary |
-| :--- | :--- | :--- |
-| Nurse | 3 | 32000.0000 |
-| Doctor | 2 | 87500.0000 |
-| Pharmacist | 1 | 40000.0000 |
-| Technician | 1 | 38000.0000 |
-        `
-      },
-      {
-        id: "sql-04",
-        module: "Module 1: MySQL Mastery",
-        title: "06. Multi-Table Joins & Anti-Joins",
-        badge: "Relationships",
-        definition: "INNER JOIN keeps only matches. LEFT JOIN keeps all rows from the primary table. Anti-joins isolate missing entries.",
-        instructorCue: "Show students: 'Look at the LEFT JOIN. John and Sara show up with NULL shift hours because they haven't worked any shifts yet!'",
-        code: `-- 1. INNER JOIN (Sara is excluded because dept_id is NULL)
-SELECT s.staff_name, d.dept_name
-FROM staff s
-INNER JOIN departments d ON s.dept_id = d.dept_id;
-
--- 2. LEFT JOIN (Includes Sara with dept_name = NULL)
-SELECT s.staff_name, d.dept_name
-FROM staff s
-LEFT JOIN departments d ON s.dept_id = d.dept_id;
-
--- 3. Anti-Join: Find staff who worked ZERO shifts
-SELECT s.staff_name, s.role
-FROM staff s
-LEFT JOIN shifts sh ON s.staff_id = sh.staff_id
-WHERE sh.shift_id IS NULL;`,
-        output: `
--- Output of Anti-Join (Staff with 0 shifts):
-| staff_name | role |
-| :--- | :--- |
-| John | Technician |
-| Sara | Nurse |
-        `
-      },
-      {
-        id: "sql-05",
-        module: "Module 1: MySQL Mastery",
-        title: "07. Window Functions & CTEs",
-        badge: "Advanced SQL",
-        definition: "Window functions calculate across row sets without collapsing rows like GROUP BY. CTEs create readable temporary tables.",
-        instructorCue: "Explain: 'PARTITION BY is like a mini-GROUP BY inside each row, but you don't lose the staff names!'",
-        code: `-- 1. Rank staff salary within each department
-SELECT staff_name, dept_id, salary,
-       DENSE_RANK() OVER (PARTITION BY dept_id ORDER BY salary DESC) as dept_rank
-FROM staff;
-
--- 2. Running Total of hours worked per staff member
-SELECT staff_id, shift_date, hours_worked,
-       SUM(hours_worked) OVER (PARTITION BY staff_id ORDER BY shift_date) AS running_total
-FROM shifts;
-
--- 3. CTE: Find staff who earn more than their department's average
-WITH dept_averages AS (
-  SELECT dept_id, AVG(salary) AS avg_sal
-  FROM staff
-  GROUP BY dept_id
-)
-SELECT s.staff_name, s.salary, ROUND(d.avg_sal, 2) AS dept_avg
-FROM staff s
-JOIN dept_averages d ON s.dept_id = d.dept_id
-WHERE s.salary > d.avg_sal;`,
-        output: `
--- Output of Running Total:
-| staff_id | shift_date | hours_worked | running_total |
-| :--- | :--- | :--- | :--- |
-| 1 | 2026-09-01 | 8 | 8 |
-| 1 | 2026-09-02 | 10 | 18 |
-| 2 | 2026-09-01 | 12 | 12 |
-| 5 | 2026-09-02 | 8 | 8 |
-| 6 | 2026-09-02 | 12 | 12 |
-        `
-      },
-
-      // MODULE 2: PYTHON FOR DATA ANALYSIS
-      {
-        id: "py-01",
-        module: "Module 2: Python for Analytics",
-        title: "08. Python Basics & Hospital Setup",
-        badge: "Pandas Setup",
-        definition: "Initializing DataFrames matching the exact MySQL database schema in a Jupyter Notebook.",
-        instructorCue: "Tell students: 'Notice that in Python, missing values are written as None or np.nan. Sara's department is None, exactly like MySQL!'",
-        code: `import pandas as pd
-import numpy as np
-
-# Hospital Staff DataFrame
-staff = pd.DataFrame({
-    'staff_id': [1, 2, 3, 4, 5, 6, 7],
-    'staff_name': ['Asha', 'Ravi', 'Meena', 'John', 'Priya', 'Kiran', 'Sara'],
-    'role': ['Nurse', 'Doctor', 'Pharmacist', 'Technician', 'Nurse', 'Doctor', 'Nurse'],
-    'department': ['Nursing', 'Emergency', 'Pharmacy', 'Radiology', 'Nursing', 'Emergency', None],
-    'salary': [32000, 85000, 40000, 38000, 33000, 90000, 31000],
-    'join_date': ['2022-03-15', '2020-06-01', '2021-09-10', '2023-01-20', '2022-08-05', '2019-11-12', '2024-02-01']
-})
-
-# Shifts DataFrame
-shifts = pd.DataFrame({
-    'shift_id': [1, 2, 3, 4, 5, 6],
-    'staff_id': [1, 1, 2, 3, 5, 6],
-    'shift_type': ['Morning', 'Night', 'Night', 'Morning', 'Morning', 'Night'],
-    'hours_worked': [8, 10, 12, 8, 8, 12]
-})
-
-print(staff.info())`,
-        output: `
-Data columns (total 6 columns):
- #   Column       Non-Null Count  Dtype 
----  ------       --------------  ----- 
- 0   staff_id     7 non-null      int64 
- 1   staff_name   7 non-null      object
- 2   role         7 non-null      object
- 3   department   6 non-null      object (1 missing!)
- 4   salary       7 non-null      int64 
- 5   join_date    7 non-null      object
-        `
-      },
-      {
-        id: "py-02",
-        module: "Module 2: Python for Analytics",
-        title: "09. NumPy Vectorization & Fast Math",
-        badge: "NumPy",
-        definition: "Vectorized operations apply math across entire arrays without writing slow Python for-loops.",
-        instructorCue: "Show this comparison: 'In pure Python, multiplying a list duplicates it. In NumPy, it multiplies every salary by 12 instantly.'",
-        code: `import numpy as np
-
-salaries = np.array([32000, 85000, 40000, 38000, 33000, 90000, 31000])
-
-# 1. Vectorized Annual Payroll
-annual_salary = salaries * 12
-print("Annual Payroll:", annual_salary)
-
-# 2. Mean vs Median (Golden Rule #4 demonstration)
-print("Mean Salary:  ", np.mean(salaries))
-print("Median Salary:", np.median(salaries))
-
-# 3. Boolean Filtering: Find high earners
-high_earners = salaries[salaries > 35000]
-print("Salaries > 35000:", high_earners)`,
-        output: `
-Annual Payroll: [ 384000 1020000  480000  456000  396000 1080000  372000]
-Mean Salary:   49857.14
-Median Salary: 38000.0
-Salaries > 35000: [85000 40000 38000 90000]
-        `
-      },
-      {
-        id: "py-03",
-        module: "Module 2: Python for Analytics",
-        title: "10. Pandas Data Cleaning & Aggregations",
-        badge: "Data Wrangling",
-        definition: "Handling missing values, filtering rows, and summarizing data using groupby and merge.",
-        instructorCue: "Explain: 'df.groupby() in Pandas is the exact twin of GROUP BY in SQL. Compare them side-by-side on your screen.'",
-        code: `# 1. Clean missing department
-staff['department'] = staff['department'].fillna('Unassigned')
-
-# 2. Filter: High-earning nurses (SQL: WHERE role='Nurse' AND salary > 32000)
-nurse_filter = staff[(staff['role'] == 'Nurse') & (staff['salary'] > 32000)]
-print(nurse_filter[['staff_name', 'salary']])
-
-# 3. Group by role (SQL: GROUP BY role)
-role_summary = staff.groupby('role').agg(
-    total_staff=('staff_id', 'count'),
-    avg_salary=('salary', 'mean')
-).reset_index()
-print(role_summary)
-
-# 4. Merge staff with shifts (SQL: LEFT JOIN)
-merged_df = pd.merge(staff, shifts, on='staff_id', how='left')
-print("Staff with 0 shifts:")
-print(merged_df[merged_df['hours_worked'].isnull()][['staff_name', 'role']])`,
-        output: `
--- Output of Group By Summary:
-         role  total_staff  avg_salary
-0      Doctor            2     87500.0
-1       Nurse            3     32000.0
-2  Pharmacist            1     40000.0
-3  Technician            1     38000.0
-
--- Output of Inactive Staff:
-  staff_name        role
-3       John  Technician
-7       Sara       Nurse
-        `
-      },
-      {
-        id: "py-04",
-        module: "Module 2: Python for Analytics",
-        title: "11. Visualizations with Seaborn & Story",
-        badge: "Charts & Story",
-        definition: "Turning clean tables into visual evidence that answers our initial hospital staffing problem.",
-        instructorCue: "Conclude the module: 'Look at the barplot. It immediately shows management why costs are high—doctors earn nearly triple the other departments.'",
-        code: `import matplotlib.pyplot as plt
-import seaborn as sns
-
-# 1. Salary distribution by Role
-plt.figure(figsize=(7, 4))
-sns.barplot(data=staff, x='role', y='salary', palette='Blues_d')
-plt.title("Average Salary by Role")
-plt.xlabel("Role")
-plt.ylabel("Salary (INR)")
-plt.show()
-
-# 2. Total hours per shift type
-shift_summary = shifts.groupby('shift_type')['hours_worked'].sum().reset_index()
-plt.figure(figsize=(5, 4))
-plt.bar(shift_summary['shift_type'], shift_summary['hours_worked'], color=['#38bdf8', '#0284c7'])
-plt.title("Total Hours Worked: Morning vs Night")
-plt.ylabel("Hours")
-plt.show()`,
-        output: `
-Insights Delivered:
-1. Doctors earn an average of 87,500 INR, driving up total medical expenditure.
-2. Night shifts account for 34 out of 58 total hospital hours (58.6%), primarily covered by top-bracket doctors.
-        `
-      },
-
-      // MODULE 3: POWER BI & DAX
-      {
-        id: "pbi-01",
-        module: "Module 3: Power BI & DAX",
-        title: "12. Power Query ETL & Transformations",
-        badge: "Power Query",
-        definition: "Transforming raw hospital data before loading it into the data model.",
-        instructorCue: "Tell students: 'Always clean data in Power Query before writing DAX. Replace Sara's blank department with Unassigned right here.'",
-        concept: `
-          <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4 text-sm text-slate-700">
-            <h3 class="font-bold text-slate-900 text-base">Core Applied Steps in Power Query:</h3>
-            <ol class="list-decimal pl-5 space-y-2">
-              <li><strong>Set Data Types:</strong> Ensure <code>staff_id</code> is Whole Number, <code>join_date</code> is Date, and <code>salary</code> is Decimal.</li>
-              <li><strong>Replace Values:</strong> Right click <code>dept_id</code> column in <code>staff</code> → Replace Blanks with <code>null</code>.</li>
-              <li><strong>Conditional Column (Salary Band):</strong>
-                <pre class="bg-slate-900 text-slate-200 p-2 rounded mt-1 text-xs">If salary >= 80000 Then "High"
-Else If salary >= 35000 Then "Medium"
-Else "Low"</pre>
-              </li>
-              <li><strong>Merge Queries (Left Outer):</strong> Merge <code>staff</code> with <code>departments</code> on <code>dept_id</code> to pull in department names.</li>
-            </ol>
-          </div>
-        `
-      },
-      {
-        id: "pbi-02",
-        module: "Module 3: Power BI & DAX",
-        title: "13. Star Schema & Data Modeling",
-        badge: "Data Model",
-        definition: "Structuring tables into Fact (transactions) and Dimension (lookup) tables with 1-to-many relationships.",
-        instructorCue: "Point at the screen: 'shifts is our Fact table because it measures hours. departments and staff are Dimension tables because they tell us who and where.'",
-        concept: `
-          <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
-            <h3 class="font-bold text-slate-900 text-base">Hospital Star Schema Architecture</h3>
-            <div class="p-4 bg-sky-50 rounded-lg border border-sky-200 text-sm space-y-2 text-slate-700">
-              <p><strong>departments (Dimension):</strong> <code>dept_id</code> [1] ─── (Many) <code>staff[dept_id]</code></p>
-              <p><strong>staff (Dimension):</strong> <code>staff_id</code> [1] ─── (Many) <code>shifts[staff_id]</code></p>
-              <p><strong>Date Table (Dimension):</strong> <code>Date</code> [1] ─── (Many) <code>shifts[shift_date]</code></p>
-            </div>
-            <div class="text-sm text-slate-600">
-              <strong>Rule:</strong> Keep filter directions <em>Single</em> from the Dimension (1) to the Fact table (*).
-            </div>
-          </div>
-        `
-      },
-      {
-        id: "pbi-03",
-        module: "Module 3: Power BI & DAX",
-        title: "14. DAX Foundations & CALCULATE",
-        badge: "DAX Core",
-        definition: "Measures compute dynamically based on report slicers. CALCULATE alters the filter context.",
-        instructorCue: "Say this: 'CALCULATE is just SUM with a WHERE clause! Look at Night Hours—it ignores whatever shift is selected and forces shift_type = Night.'",
-        code: `-- 1. Base Measures
-Total Staff = COUNTROWS(staff)
-
-Total Hours = SUM(shifts[hours_worked])
-
-Average Salary = AVERAGE(staff[salary])
-
--- 2. Safe Division (Handles 0 errors)
-Hours per Staff = DIVIDE([Total Hours], DISTINCTCOUNT(shifts[staff_id]), 0)
-
--- 3. CALCULATE with Filter Context Modification
-Night Hours = 
-CALCULATE(
-    [Total Hours],
-    shifts[shift_type] = "Night"
-)
-
--- 4. Ratio Calculation
-Night Share % = DIVIDE([Night Hours], [Total Hours])`,
-        output: `
-| Measure Name | Computed Value | Format |
-| :--- | :--- | :--- |
-| Total Staff | 7 | Whole Number |
-| Total Hours | 58 | Whole Number |
-| Average Salary | ₹49,857.14 | Currency |
-| Night Hours | 34 | Whole Number |
-| Night Share % | 58.6% | Percentage |
-        `
-      },
-      {
-        id: "pbi-04",
-        module: "Module 3: Power BI & DAX",
-        title: "15. Advanced DAX & Context Control",
-        badge: "Advanced DAX",
-        definition: "Using ALL and REMOVEFILTERS for percent-of-total calculations and ranking functions.",
-        instructorCue: "Explain: 'When you divide salary by ALL(staff), the denominator ignores the role filter, giving you the true grand total percentage!'",
-        code: `-- 1. Percentage of Total Salary (Ignores visual filters)
-Salary % of Total = 
-DIVIDE(
-    SUM(staff[salary]),
-    CALCULATE(SUM(staff[salary]), ALL(staff))
-)
-
--- 2. Salary Ranking
-Salary Rank = 
-RANKX(
-    ALL(staff[staff_name]), 
-    CALCULATE(SUM(staff[salary])), 
-    , 
-    DESC, 
-    DENSE
-)
-
--- 3. Dynamic Title Measure
-Report Title = 
-"Staff Hours for " & SELECTEDVALUE(departments[dept_name], "All Departments") & 
-": " & FORMAT([Total Hours], "#,0") & " hrs"`,
-        output: `
--- Output in a Table Visual:
-| staff_name | salary | Salary % of Total | Salary Rank |
-| :--- | :--- | :--- | :--- |
-| Kiran | 90,000 | 25.8% | 1 |
-| Ravi | 85,000 | 24.4% | 2 |
-| Meena | 40,000 | 11.5% | 3 |
-| John | 38,000 | 10.9% | 4 |
-| Priya | 33,000 | 9.5% | 5 |
-| Asha | 32,000 | 9.2% | 6 |
-| Sara | 31,000 | 8.9% | 7 |
-        `
-      },
-      {
-        id: "pbi-05",
-        module: "Module 3: Power BI & DAX",
-        title: "16. Hospital Staffing Dashboard & Final Story",
-        badge: "Final Report",
-        definition: "Assembling visual components into an executive summary that delivers clear business recommendations.",
-        instructorCue: "This is your wrap-up. Show the 3 KPI cards, the matrix, and read the final business recommendation out loud.",
-        concept: `
-          <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-5">
-            <h3 class="font-bold text-slate-900 text-base">Dashboard Page Architecture</h3>
-            
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div class="p-4 bg-sky-50 border border-sky-200 rounded-lg text-center">
-                <span class="text-xs text-sky-700 font-semibold uppercase">KPI 1</span>
-                <p class="text-2xl font-bold text-slate-800 mt-1">7</p>
-                <p class="text-xs text-slate-500">Total Staff Headcount</p>
-              </div>
-              <div class="p-4 bg-sky-50 border border-sky-200 rounded-lg text-center">
-                <span class="text-xs text-sky-700 font-semibold uppercase">KPI 2</span>
-                <p class="text-2xl font-bold text-slate-800 mt-1">58 hrs</p>
-                <p class="text-xs text-slate-500">Total Logged Hours</p>
-              </div>
-              <div class="p-4 bg-sky-50 border border-sky-200 rounded-lg text-center">
-                <span class="text-xs text-sky-700 font-semibold uppercase">KPI 3</span>
-                <p class="text-2xl font-bold text-slate-800 mt-1">58.6%</p>
-                <p class="text-xs text-slate-500">Night Shift Ratio</p>
-              </div>
-            </div>
-
-            <div class="p-4 bg-amber-50 border border-amber-200 rounded-lg text-sm space-y-2">
-              <p class="font-bold text-amber-900">Final Business Recommendation (Tell Management):</p>
-              <p class="text-amber-800">"Emergency accounts for 24 night hours handled entirely by doctors earning ₹85,000–₹90,000. By assigning unallocated staff (Sara) and rebalancing night shifts with nursing personnel, hospital night operational costs can be reduced by 35% without reducing patient coverage."</p>
-            </div>
-          </div>
-        `
-      }
-    ];
-
     let currentIndex = 0;
     let isCueMode = false;
 
-    // Initialize UI
     function init() {
+      if (typeof curriculum === 'undefined' || !curriculum.length) {
+        document.getElementById('lessonContent').innerHTML = '<p class="text-red-500">curriculum data not found in topics.js</p>';
+        return;
+      }
       renderSidebar();
       renderPage(0);
       setupEvents();
       lucide.createIcons();
     }
 
-    // Render Sidebar Navigation
-    function renderSidebar(filterText = "") {
+    function renderSidebar(filter = "") {
       const nav = document.getElementById("sidebarNav");
       nav.innerHTML = "";
+      let currentMod = "";
 
-      let currentModule = "";
-      let groupDiv = null;
+      curriculum.forEach((item, idx) => {
+        if (filter && !item.title.toLowerCase().includes(filter.toLowerCase()) && !item.meaning.toLowerCase().includes(filter.toLowerCase())) return;
 
-      curriculum.forEach((item, index) => {
-        if (filterText && !item.title.toLowerCase().includes(filterText.toLowerCase()) && !item.definition.toLowerCase().includes(filterText.toLowerCase())) {
-          return;
+        if (item.module !== currentMod) {
+          currentMod = item.module;
+          const h = document.createElement("div");
+          h.className = "text-xs font-bold text-slate-400 uppercase tracking-wider mt-4 mb-2 px-2";
+          h.innerText = currentMod;
+          nav.appendChild(h);
         }
 
-        if (item.module !== currentModule) {
-          currentModule = item.module;
-          const heading = document.createElement("div");
-          heading.className = "text-xs font-bold text-slate-400 uppercase tracking-wider mt-4 mb-2 px-2";
-          heading.innerText = currentModule;
-          nav.appendChild(heading);
-        }
-
-        const link = document.createElement("button");
-        link.className = `w-full text-left px-3 py-2 rounded-lg text-xs font-medium transition-all flex items-center justify-between group ${
-          index === currentIndex 
-            ? "bg-sky-600 text-white shadow-sm" 
-            : "text-slate-400 hover:bg-slate-800 hover:text-slate-200"
+        const btn = document.createElement("button");
+        btn.className = `w-full text-left px-3 py-2 rounded-lg text-xs font-medium transition-all ${
+          idx === currentIndex ? "bg-sky-600 text-white" : "text-slate-400 hover:bg-slate-800 hover:text-slate-200"
         }`;
-        link.innerHTML = `
-          <span class="truncate">${item.title}</span>
-          <i data-lucide="chevron-right" class="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity"></i>
-        `;
-        link.onclick = () => renderPage(index);
-        nav.appendChild(link);
+        btn.innerText = item.title;
+        btn.onclick = () => renderPage(idx);
+        nav.appendChild(btn);
       });
       lucide.createIcons();
     }
 
-    // Render Page Content
-    function renderPage(index) {
-      currentIndex = index;
-      const data = curriculum[index];
+    function renderPage(idx) {
+      currentIndex = idx;
+      const data = curriculum[idx];
 
-      // Update Breadcrumbs & Progress
       document.getElementById("breadcrumbModule").innerText = data.module;
       document.getElementById("breadcrumbTitle").innerText = data.title;
-      document.getElementById("pageProgress").innerText = `Page ${index + 1} of ${curriculum.length}`;
+      document.getElementById("pageProgress").innerText = `Topic ${idx + 1} of ${curriculum.length}`;
 
-      // Update Prev / Next Buttons
-      document.getElementById("prevBtn").disabled = (index === 0);
-      document.getElementById("nextBtn").disabled = (index === curriculum.length - 1);
+      document.getElementById("prevBtn").disabled = (idx === 0);
+      document.getElementById("nextBtn").disabled = (idx === curriculum.length - 1);
 
-      // Render Body
-      const container = document.getElementById("lessonContent");
-      container.innerHTML = `
-        <div class="flex items-center gap-3">
-          <span class="px-2.5 py-1 rounded-full text-xs font-bold bg-sky-100 text-sky-700">${data.badge}</span>
-          <h1 class="text-2xl font-bold text-slate-900">${data.title}</h1>
-        </div>
-
-        <p class="text-base text-slate-600">${data.definition}</p>
-
-        <!-- Instructor Cue Box -->
-        <div id="cueCard" class="p-4 bg-amber-50 border-l-4 border-amber-500 rounded-r-lg ${isCueMode ? 'block' : 'hidden'} transition-all">
-          <div class="flex items-center gap-2 text-amber-900 font-bold text-xs uppercase tracking-wide">
-            <i data-lucide="mic" class="w-4 h-4"></i> Instructor Speaking Script
+      document.getElementById("lessonContent").innerHTML = `
+        <div class="space-y-4">
+          <div class="flex items-center gap-3">
+            <span class="px-2.5 py-1 rounded-full text-xs font-bold bg-sky-100 text-sky-700">${data.section || 'Core Topic'}</span>
+            <h1 class="text-2xl font-bold text-slate-900">${data.title}</h1>
           </div>
-          <p class="text-amber-800 text-sm mt-1">${data.instructorCue}</p>
-        </div>
 
-        ${data.concept ? data.concept : ''}
+          <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-3">
+            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400">Definition & Meaning</h4>
+            <p class="text-slate-700 text-sm leading-relaxed">${data.definition}</p>
+            <p class="text-slate-600 text-sm leading-relaxed">${data.meaning}</p>
+          </div>
 
-        ${data.code ? `
-          <div class="bg-slate-900 rounded-xl overflow-hidden shadow-md border border-slate-800">
-            <div class="bg-slate-950 px-4 py-2.5 flex items-center justify-between border-b border-slate-800">
-              <span class="text-xs font-mono text-slate-400">Hospital Dataset Code Demo</span>
-              <button onclick="copyCode(this)" class="text-xs text-sky-400 hover:text-sky-300 font-medium flex items-center gap-1.5 transition-colors">
-                <i data-lucide="copy" class="w-3.5 h-3.5"></i> <span>Copy Code</span>
-              </button>
+          <div id="cueCard" class="p-4 bg-amber-50 border-l-4 border-amber-500 rounded-r-lg ${isCueMode ? 'block' : 'hidden'}">
+            <div class="flex items-center gap-2 text-amber-900 font-bold text-xs uppercase">
+              <i data-lucide="mic" class="w-4 h-4"></i> Instructor Speaking Script
             </div>
-            <pre class="p-5 text-sm text-slate-200 overflow-x-auto custom-scroll leading-relaxed"><code id="codeBlock">${escapeHtml(data.code)}</code></pre>
+            <p class="text-amber-800 text-sm mt-1">${data.instructorCue || data.meaning}</p>
           </div>
-        ` : ''}
 
-        ${data.output ? `
-          <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
-            <h4 class="font-bold text-slate-800 text-sm mb-2 flex items-center gap-2">
-              <i data-lucide="table" class="w-4 h-4 text-emerald-600"></i> Expected Output & Verification
-            </h4>
-            <div class="text-xs text-slate-600 overflow-x-auto font-mono leading-relaxed">${formatMarkdownTable(data.output)}</div>
-          </div>
-        ` : ''}
+          ${data.syntax ? `
+            <div class="bg-slate-900 rounded-xl overflow-hidden border border-slate-800">
+              <div class="bg-slate-950 px-4 py-2 text-xs font-mono text-slate-400 border-b border-slate-800">Syntax / Steps</div>
+              <pre class="p-4 text-xs font-mono text-emerald-400 overflow-x-auto">${escapeHtml(data.syntax)}</pre>
+            </div>
+          ` : ''}
+
+          ${data.example ? `
+            <div class="bg-slate-900 rounded-xl overflow-hidden border border-slate-800 shadow-sm">
+              <div class="bg-slate-950 px-4 py-2 text-xs font-mono text-slate-400 border-b border-slate-800 flex justify-between items-center">
+                <span>Code Example (How to Use)</span>
+                <button onclick="copyCode()" class="text-sky-400 hover:text-sky-300 text-xs">Copy</button>
+              </div>
+              <pre class="p-4 text-xs font-mono text-slate-200 overflow-x-auto"><code id="codeBlock">${escapeHtml(data.example)}</code></pre>
+            </div>
+          ` : ''}
+
+          ${data.extra ? `<div class="bg-white p-5 rounded-xl border border-slate-200 text-sm text-slate-700">${data.extra}</div>` : ''}
+        </div>
       `;
 
-      // Scroll to top
       document.getElementById("contentContainer").scrollTop = 0;
       renderSidebar();
       lucide.createIcons();
     }
 
-    // Helper functions
-    function escapeHtml(text) {
-      return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    function escapeHtml(str) {
+      return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
     }
 
-    function formatMarkdownTable(md) {
-      return md.trim().split('\n').map(line => {
-        if (line.includes('|')) {
-          return `<div class="py-1">${line}</div>`;
-        }
-        return `<div>${line}</div>`;
-      }).join('');
-    }
-
-    function copyCode(btn) {
+    function copyCode() {
       const code = document.getElementById("codeBlock").innerText;
-      navigator.clipboard.writeText(code).then(() => {
-        const originalText = btn.innerHTML;
-        btn.innerHTML = `<i data-lucide="check" class="w-3.5 h-3.5 text-emerald-400"></i> <span class="text-emerald-400">Copied!</span>`;
-        lucide.createIcons();
-        setTimeout(() => { btn.innerHTML = originalText; lucide.createIcons(); }, 2000);
-      });
+      navigator.clipboard.writeText(code);
     }
 
     function setupEvents() {
       document.getElementById("prevBtn").onclick = () => { if (currentIndex > 0) renderPage(currentIndex - 1); };
       document.getElementById("nextBtn").onclick = () => { if (currentIndex < curriculum.length - 1) renderPage(currentIndex + 1); };
-
       document.getElementById("cueModeToggle").onchange = (e) => {
         isCueMode = e.target.checked;
-        const card = document.getElementById("cueCard");
-        if (card) {
-          if (isCueMode) card.classList.remove("hidden");
-          else card.classList.add("hidden");
-        }
+        const c = document.getElementById("cueCard");
+        if (c) c.classList.toggle("hidden", !isCueMode);
       };
-
-      document.getElementById("searchInput").oninput = (e) => {
-        renderSidebar(e.target.value);
-      };
-
-      // Keyboard arrow shortcuts
-      window.addEventListener("keydown", (e) => {
-        if (e.key === "ArrowRight" && currentIndex < curriculum.length - 1) renderPage(currentIndex + 1);
-        if (e.key === "ArrowLeft" && currentIndex > 0) renderPage(currentIndex - 1);
-      });
+      document.getElementById("searchInput").oninput = (e) => renderSidebar(e.target.value);
     }
 
-    // Run
     window.onload = init;
   </script>
 </body>
