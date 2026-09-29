@@ -1,8 +1,8 @@
 # 01. Hospital Database Setup
 
-Run this script once in MySQL Workbench to initialize the hospital database used throughout the curriculum[cite: 1].
+Run this setup script once in MySQL Workbench to initialize the schema and records used across the entire curriculum.
 
-### SQL Schema Script
+### Schema & Data Script
 ```sql
 CREATE DATABASE hospital_db;
 USE hospital_db;
