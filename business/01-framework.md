@@ -1,19 +1,27 @@
-# 01. Business Problem & 5W1H Framework
+# 01. Business Framework & 5W1H
 
-Before opening MySQL, Python, or Power BI, an analyst must translate business symptoms into measurable technical questions.
+Before opening MySQL, Python, or Power BI, an analyst must translate ambiguous symptoms into a measurable problem.
 
-### 1. The Hospital Business Problem
-> **Management Statement:** *"Our staffing costs in Emergency are surging, yet patients still complain about long night wait times. Are we overpaying or understaffing?"*
+---
 
-### 2. The 5W1H Breakdown
-* **What?** Total shift hours and payroll are skewed toward emergency night coverage[cite: 1, 3].
-* **Why?** Senior doctors are taking extended 12-hour night shifts[cite: 1, 4].
-* **Who?** Emergency doctors (Ravi, Kiran) and unassigned nursing resources (Sara)[cite: 1, 4].
-* **When?** Shifts logged during the September 2026 scheduling cycle.
-* **Where?** Emergency department compared against Pharmacy, Nursing, and Radiology[cite: 1, 3, 4].
-* **How Much?** Emergency accounts for 24 of the 58 total hospital shift hours worked[cite: 4].
+### The 5W1H Framework
 
-### 3. The 3 Levels of Analysis
-1. **Descriptive (What happened?):** Emergency logged 24 hours (100% night shifts) across only two doctors[cite: 1, 4].
-2. **Diagnostic (Why did it happen?):** Doctor rates (₹85,000–₹90,000) drive up night costs because no junior relief is scheduled.
-3. **Prescriptive (What should we do?):** Rebalance night shifts to assign nurses (Asha, Priya) and resolve unassigned staff records[cite: 1].
+| Question | Focus | Hospital Staffing Example |
+| :--- | :--- | :--- |
+| **What?** | What exactly is happening? | Emergency department shift costs are exceeding budget. |
+| **Why?** | Why might it be happening? | Senior doctors are working long, unsupervised night blocks. |
+| **Who?** | Who is affected? | Emergency doctors (Ravi, Kiran) and unassigned nurses (Sara)[cite: 1, 4]. |
+| **When?** | When did it start? | Logged during the September 2026 scheduling period. |
+| **Where?** | Where is it localized? | Emergency unit versus Pharmacy, Radiology, and Nursing[cite: 1, 3, 4]. |
+| **How Much?** | What is the total impact? | 24 out of 58 total hospital shift hours worked[cite: 4]. |
+
+---
+
+### The 3 Levels of Analysis
+
+1. **Level 1 — Descriptive (What happened?):**  
+   Emergency consumed 24 hours across only 2 doctors (Ravi and Kiran), all on 12-hour Night shifts[cite: 1, 4].
+2. **Level 2 — Diagnostic (Why did it happen?):**  
+   Senior doctor salaries (₹85,000–₹90,000) are being applied to night coverage without scheduling lower-cost nursing staff.
+3. **Level 3 — Prescriptive (What should we do?):**  
+   Resolve Sara's missing department allocation and rebalance night schedules with qualified nursing staff (Asha, Priya).
