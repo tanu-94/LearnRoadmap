@@ -109,7 +109,6 @@
         <button id="menuToggleBtn" class="md:hidden text-slate-700 hover:text-sky-600 p-1.5 rounded-lg border border-slate-200 flex-shrink-0">
           <i data-lucide="menu" class="w-5 h-5"></i>
         </button>
-        <!-- Mobile Logo Icon -->
         <img src="image/logo.png" alt="Logo" class="w-7 h-7 rounded-lg object-contain bg-white p-0.5 border border-slate-200 md:hidden flex-shrink-0">
         
         <span id="breadcrumbModule" class="font-medium text-slate-700 truncate hidden sm:inline">Module</span>
@@ -250,6 +249,7 @@
 
       container.innerHTML = `
         <div class="space-y-4">
+          <!-- TOP BADGES: DIFFICULTY & TIME -->
           <div class="flex flex-wrap items-center gap-2">
             <span class="px-2.5 py-0.5 rounded-full text-xs font-bold border ${level.color}">
               ${level.label}
@@ -264,6 +264,7 @@
 
           <h1 class="text-xl sm:text-3xl font-extrabold text-slate-900 tracking-tight leading-snug">${data.title}</h1>
 
+          <!-- DEFINITION & MEANING CARD -->
           <div class="bg-white p-4 sm:p-6 rounded-2xl border border-slate-200/90 shadow-sm space-y-3">
             <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
               <i data-lucide="book-open" class="w-4 h-4 text-sky-600"></i> Definition & Meaning
@@ -272,6 +273,7 @@
             <p class="text-slate-600 text-xs sm:text-sm leading-relaxed">${data.meaning}</p>
           </div>
 
+          <!-- INSTRUCTOR CUE SCRIPT -->
           <div id="cueCard" class="p-4 bg-amber-50/90 border-l-4 border-amber-500 rounded-r-xl ${isCueMode ? 'block' : 'hidden'}">
             <div class="flex items-center gap-2 text-amber-900 font-bold text-xs uppercase tracking-wide">
               <i data-lucide="mic" class="w-4 h-4"></i> Instructor Speaking Script
@@ -279,6 +281,7 @@
             <p class="text-amber-800 text-xs sm:text-sm mt-1.5 leading-relaxed">${data.instructorCue || data.meaning}</p>
           </div>
 
+          <!-- SYNTAX BLOCK -->
           ${data.syntax ? `
             <div class="bg-slate-900 rounded-2xl overflow-hidden border border-slate-800 shadow-sm">
               <div class="bg-slate-950 px-4 py-2.5 text-xs font-mono text-slate-400 border-b border-slate-800 flex items-center gap-2">
@@ -289,6 +292,7 @@
             </div>
           ` : ''}
 
+          <!-- CODE EXAMPLE BOX -->
           ${data.example ? `
             <div class="bg-slate-900 rounded-2xl overflow-hidden border border-slate-800 shadow-md">
               <div class="bg-slate-950 px-4 py-2.5 text-xs font-mono text-slate-400 border-b border-slate-800 flex justify-between items-center">
@@ -305,14 +309,49 @@
             </div>
           ` : ''}
 
-          <div class="bg-gradient-to-r from-sky-50 to-indigo-50 border border-sky-100 rounded-2xl p-4 sm:p-5">
-            <h4 class="text-xs font-bold uppercase tracking-wider text-sky-900 flex items-center gap-2 mb-2">
-              <i data-lucide="folder-git-2" class="w-4 h-4 text-sky-600"></i> Hands-On Practice Goal
-            </h4>
-            <p class="text-xs sm:text-sm text-sky-950 leading-relaxed">
-              Verify your output against expected results. Once verified, document the logic and push your SQL script, Python notebook, or DAX measure file to your personal GitHub portfolio.
-            </p>
-          </div>
+          <!-- PRACTICE EXERCISE WITH HIDDEN HINT & SOLUTION -->
+          ${data.practice ? `
+            <div class="bg-white p-4 sm:p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+              <div class="flex items-center justify-between">
+                <h4 class="text-xs font-bold uppercase tracking-wider text-sky-600 flex items-center gap-1.5">
+                  <i data-lucide="pen-tool" class="w-4 h-4"></i> Practice Exercise
+                </h4>
+                <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Try on your own</span>
+              </div>
+              
+              <p class="text-slate-800 text-sm sm:text-base font-medium leading-relaxed">${data.practice}</p>
+
+              <div class="space-y-2 pt-1">
+                ${data.hint ? `
+                  <details class="group border border-amber-200 bg-amber-50/60 rounded-xl overflow-hidden text-xs transition-all">
+                    <summary class="p-3 font-semibold text-amber-900 cursor-pointer flex items-center justify-between select-none hover:bg-amber-100/60">
+                      <span class="flex items-center gap-1.5">
+                        <i data-lucide="lightbulb" class="w-3.5 h-3.5 text-amber-500"></i>
+                        <span>Need a Hint?</span>
+                      </span>
+                      <span class="text-amber-700 text-xs font-mono group-open:rotate-180 transition-transform">▼</span>
+                    </summary>
+                    <div class="px-3 pb-3 text-amber-800 border-t border-amber-200/60 pt-2 leading-relaxed">
+                      ${data.hint}
+                    </div>
+                  </details>
+                ` : ''}
+
+                ${data.answer ? `
+                  <details class="group border border-slate-800 bg-slate-900 rounded-xl overflow-hidden text-xs shadow-sm transition-all">
+                    <summary class="p-3 font-semibold text-slate-200 cursor-pointer flex items-center justify-between select-none bg-slate-950 hover:bg-slate-900/80">
+                      <span class="flex items-center gap-1.5 text-sky-400">
+                        <i data-lucide="eye" class="w-3.5 h-3.5"></i>
+                        <span>Reveal Solution</span>
+                      </span>
+                      <span class="text-slate-400 text-xs font-mono group-open:rotate-180 transition-transform">▼</span>
+                    </summary>
+                    <div class="p-3.5 text-emerald-400 font-mono overflow-x-auto border-t border-slate-800 leading-relaxed whitespace-pre-wrap">${escapeHtml(data.answer)}</div>
+                  </details>
+                ` : ''}
+              </div>
+            </div>
+          ` : ''}
 
           ${data.extra ? `<div class="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-700">${data.extra}</div>` : ''}
         </div>
