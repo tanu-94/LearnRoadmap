@@ -712,4 +712,500 @@ FROM shifts;`
     section: "Part 7: Intermediate SQL",
     title: "51. Running Total (Cumulative Sum)",
     definition: "Calculates an ongoing cumulative sum row by row.",
-    meaning: "Uses SUM() with an OVER(ORDER BY) clau
+    meaning: "Uses SUM() with an OVER(ORDER BY) clause. Each row displays the sum of itself plus all preceding rows in the partition.",
+    instructorCue: "Say: 'Look at staff 1: first shift is 8 hours. Next shift is 10 hours, so the running total becomes 18 (8 + 10).'",
+    syntax: "SUM(column) OVER (PARTITION BY col ORDER BY col)",
+    example: `SELECT staff_id, shift_date, hours_worked,
+  SUM(hours_worked) OVER (PARTITION BY staff_id ORDER BY shift_date) AS total_hours
+FROM shifts;`
+  },
+  {
+    module: "Module 1: MySQL Mastery",
+    section: "Part 8: Views & Indexes",
+    title: "52. Views",
+    definition: "A saved SQL query that functions as a virtual table.",
+    meaning: "Stores query logic, not underlying data. Simplifies complex multi-table joins and restricts access to sensitive columns like base pay.",
+    instructorCue: "Tell them: 'Create a view once, and analysts can query it like a simple table without rewriting the JOIN every time.'",
+    syntax: "CREATE VIEW view_name AS SELECT ...;\nDROP VIEW view_name;",
+    example: `CREATE VIEW staff_with_dept AS
+SELECT s.staff_name, s.role, d.dept_name
+FROM staff s
+LEFT JOIN departments d ON s.dept_id = d.dept_id;
+
+SELECT * FROM staff_with_dept WHERE role = 'Nurse';`
+  },
+  {
+    module: "Module 1: MySQL Mastery",
+    section: "Part 8: Views & Indexes",
+    title: "53. Indexes",
+    definition: "Data structures that accelerate search and retrieval speeds in MySQL.",
+    meaning: "Works like an index at the back of a textbook. Speeds up WHERE, JOIN, and ORDER BY queries on large datasets, but slightly slows down INSERT and UPDATE.",
+    instructorCue: "Explain: 'Primary keys are indexed automatically. You only create custom indexes on columns that you frequently filter or join on.'",
+    syntax: "CREATE INDEX idx_name ON table (col);\nDROP INDEX idx_name ON table;",
+    example: "CREATE INDEX idx_staff_role ON staff (role);"
+  },
+  {
+    module: "Module 1: MySQL Mastery",
+    section: "Part 8: Views & Indexes",
+    title: "54. Order of Writing vs Execution",
+    definition: "SQL clauses are written in a specific syntax order, but the MySQL database engine executes them in a completely different sequence.",
+    meaning: "Writing: SELECT -> FROM -> JOIN -> WHERE -> GROUP BY -> HAVING -> ORDER BY -> LIMIT. Execution: FROM -> JOIN -> WHERE -> GROUP BY -> HAVING -> SELECT -> ORDER BY -> LIMIT. This explains why WHERE cannot filter column aliases defined in SELECT.",
+    instructorCue: "Crucial teaching point: 'This is the most asked interview question. You write SELECT first, but the database runs FROM and WHERE before SELECT even exists! That is why WHERE cannot use column aliases.'",
+    syntax: "Writing:   SELECT -> FROM -> WHERE -> GROUP BY -> HAVING -> ORDER BY -> LIMIT\nExecution: FROM -> WHERE -> GROUP BY -> HAVING -> SELECT -> ORDER BY -> LIMIT",
+    example: `SELECT d.dept_name, COUNT(*) AS total_staff, AVG(s.salary) AS avg_salary
+FROM staff s
+JOIN departments d ON s.dept_id = d.dept_id
+WHERE s.salary > 30000
+GROUP BY d.dept_name
+HAVING COUNT(*) >= 2
+ORDER BY avg_salary DESC
+LIMIT 3;`
+  },
+
+  // =========================================================================
+  // MODULE 2: PYTHON FOR DATA ANALYSIS (PARTS 1 TO 9: TOPICS 1 TO 57)
+  // =========================================================================
+  {
+    module: "Module 2: Python for Analytics",
+    section: "Part 1 & 2: Python Basics",
+    title: "01. Python Intro & Hospital DataFrames",
+    definition: "Python is a high-level interpreted programming language tailored for data analysis, automation, and machine learning.",
+    meaning: "Load pandas and numpy at the start. Build the two hospital DataFrames matching MySQL schema: staff and shifts. Sara has missing department (None) and John has 0 shifts.",
+    instructorCue: "Say: 'Notice how Sara has None in Python, which becomes NaN in Pandas. It matches Sara having NULL in MySQL.'",
+    syntax: "import pandas as pd\nimport numpy as np",
+    example: `import pandas as pd
+import numpy as np
+
+staff = pd.DataFrame({
+    'staff_id': [1, 2, 3, 4, 5, 6, 7],
+    'staff_name': ['Asha', 'Ravi', 'Meena', 'John', 'Priya', 'Kiran', 'Sara'],
+    'role': ['Nurse', 'Doctor', 'Pharmacist', 'Technician', 'Nurse', 'Doctor', 'Nurse'],
+    'department': ['Nursing', 'Emergency', 'Pharmacy', 'Radiology', 'Nursing', 'Emergency', None],
+    'salary': [32000, 85000, 40000, 38000, 33000, 90000, 31000],
+    'join_date': ['2022-03-15', '2020-06-01', '2021-09-10', '2023-01-20', '2022-08-05', '2019-11-12', '2024-02-01']
+})
+
+shifts = pd.DataFrame({
+    'staff_id': [1, 1, 2, 3, 5, 6],
+    'shift_type': ['Morning', 'Night', 'Night', 'Morning', 'Morning', 'Night'],
+    'hours_worked': [8, 10, 12, 8, 8, 12]
+})`
+  },
+  {
+    module: "Module 2: Python for Analytics",
+    section: "Part 2: Python Basics",
+    title: "02. Variables, Types, Conversions & f-Strings",
+    definition: "Variables store values. Data types define operations. f-Strings format outputs cleanly.",
+    meaning: "int, float, str, bool, NoneType. Convert types with int(), float(), str(). Strings support slicing [start:stop] and .strip(). Use f-strings for clean display.",
+    instructorCue: "Explain: 'A common mistake is adding text \"32000\" to 1000. You must convert it with int() first.'",
+    syntax: "type(v) | int(v) | str(v) | f\"Text {variable}\"",
+    example: `salary_text = "32000"
+salary = int(salary_text)
+name = "  Asha  ".strip()
+print(f"{name} earns {salary * 12:,.2f} annually")`
+  },
+  {
+    module: "Module 2: Python for Analytics",
+    section: "Part 3: Data Structures",
+    title: "03. Lists, Tuples, Sets & Dictionaries",
+    definition: "Core Python collections used to store and manipulate groupings of records.",
+    meaning: "List [] (mutable, ordered). Tuple () (immutable). Set {} (unique items only, eliminates duplicates). Dictionary {key: value} (fast lookup, building blocks of DataFrames).",
+    instructorCue: "Tell them: 'A DataFrame column is essentially a Python list, and an entire DataFrame is just a dictionary of lists!'",
+    syntax: "list = [1, 2] | tuple = (1, 2) | set = {1, 2} | dict = {'a': 1}",
+    example: `roles = ["Nurse", "Doctor", "Nurse"]
+unique_roles = set(roles)  # {'Nurse', 'Doctor'}
+staff_dict = {"name": "Asha", "role": "Nurse", "salary": 32000}
+print(staff_dict.get("role"))`
+  },
+  {
+    module: "Module 2: Python for Analytics",
+    section: "Part 4: Control Flow",
+    title: "04. Conditionals, Loops & List Comprehension",
+    definition: "Controlling execution logic and iterating across data sequences.",
+    meaning: "if/elif/else checks conditions. for loops iterate over lists. range(start, stop) generates number sequences. List comprehensions replace simple loops in one line.",
+    instructorCue: "Show this: 'List comprehension is Python magic: [s * 12 for s in salaries] calculates annual pay in half a second.'",
+    syntax: "if cond: ... elif: ... else: ...\n[expr for item in sequence if cond]",
+    example: `salaries = [32000, 85000, 40000]
+high_salaries = [s for s in salaries if s > 35000] # [85000, 40000]`
+  },
+  {
+    module: "Module 2: Python for Analytics",
+    section: "Part 5: Functions & Errors",
+    title: "05. Functions, Lambda & Error Handling",
+    definition: "Writing reusable logic blocks and preventing crashes with try/except.",
+    meaning: "def creates functions with return. lambda creates small one-line functions. try/except catches errors (ValueError, ZeroDivisionError) cleanly.",
+    instructorCue: "Say: 'Always use try/except when loading messy CSV files so your entire analysis doesn't break on one corrupt row.'",
+    syntax: "def func(p): return res\nlambda x: expr\ntry: ... except Error: ...",
+    example: `def salary_tier(s):
+    return "High" if s >= 80000 else "Standard"
+
+try:
+    rate = 100 / 0
+except ZeroDivisionError:
+    rate = 0`
+  },
+  {
+    module: "Module 2: Python for Analytics",
+    section: "Part 6: NumPy",
+    title: "06. NumPy Arrays & Vectorized Math",
+    definition: "NumPy powers fast numerical computing and array operations across thousands of items at once.",
+    meaning: "Vectorization applies math across every element without loops. Calculate mean, median, min, max, std. Use boolean array filtering.",
+    instructorCue: "Demonstrate: 'Multiplying a Python list duplicates it. Multiplying a NumPy array multiplies every single number inside it. That is vectorization.'",
+    syntax: "import numpy as np\nnp.array() | np.mean() | np.median()",
+    example: `import numpy as np
+salaries = np.array([32000, 85000, 40000, 38000, 33000, 90000, 31000])
+print("Annual:", salaries * 12)
+print("Mean vs Median:", np.mean(salaries), np.median(salaries))
+print("Over 35k:", salaries[salaries > 35000])`
+  },
+  {
+    module: "Module 2: Python for Analytics",
+    section: "Part 7: Pandas Exploration",
+    title: "07. Pandas Exploration & Selection (loc/iloc)",
+    definition: "Pandas provides DataFrames (tables) with powerful inspection and indexing tools.",
+    meaning: "head(), tail(), shape, info(), describe(). Select columns with df['col'] or df[['a', 'b']]. loc uses labels; iloc uses numeric index positions.",
+    instructorCue: "Always tell students: 'First 4 commands on any new dataset: head(), shape, info(), and describe(). Always inspect before analyzing.'",
+    syntax: "df.head() | df.info() | df.describe() | df.loc[] | df.iloc[]",
+    example: `print(staff.shape)
+print(staff.info())
+print(staff.loc[0, 'staff_name'])  # Asha
+print(staff.iloc[0:3, 0:2])         # First 3 rows, first 2 cols`
+  },
+  {
+    module: "Module 2: Python for Analytics",
+    section: "Part 7: Pandas Cleaning",
+    title: "08. Pandas Filtering, Missing Values & Duplicates",
+    definition: "Techniques to filter rows, clean null values, and remove duplicate entries.",
+    meaning: "Filter with df[condition]. Combine conditions with & (and) and | (or). isnull().sum() counts missing values. fillna() imputes defaults. drop_duplicates() removes copies.",
+    instructorCue: "Point out: 'In Pandas, always use & and | with brackets around each condition: (df[col] > 1) & (df[col] < 5). Do not use the word and.'",
+    syntax: "df[cond] | df.isna().sum() | df.fillna() | df.drop_duplicates()",
+    example: `# High earning nurses
+nurses = staff[(staff['role'] == 'Nurse') & (staff['salary'] > 32000)]
+# Fill Sara's missing department
+staff['department'] = staff['department'].fillna('Unassigned')
+print(staff.duplicated().sum())`
+  },
+  {
+    module: "Module 2: Python for Analytics",
+    section: "Part 7: Pandas Wrangling",
+    title: "09. Dates, GroupBy & Aggregations",
+    definition: "Converting dates, grouping by dimensions, and calculating multi-metric summaries.",
+    meaning: "pd.to_datetime() turns text into real dates. .dt accessor gives year, month. groupby('col').agg() mirrors SQL GROUP BY. Always reset_index().",
+    instructorCue: "Say: 'groupby and agg is SQL GROUP BY in Python. Look at the syntax: we count staff and average the salary per role.'",
+    syntax: "pd.to_datetime(df['date'])\ndf.groupby('col').agg(name=('col', 'func')).reset_index()",
+    example: `staff['join_date'] = pd.to_datetime(staff['join_date'])
+staff['join_year'] = staff['join_date'].dt.year
+
+role_summary = staff.groupby('role').agg(
+    total_staff=('staff_id', 'count'),
+    avg_salary=('salary', 'mean')
+).reset_index()
+print(role_summary)`
+  },
+  {
+    module: "Module 2: Python for Analytics",
+    section: "Part 7: Pandas Wrangling",
+    title: "10. Merging, Reshaping & Custom Logic",
+    definition: "Combining DataFrames with SQL-style joins and applying row-level functions.",
+    meaning: "pd.merge(how='inner'/'left') matches tables on keys. concat stacks rows. apply() runs custom functions. np.where() executes vectorized IF-ELSE.",
+    instructorCue: "Highlight: 'pd.merge(how=\"left\") keeps John and Sara with NaN shifts, exactly like SQL LEFT JOIN!'",
+    syntax: "pd.merge(df1, df2, on='key', how='left')\nnp.where(cond, val_if_true, val_if_false)",
+    example: `merged = pd.merge(staff, shifts, on='staff_id', how='left')
+staff['salary_band'] = np.where(staff['salary'] >= 80000, 'High', 'Standard')
+print(merged[merged['hours_worked'].isnull()][['staff_name']]) # John, Sara`
+  },
+  {
+    module: "Module 2: Python for Analytics",
+    section: "Part 8: Visualisation",
+    title: "11. Matplotlib, Seaborn & The 7-Step Workflow",
+    definition: "Plotting distributions and relationships to deliver business insights.",
+    meaning: "Matplotlib (plt.bar, plt.plot) draws base visuals. Seaborn (sns.barplot, sns.boxplot) creates statistical charts. 7-step workflow: Question -> Load -> Explore -> Clean -> Analyze -> Visualize -> Insights.",
+    instructorCue: "Conclude Python: 'Always finish with what the numbers mean: Doctors average 87.5k and hold 100% of Emergency night hours. That is your business takeaway.'",
+    syntax: "import matplotlib.pyplot as plt\nimport seaborn as sns\nplt.show()",
+    example: `import matplotlib.pyplot as plt
+import seaborn as sns
+
+plt.figure(figsize=(6, 3))
+sns.barplot(data=staff, x='role', y='salary', palette='Blues_d')
+plt.title("Average Salary by Role")
+plt.show()`
+  },
+
+  // =========================================================================
+  // MODULE 3: POWER BI & POWER QUERY (PARTS 1 TO 7: TOPICS 1 TO 54)
+  // =========================================================================
+  {
+    module: "Module 3: Power BI & DAX",
+    section: "Part 1 & 2: Power Query",
+    title: "01. Power BI Architecture & Desktop Interface",
+    definition: "Power BI Desktop connects to data, cleans it in Power Query, models it, and publishes interactive dashboards to the Service.",
+    meaning: "Three primary views: Report View (canvas), Table/Data View (raw tables), Model View (relationships). Power Query transforms data before loading.",
+    instructorCue: "Tell them: 'Power Query cleans the data before it enters the report. If data is dirty, your visuals will be wrong.'",
+    syntax: "Workflow: Get Data -> Transform (Power Query) -> Model -> Visualise -> Publish",
+    example: "-- Load departments.csv, staff.csv, shifts.csv via Get Data > Text/CSV"
+  },
+  {
+    module: "Module 3: Power BI & DAX",
+    section: "Part 2: Power Query ETL",
+    title: "02. Power Query Data Cleaning & Transformations",
+    definition: "Power Query records repeatable cleaning steps in M language without modifying original source files.",
+    meaning: "Fix data types early (IDs as Whole Number, dates as Date, salary as Decimal). Replace values (null with Unassigned). Add Conditional Columns (Salary Bands). Group By rows. Merge Queries (Joins).",
+    instructorCue: "Point out: 'In Power Query, select dept_id and Replace Values: blank with null. This makes sure relationships link cleanly.'",
+    syntax: "= Table.SelectRows(Source, each [salary] > 35000)\n= Table.AddColumn(Source, \"Yearly\", each [salary] * 12)",
+    example: `Applied Steps in Power Query:
+1. Changed Type (join_date -> Date, salary -> Decimal)
+2. Replaced Values in dept_id
+3. Conditional Column: Salary Band (High / Medium / Low)
+4. Close & Apply to load into model`
+  },
+  {
+    module: "Module 3: Power BI & DAX",
+    section: "Part 3: Data Modeling",
+    title: "03. Star Schema & Table Relationships",
+    definition: "Connecting Fact tables (transactions) to Dimension tables (lookup categories) with 1-to-many relationships.",
+    meaning: "Fact table: shifts (measures hours, changes often). Dimension tables: staff, departments, Date Table. Set cardinality to 1-to-many (1:*), cross-filter direction to Single.",
+    instructorCue: "Write on the board: 'Dimension filters the Fact. departments (1) filters staff (*), and staff (1) filters shifts (*). Keep filter direction Single.'",
+    syntax: "departments[dept_id] (1) ---> staff[dept_id] (*)\nstaff[staff_id] (1) ---> shifts[staff_id] (*)",
+    example: "-- In Model View:\n-- Drag dept_id from departments to staff.\n-- Drag staff_id from staff to shifts."
+  },
+  {
+    module: "Module 3: Power BI & DAX",
+    section: "Part 3: Data Modeling",
+    title: "04. Building a Dedicated Date Table",
+    definition: "A contiguous calendar table required for Power BI time intelligence calculations.",
+    meaning: "Time intelligence functions (YTD, SAMEPERIODLASTYEAR) require a dedicated table with no missing dates, marked as a Date Table.",
+    instructorCue: "Remind them: 'Never use the shift_date from the shifts table for time analysis. Always build and relate a proper Date Table.'",
+    syntax: "Date Table = CALENDAR(DATE(2026, 1, 1), DATE(2026, 12, 31))",
+    example: `Date Table = CALENDAR(DATE(2026, 1, 1), DATE(2026, 12, 31))
+
+Year = YEAR('Date Table'[Date])
+Month Number = MONTH('Date Table'[Date])
+Month Name = FORMAT('Date Table'[Date], "mmmm")
+-- Mark as Date Table and relate Date to shifts[shift_date]`
+  },
+  {
+    module: "Module 3: Power BI & DAX",
+    section: "Part 4 & 5: Visuals & Reports",
+    title: "05. Report Visuals, Cards, Matrix & Slicers",
+    definition: "Choosing the correct visual to answer specific operational questions clearly.",
+    meaning: "Cards: Headline KPIs (Total Staff, Total Hours). Column chart: Hours by Department. Donut chart: Hours by Shift Type. Matrix: Role vs Shift Type with drill down. Slicers: Interactive page filters.",
+    instructorCue: "Show this: 'Place 3 KPI cards at the very top: Total Staff (7), Total Hours (58), Night Share (58.6%). Then place your charts below.'",
+    syntax: "KPI Cards: Values well\nBar Chart: X-axis (Department), Y-axis (Total Hours)\nMatrix: Rows (Role), Columns (Shift Type), Values (Total Hours)",
+    example: "-- Add slicer on departments[dept_name] and shifts[shift_type]"
+  },
+  {
+    module: "Module 3: Power BI & DAX",
+    section: "Part 6: Service & Security",
+    title: "06. Power BI Service, Gateways & Row-Level Security",
+    definition: "Publishing reports to cloud workspaces, scheduling data refreshes, and restricting user access with RLS.",
+    meaning: "Power BI Service (cloud sharing). On-premises Data Gateway connects cloud reports to local databases/files. Row-Level Security (RLS) restricts visible rows per user role using DAX.",
+    instructorCue: "Explain: 'With RLS, the Emergency Manager logs in and only sees Emergency data. The Pharmacy Manager only sees Pharmacy data.'",
+    syntax: "-- Modeling > Manage Roles > Emergency Manager:\n[dept_name] = \"Emergency\"",
+    example: "-- Dynamic RLS Pattern:\n[email] = USERPRINCIPALNAME()"
+  },
+
+  // =========================================================================
+  // MODULE 4: DAX DEEP DIVE (TOPICS 1 TO 55 COMPLETE)
+  // =========================================================================
+  {
+    module: "Module 4: DAX Deep Dive",
+    section: "Part 1: DAX Foundations",
+    title: "01. What is DAX & Where to Write It",
+    definition: "Data Analysis Expressions (DAX) is the formula language used in Power BI to create custom calculations.",
+    meaning: "Written in Measures (dynamic calculations), Calculated Columns (row-by-row static columns), Calculated Tables, and the DAX Query View (EVALUATE).",
+    instructorCue: "Explain: 'Good DAX habit: Always write columns with table name like staff[salary], and measures in brackets like [Total Salary].'",
+    syntax: "Measure Name = expression\n'Table'[Column] | [Measure Name]",
+    example: `Total Salary = SUM(staff[salary])
+Salary in Lakhs = [Total Salary] / 100000`
+  },
+  {
+    module: "Module 4: DAX Deep Dive",
+    section: "Part 1: DAX Foundations",
+    title: "02. Calculated Column vs Measure",
+    definition: "Calculated columns store values row-by-row in RAM. Measures compute dynamically on the fly based on report filters.",
+    meaning: "Calculated column: Row context, computed on refresh, increases file size. Measure: Filter context, computed on visual demand, uses zero disk space.",
+    instructorCue: "Golden Rule: 'If it needs to change when the user clicks a slicer, make it a Measure. If you need it as an axis or category, make it a Column.'",
+    syntax: "Column: staff[salary] * 12\nMeasure: SUM(staff[salary])",
+    example: `-- Calculated Column:
+Salary Band = IF(staff[salary] >= 80000, "High", "Standard")
+
+-- Measure:
+Average Salary = AVERAGE(staff[salary])`
+  },
+  {
+    module: "Module 4: DAX Deep Dive",
+    section: "Part 1: DAX Foundations",
+    title: "03. The Engine: Row Context, Filter Context & Context Transition",
+    definition: "The fundamental evaluation engine that governs how DAX calculates numbers.",
+    meaning: "Row Context: Current row awareness (inside calculated columns or iterators like SUMX). Filter Context: All active slicers, visual axes, and page filters. Context Transition: Wrapping an expression in CALCULATE turns the current row into a filter.",
+    instructorCue: "Critical Concept: 'Inside a calculated column in staff, writing SUM(shifts[hours]) gives 58 for every row. But wrapping it in CALCULATE(SUM(shifts[hours])) forces it to filter by that specific staff member!'",
+    syntax: "CALCULATE(expression) -- triggers context transition inside row context",
+    example: `-- Inside staff table:
+Staff Hours Worked = CALCULATE(SUM(shifts[hours_worked]))
+-- Asha: 18, Ravi: 12, Meena: 8, John: BLANK, Sara: BLANK`
+  },
+  {
+    module: "Module 4: DAX Deep Dive",
+    section: "Part 2: Aggregations & Math",
+    title: "04. Aggregations, DIVIDE & Math Functions",
+    definition: "Basic aggregation functions and safe division handling.",
+    meaning: "SUM, AVERAGE, MIN, MAX aggregate numeric columns. COUNTROWS counts records. DISTINCTCOUNT counts unique keys. DIVIDE handles zero division gracefully.",
+    instructorCue: "Tip: 'Never use the forward slash (/) for division in DAX. Always use DIVIDE to prevent #DIV/0! errors.'",
+    syntax: "SUM(table[col]) | COUNTROWS(table) | DISTINCTCOUNT(table[col])\nDIVIDE(num, den, [alt])",
+    example: `Total Staff = COUNTROWS(staff)                     -- 7
+Total Hours = SUM(shifts[hours_worked])            -- 58
+Staff Worked = DISTINCTCOUNT(shifts[staff_id])     -- 5
+Hours per Staff = DIVIDE([Total Hours], [Staff Worked], 0) -- 11.6`
+  },
+  {
+    module: "Module 4: DAX Deep Dive",
+    section: "Part 2: Iterators",
+    title: "05. Iterator Functions (SUMX, AVERAGEX)",
+    definition: "Iterators evaluate an expression row-by-row across a table and then aggregate the results.",
+    meaning: "Functions ending with X (SUMX, AVERAGEX, MINX, MAXX). Use them when you need row-level arithmetic before summing (e.g. price * quantity or salary * 12).",
+    instructorCue: "Tell them: 'SUM(staff[salary] * 12) is invalid syntax in DAX. You must write SUMX(staff, staff[salary] * 12).'",
+    syntax: "SUMX(table, expression)\nAVERAGEX(table, expression)",
+    example: `Yearly Payroll = SUMX(staff, staff[salary] * 12)   -- 4,188,000
+Avg Shift Length = AVERAGEX(shifts, shifts[hours_worked]) -- 9.67`
+  },
+  {
+    module: "Module 4: DAX Deep Dive",
+    section: "Part 3: Logical Functions",
+    title: "06. Logical Logic: IF, SWITCH(TRUE()) & COALESCE",
+    definition: "Conditional branching and blank substitution in DAX.",
+    meaning: "IF checks single conditions. SWITCH(TRUE(), ...) checks multiple range conditions (DAX equivalent of SQL CASE WHEN). COALESCE replaces blanks with defaults.",
+    instructorCue: "Show them: 'SWITCH(TRUE()) is identical to SQL CASE WHEN. Put the strictest condition at the top.'",
+    syntax: "SWITCH(TRUE(), cond1, res1, cond2, res2, default)\nCOALESCE(val, fallback)",
+    example: `Salary Tier = 
+SWITCH(
+    TRUE(),
+    staff[salary] >= 80000, "Executive",
+    staff[salary] >= 35000, "Senior",
+    "Associate"
+)
+
+Hours Display = COALESCE([Total Hours], 0)`
+  },
+  {
+    module: "Module 4: DAX Deep Dive",
+    section: "Part 4: Filter Functions",
+    title: "07. CALCULATE & Simple Filters",
+    definition: "CALCULATE evaluates an expression under modified filter contexts. It is the king of DAX.",
+    meaning: "The first argument is the calculation. Subsequent arguments add or overwrite filters. Shifts filtered to 'Night' ignore selected shift slicers.",
+    instructorCue: "Say: 'CALCULATE is simply SUM with a WHERE clause! Look at Night Hours: it calculates hours where shift_type = Night.'",
+    syntax: "CALCULATE(expression, filter1, filter2, ...)",
+    example: `Night Hours = 
+CALCULATE(
+    SUM(shifts[hours_worked]),
+    shifts[shift_type] = "Night"
+) -- 34 hours
+
+Night Share % = DIVIDE([Night Hours], [Total Hours]) -- 58.6%`
+  },
+  {
+    module: "Module 4: DAX Deep Dive",
+    section: "Part 4: Filter Functions",
+    title: "08. Context Control: ALL, REMOVEFILTERS & ALLEXCEPT",
+    definition: "Functions that strip filters from tables or columns to compute grand totals and percentages.",
+    meaning: "ALL(table) ignores all filters, giving grand totals. REMOVEFILTERS does the same inside CALCULATE. ALLEXCEPT removes all filters except specified columns for subtotaling.",
+    instructorCue: "Explain: 'To calculate a percentage of total, divide the filtered salary by CALCULATE(SUM(salary), ALL(staff)). The denominator never changes!'",
+    syntax: "ALL(table_or_column)\nCALCULATE(expr, REMOVEFILTERS(table))\nALLEXCEPT(table, col1)",
+    example: `Salary % of Total = 
+DIVIDE(
+    SUM(staff[salary]),
+    CALCULATE(SUM(staff[salary]), ALL(staff))
+)
+
+Role Total Salary = 
+CALCULATE(SUM(staff[salary]), ALLEXCEPT(staff, staff[role]))`
+  },
+  {
+    module: "Module 4: DAX Deep Dive",
+    section: "Part 4: Filter Functions",
+    title: "09. ALLSELECTED, VALUES & KEEPFILTERS",
+    definition: "Fine-tuning filter boundaries to respect slicer selections while ignoring visual grouping.",
+    meaning: "ALLSELECTED respects slicers outside the chart while clearing row filters inside the chart (percentages add up to 100% of the selection). VALUES returns unique column values.",
+    instructorCue: "Tip: 'Use ALL if you want percent of the entire company. Use ALLSELECTED if you want percent of whatever departments the user picked in the slicer.'",
+    syntax: "ALLSELECTED(column) | VALUES(column) | KEEPFILTERS(filter)",
+    example: `Hours % of Selection = 
+DIVIDE(
+    [Total Hours],
+    CALCULATE([Total Hours], ALLSELECTED(departments[dept_name]))
+)`
+  },
+  {
+    module: "Module 4: DAX Deep Dive",
+    section: "Part 5: Table Functions",
+    title: "10. Table Functions: SUMMARIZE, TOPN & Set Operations",
+    definition: "Functions that compute and return full tables rather than single scalar values.",
+    meaning: "SUMMARIZE groups data like SQL GROUP BY. TOPN returns top N rows. EXCEPT finds missing records (anti-join).",
+    instructorCue: "Show this: 'EXCEPT finds staff who have zero shifts. It compares staff IDs against shift IDs and gives John and Sara.'",
+    syntax: "SUMMARIZE(table, group_col, \"Name\", expr)\nTOPN(n, table, order_expr, [order])",
+    example: `Top 3 Earner Total = 
+SUMX(TOPN(3, staff, staff[salary], DESC), staff[salary]) -- 215,000
+
+Staff Without Shifts = 
+EXCEPT(VALUES(staff[staff_id]), VALUES(shifts[staff_id]))`
+  },
+  {
+    module: "Module 4: DAX Deep Dive",
+    section: "Part 6: Relationships",
+    title: "11. RELATED, RELATEDTABLE & USERELATIONSHIP",
+    definition: "Navigating relationships to fetch values from lookup tables or activate secondary paths.",
+    meaning: "RELATED: pulls from 1-side into *-side (lookup). RELATEDTABLE: pulls *-side rows into 1-side (wrapped in COUNTROWS/SUMX). USERELATIONSHIP activates inactive links.",
+    instructorCue: "Say: 'RELATED is VLOOKUP in DAX. It works only when an active relationship exists between the tables.'",
+    syntax: "RELATED(other_table[col])\nRELATEDTABLE(other_table)\nUSERELATIONSHIP(col1, col2)",
+    example: `-- In shifts table (many side):
+Staff Name = RELATED(staff[staff_name])
+
+-- In staff table (one side):
+Shift Count = COUNTROWS(RELATEDTABLE(shifts))`
+  },
+  {
+    module: "Module 4: DAX Deep Dive",
+    section: "Part 7: Text & Strings",
+    title: "12. Text Functions & CONCATENATEX",
+    definition: "Manipulating text and concatenating strings across multiple table rows.",
+    meaning: "Concatenate with & or CONCATENATE. FORMAT formats numbers/dates into text strings. CONCATENATEX lists values across rows into a comma-separated sentence.",
+    instructorCue: "Tip: 'CONCATENATEX is amazing for cards: you can list all doctors in one cell: Ravi, Kiran.'",
+    syntax: "FORMAT(value, \"format\")\nCONCATENATEX(table, expr, delimiter, [order])",
+    example: `Doctor List = 
+CONCATENATEX(
+    FILTER(staff, staff[role] = "Doctor"),
+    staff[staff_name],
+    ", "
+) -- "Ravi, Kiran"`
+  },
+  {
+    module: "Module 4: DAX Deep Dive",
+    section: "Part 8: Time Intelligence",
+    title: "13. Time Intelligence: TOTALYTD & Previous Periods",
+    definition: "Comparing metrics across calendar periods using a marked Date Table.",
+    meaning: "TOTALYTD accumulates values from Jan 1st. SAMEPERIODLASTYEAR compares against the prior year. DATEADD shifts by custom intervals.",
+    instructorCue: "Crucial rule: 'Time intelligence measures will return BLANK if your Date Table is not marked as a Date Table or has gaps in dates.'",
+    syntax: "TOTALYTD(expr, 'Date'[Date])\nCALCULATE(expr, SAMEPERIODLASTYEAR('Date'[Date]))",
+    example: `Hours YTD = TOTALYTD([Total Hours], 'Date Table'[Date])
+
+Hours Last Month = 
+CALCULATE([Total Hours], DATEADD('Date Table'[Date], -1, MONTH))
+
+Hours MoM Change = [Total Hours] - [Hours Last Month]`
+  },
+  {
+    module: "Module 4: DAX Deep Dive",
+    section: "Part 9: Advanced Patterns",
+    title: "14. RANKX, Variables (VAR/RETURN) & Dynamic Titles",
+    definition: "Best practice patterns for ranking items, writing fast code, and generating dynamic labels.",
+    meaning: "RANKX ranks items. Variables (VAR/RETURN) store intermediate values for faster execution and cleaner debugging. Dynamic titles adapt to user slicers.",
+    instructorCue: "Final DAX lesson: 'Always use VAR and RETURN. It evaluates once, runs faster, and makes your DAX 10x easier to explain in class.'",
+    syntax: "VAR var_name = expr RETURN expr\nRANKX(ALL(col), expr, , DESC, DENSE)",
+    example: `Salary Rank = 
+RANKX(ALL(staff[staff_name]), CALCULATE(SUM(staff[salary])), , DESC, DENSE)
+
+Dynamic Title = 
+VAR Dept = SELECTEDVALUE(departments[dept_name], "All Departments")
+VAR Hrs = FORMAT([Total Hours], "#,0")
+RETURN
+"Staff Hours for " & Dept & ": " & Hrs & " hrs"`
+  }
+];
