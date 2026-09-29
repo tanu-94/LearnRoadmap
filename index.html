@@ -29,7 +29,6 @@
         </div>
         <p class="text-xs text-slate-400 mt-1">Learn. Practice. Analyze. Grow.</p>
       </div>
-      <!-- Close drawer button on mobile -->
       <button id="closeSidebarBtn" class="md:hidden text-slate-400 hover:text-white p-1 rounded-lg">
         <i data-lucide="x" class="w-5 h-5"></i>
       </button>
@@ -64,7 +63,6 @@
     <!-- Header -->
     <header class="h-14 sm:h-16 border-b border-slate-200 px-4 sm:px-8 flex items-center justify-between bg-white flex-shrink-0 z-10">
       <div class="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm text-slate-500 min-w-0">
-        <!-- Hamburger Menu Button on Mobile -->
         <button id="menuToggleBtn" class="md:hidden text-slate-700 hover:text-sky-600 p-1.5 rounded-lg border border-slate-200 flex-shrink-0">
           <i data-lucide="menu" class="w-5 h-5"></i>
         </button>
@@ -77,14 +75,14 @@
 
     <!-- Scrollable Content -->
     <div class="flex-1 overflow-y-auto p-4 sm:p-8 custom-scroll bg-slate-50" id="contentContainer">
-      <div class="max-w-4xl mx-auto space-y-6" id="lessonContent"></div>
+      <div class="max-w-4xl mx-auto space-y-6 pb-6" id="lessonContent"></div>
     </div>
 
-    <!-- Fixed Bottom Bar -->
+    <!-- Single Bottom Navigation Bar -->
     <footer class="h-14 sm:h-16 border-t border-slate-200 px-4 sm:px-8 flex items-center justify-between bg-white flex-shrink-0 z-10">
       <button onclick="goToPrev()" id="prevBtn" class="flex items-center gap-1 sm:gap-2 px-3 sm:px-5 py-1.5 sm:py-2 rounded-lg border border-slate-300 text-slate-700 font-medium text-xs sm:text-sm hover:bg-slate-50 disabled:opacity-30 disabled:pointer-events-none">
         <i data-lucide="arrow-left" class="w-4 h-4"></i>
-        <span>Prev</span>
+        <span>Previous</span>
       </button>
 
       <span class="text-[11px] text-slate-400 hidden sm:inline">Use arrow keys (← / →) to navigate</span>
@@ -96,7 +94,6 @@
     </footer>
   </main>
 
-  <!-- External Data File -->
   <script src="topics.js"></script>
 
   <script>
@@ -175,7 +172,6 @@
       document.getElementById("breadcrumbTitle").innerText = data.title;
       document.getElementById("pageProgress").innerText = `Topic ${idx + 1} of ${curriculum.length}`;
 
-      // Update bottom fixed buttons
       document.getElementById("prevBtn").disabled = (idx === 0);
       document.getElementById("nextBtn").disabled = (idx === curriculum.length - 1);
 
@@ -217,18 +213,6 @@
           ` : ''}
 
           ${data.extra ? `<div class="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-700">${data.extra}</div>` : ''}
-
-          <!-- IN-PAGE NAVIGATION BUTTONS (Guaranteed to be visible at end of topic on phones) -->
-          <div class="pt-6 border-t border-slate-200 flex flex-col sm:flex-row gap-3 justify-between items-center mt-8 pb-4">
-            <button onclick="goToPrev()" class="w-full sm:w-auto flex items-center justify-center gap-2 px-5 py-3 rounded-xl border border-slate-300 text-slate-700 font-semibold text-sm hover:bg-slate-100 disabled:opacity-30 disabled:pointer-events-none shadow-sm transition-all" ${idx === 0 ? 'disabled' : ''}>
-              <i data-lucide="arrow-left" class="w-4 h-4"></i>
-              <span>Previous Topic</span>
-            </button>
-            <button onclick="goToNext()" class="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-sky-600 text-white font-semibold text-sm hover:bg-sky-700 disabled:opacity-30 disabled:pointer-events-none shadow-md transition-all" ${idx === curriculum.length - 1 ? 'disabled' : ''}>
-              <span>Next Topic</span>
-              <i data-lucide="arrow-right" class="w-4 h-4"></i>
-            </button>
-          </div>
         </div>
       `;
 
