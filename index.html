@@ -136,12 +136,15 @@
         </a>
       </div>
 
-      <label class="flex items-center justify-between cursor-pointer pt-2 border-t border-slate-800/80">
+      <label class="flex items-center justify-between cursor-pointer pt-2 border-t border-slate-800/80 select-none">
         <span class="text-[11px] font-semibold text-slate-300 flex items-center gap-1.5">
           <i data-lucide="mic" class="w-3.5 h-3.5 text-amber-400"></i> Instructor Cue Mode
         </span>
-        <input type="checkbox" id="cueModeToggle" class="sr-only">
-        <div class="w-8 h-4 bg-slate-700 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-amber-500 relative"></div>
+        <div class="relative inline-flex items-center">
+          <input type="checkbox" id="cueModeToggle" class="sr-only peer">
+          <div class="w-9 h-5 bg-slate-700 rounded-full peer-checked:bg-amber-500 transition-colors duration-200"></div>
+          <div class="absolute left-0.5 top-0.5 w-4 h-4 bg-white rounded-full transition-transform duration-200 ease-in-out peer-checked:translate-x-4 pointer-events-none shadow-sm"></div>
+        </div>
       </label>
     </div>
   </aside>
@@ -207,7 +210,7 @@
   <script>
     const MAX_FREE_TOPICS = 2; // Preview limit before requiring name
     let currentIndex = 0;
-    let isCueMode = false;
+    let isCueMode = localStorage.getItem("dataRoadmapCueMode") === "true";
     let currentUserName = localStorage.getItem("dataRoadmapUserName") || null;
 
     const sidebar = document.getElementById("sidebar");
@@ -595,8 +598,11 @@
       closeSidebarBtn.onclick = closeMobileSidebar;
       mobileBackdrop.onclick = closeMobileSidebar;
 
-      document.getElementById("cueModeToggle").onchange = (e) => {
+      const cueModeToggle = document.getElementById("cueModeToggle");
+      cueModeToggle.checked = isCueMode;
+      cueModeToggle.onchange = (e) => {
         isCueMode = e.target.checked;
+        localStorage.setItem("dataRoadmapCueMode", isCueMode);
         const c = document.getElementById("cueCard");
         if (c) c.classList.toggle("hidden", !isCueMode);
       };
