@@ -1760,5 +1760,5 @@ Average Sale := AVERAGEX(tblSales, tblSales[Amount])`,
     practice: "What is the standard syntax for defining an explicit DAX measure inside Power Pivot?",
     hint: "Use a colon before the equals sign.",
     answer: "Measure Name := expression (e.g. Total Sales := SUM(tblSales[Amount]))"
-  }
+  },
 ];
