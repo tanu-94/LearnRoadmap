@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -23,7 +22,7 @@
     }
 
     @media print {
-      aside, header, footer, #mobileBackdrop, #cueCard, #loginModal, button {
+      aside, header, footer, #mobileBackdrop, #cueCard, #loginModal, button, #aiDoubtBox {
         display: none !important;
       }
       body, main, #contentContainer {
@@ -43,40 +42,37 @@
   <!-- MOBILE OVERLAY BACKDROP -->
   <div id="mobileBackdrop" class="fixed inset-0 bg-slate-900/60 z-40 hidden md:hidden transition-opacity"></div>
 
-  <!-- LOGIN MODAL -->
-  <div id="loginModal" class="fixed inset-0 bg-slate-950/70 z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-slate-100 space-y-4">
+  <!-- NAME-ONLY LOGIN MODAL -->
+  <div id="loginModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-slate-100 space-y-4 relative">
       <div class="flex items-center justify-between border-b border-slate-100 pb-3">
         <div class="flex items-center gap-2 text-slate-900 font-bold">
-          <i data-lucide="user-check" class="w-5 h-5 text-sky-600"></i>
-          <span>Student & Instructor Login</span>
+          <i data-lucide="user" class="w-5 h-5 text-sky-600"></i>
+          <span>Welcome to Learn Roadmap</span>
         </div>
-        <button onclick="toggleLoginModal()" class="text-slate-400 hover:text-slate-700 p-1">
+        <button id="closeModalXBtn" onclick="toggleLoginModal(false)" class="text-slate-400 hover:text-slate-700 p-1">
           <i data-lucide="x" class="w-4 h-4"></i>
         </button>
       </div>
 
+      <p id="loginModalSubtitle" class="text-xs text-slate-500 leading-relaxed">
+        Please enter your name to unlock the curriculum and track your progress.
+      </p>
+
       <div class="space-y-3">
         <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1">Your Full Name</label>
-          <input type="text" id="loginNameInput" placeholder="e.g. Rahul Sharma" 
-            class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-sky-500">
-        </div>
-        <div>
-          <label class="block text-xs font-semibold text-slate-600 mb-1">Role</label>
-          <select id="loginRoleInput" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-sky-500">
-            <option value="Student">Student</option>
-            <option value="Instructor">Instructor</option>
-          </select>
+          <label class="block text-xs font-semibold text-slate-700 mb-1">Your Name</label>
+          <input type="text" id="loginNameInput" placeholder="Enter your full name..." 
+            class="w-full px-3.5 py-2.5 border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-sky-500">
         </div>
       </div>
 
-      <div class="flex gap-2 pt-2">
-        <button onclick="saveUserLogin()" class="flex-1 py-2 rounded-lg bg-sky-600 hover:bg-sky-700 text-white font-semibold text-xs transition-all shadow-sm">
-          Save & Log In
+      <div class="flex gap-2 pt-1">
+        <button onclick="saveUserLogin()" class="flex-1 py-2.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-semibold text-xs transition-all shadow-md">
+          Start Learning
         </button>
-        <button onclick="logoutUser()" class="px-3 py-2 rounded-lg border border-slate-200 text-rose-600 hover:bg-rose-50 font-semibold text-xs transition-all">
-          Logout
+        <button id="logoutBtn" onclick="logoutUser()" class="hidden px-3 py-2.5 rounded-xl border border-slate-200 text-rose-600 hover:bg-rose-50 font-semibold text-xs transition-all">
+          Clear Name
         </button>
       </div>
     </div>
@@ -99,15 +95,15 @@
       </button>
     </div>
 
-    <!-- WHO IS LOGGED IN (SIDEBAR WIDGET) -->
-    <div onclick="toggleLoginModal()" class="px-4 py-2.5 bg-slate-950/70 border-b border-slate-800 flex items-center justify-between cursor-pointer hover:bg-slate-800/60 transition-colors">
+    <!-- USER NAME BADGE (SIDEBAR) -->
+    <div onclick="toggleLoginModal(true)" class="px-4 py-2.5 bg-slate-950/70 border-b border-slate-800 flex items-center justify-between cursor-pointer hover:bg-slate-800/60 transition-colors">
       <div class="flex items-center gap-2.5 min-w-0">
         <div id="userAvatarSidebar" class="w-7 h-7 rounded-full bg-sky-600 text-white font-bold text-xs flex items-center justify-center flex-shrink-0">
           ?
         </div>
         <div class="min-w-0">
-          <p id="userNameSidebar" class="text-xs font-semibold text-slate-200 truncate">Click to Log In</p>
-          <p id="userRoleSidebar" class="text-[10px] text-slate-400">Track Progress</p>
+          <p id="userNameSidebar" class="text-xs font-semibold text-slate-200 truncate">Enter Your Name</p>
+          <p id="userStatusSidebar" class="text-[10px] text-slate-400">Track Progress</p>
         </div>
       </div>
       <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-slate-500"></i>
@@ -165,11 +161,11 @@
         <span id="breadcrumbTitle" class="text-sky-600 font-semibold truncate">Topic Title</span>
       </div>
 
-      <!-- Action Area: Logged-in Tag & PDF Button -->
+      <!-- Action Area: User Name Button & PDF -->
       <div class="flex items-center gap-2 sm:gap-3 flex-shrink-0">
-        <button onclick="toggleLoginModal()" id="userHeaderBtn" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition-all">
+        <button onclick="toggleLoginModal(true)" id="userHeaderBtn" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition-all">
           <i data-lucide="user" class="w-3.5 h-3.5 text-sky-600"></i>
-          <span id="userHeaderLabel" class="max-w-[100px] truncate">Login</span>
+          <span id="userHeaderLabel" class="max-w-[120px] truncate">Enter Name</span>
         </button>
 
         <button onclick="window.print()" title="Download PDF of this lesson" class="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 hover:text-slate-900 text-xs font-medium transition-all shadow-sm">
@@ -209,60 +205,80 @@
   <script src="topics.js"></script>
 
   <script>
+    const MAX_FREE_TOPICS = 2; // Preview limit before requiring name
     let currentIndex = 0;
     let isCueMode = false;
-    let currentUser = JSON.parse(localStorage.getItem("dataRoadmapUser") || 'null');
+    let currentUserName = localStorage.getItem("dataRoadmapUserName") || null;
 
     const sidebar = document.getElementById("sidebar");
     const mobileBackdrop = document.getElementById("mobileBackdrop");
     const menuToggleBtn = document.getElementById("menuToggleBtn");
     const closeSidebarBtn = document.getElementById("closeSidebarBtn");
     const loginModal = document.getElementById("loginModal");
+    const closeModalXBtn = document.getElementById("closeModalXBtn");
+    const logoutBtn = document.getElementById("logoutBtn");
 
-    function toggleLoginModal() {
-      loginModal.classList.toggle("hidden");
-      if (!loginModal.classList.contains("hidden") && currentUser) {
-        document.getElementById("loginNameInput").value = currentUser.name;
-        document.getElementById("loginRoleInput").value = currentUser.role;
+    function toggleLoginModal(canClose = true) {
+      if (!canClose && !currentUserName) {
+        closeModalXBtn.classList.add("hidden");
+        document.getElementById("loginModalSubtitle").innerText = "You have reached the preview limit. Please enter your name to continue.";
+      } else {
+        closeModalXBtn.classList.remove("hidden");
+        document.getElementById("loginModalSubtitle").innerText = "Please enter your name to unlock the curriculum and track your progress.";
       }
+
+      loginModal.classList.toggle("hidden");
+      if (!loginModal.classList.contains("hidden")) {
+        if (currentUserName) {
+          document.getElementById("loginNameInput").value = currentUserName;
+          logoutBtn.classList.remove("hidden");
+        } else {
+          document.getElementById("loginNameInput").value = "";
+          logoutBtn.classList.add("hidden");
+        }
+      }
+    }
+
+    function checkAuthGate(targetIndex) {
+      if (!currentUserName && targetIndex >= MAX_FREE_TOPICS) {
+        toggleLoginModal(false);
+        return false;
+      }
+      return true;
     }
 
     function saveUserLogin() {
       const name = document.getElementById("loginNameInput").value.trim();
-      const role = document.getElementById("loginRoleInput").value;
       if (!name) return alert("Please enter your name.");
-      currentUser = { name, role };
-      localStorage.setItem("dataRoadmapUser", JSON.stringify(currentUser));
+      currentUserName = name;
+      localStorage.setItem("dataRoadmapUserName", currentUserName);
       updateUserUI();
-      toggleLoginModal();
+      loginModal.classList.add("hidden");
+      renderSidebar();
     }
 
     function logoutUser() {
-      currentUser = null;
-      localStorage.removeItem("dataRoadmapUser");
+      currentUserName = null;
+      localStorage.removeItem("dataRoadmapUserName");
       updateUserUI();
-      toggleLoginModal();
+      loginModal.classList.add("hidden");
+      renderSidebar();
+      renderPage(0);
     }
 
     function updateUserUI() {
-      if (currentUser) {
-        const initials = currentUser.name.split(" ").map(n => n[0]).join("").toUpperCase().substring(0, 2);
-        document.getElementById("userNameSidebar").innerText = currentUser.name;
-        document.getElementById("userRoleSidebar").innerText = `${currentUser.role} • Active`;
+      if (currentUserName) {
+        const initials = currentUserName.split(" ").map(n => n[0]).join("").toUpperCase().substring(0, 2);
+        document.getElementById("userNameSidebar").innerText = currentUserName;
+        document.getElementById("userStatusSidebar").innerText = "Active Learner";
         document.getElementById("userAvatarSidebar").innerText = initials;
-        document.getElementById("userHeaderLabel").innerText = currentUser.name;
-        if (currentUser.role === "Instructor") {
-          document.getElementById("cueModeToggle").checked = true;
-          isCueMode = true;
-        }
+        document.getElementById("userHeaderLabel").innerText = currentUserName;
       } else {
-        document.getElementById("userNameSidebar").innerText = "Click to Log In";
-        document.getElementById("userRoleSidebar").innerText = "Track Progress";
+        document.getElementById("userNameSidebar").innerText = "Enter Your Name";
+        document.getElementById("userStatusSidebar").innerText = "Preview Mode";
         document.getElementById("userAvatarSidebar").innerText = "?";
-        document.getElementById("userHeaderLabel").innerText = "Login";
+        document.getElementById("userHeaderLabel").innerText = "Enter Name";
       }
-      const cue = document.getElementById("cueCard");
-      if (cue) cue.classList.toggle("hidden", !isCueMode);
       lucide.createIcons();
     }
 
@@ -289,6 +305,7 @@
     }
 
     function goToNext() {
+      if (!checkAuthGate(currentIndex + 1)) return;
       if (currentIndex < curriculum.length - 1) renderPage(currentIndex + 1);
     }
 
@@ -299,6 +316,32 @@
         return { label: "Intermediate", color: "bg-amber-100 text-amber-800 border-amber-200", time: "15-20 min" };
       }
       return { label: "Advanced", color: "bg-purple-100 text-purple-800 border-purple-200", time: "20-25 min" };
+    }
+
+    function askAIQuestion() {
+      const input = document.getElementById("aiQuestionInput");
+      const answerArea = document.getElementById("aiAnswerArea");
+      const answerText = document.getElementById("aiAnswerText");
+      const q = input.value.trim();
+      if (!q) return;
+
+      answerArea.classList.remove("hidden");
+      answerText.innerHTML = `<span class="text-sky-600 animate-pulse">Thinking through the lesson logic...</span>`;
+
+      setTimeout(() => {
+        const curTopic = curriculum[currentIndex];
+        answerText.innerHTML = `
+          <div class="space-y-2 text-xs sm:text-sm text-slate-800">
+            <p class="font-semibold text-sky-950">Analyst Guidance for "${escapeHtml(q)}":</p>
+            <p class="leading-relaxed">In this topic (<strong>${curTopic.title}</strong>), the primary rule is: <em>${curTopic.meaning.substring(0, 140)}...</em></p>
+            <div class="p-2 bg-slate-900 text-emerald-400 font-mono text-xs rounded-lg mt-2 overflow-x-auto">
+              ${curTopic.syntax ? escapeHtml(curTopic.syntax.split('\n')[0]) : '-- Check syntax block above'}
+            </div>
+            <p class="text-[11px] text-slate-500 mt-1">Remember to test your output on the hospital dataset before promoting logic into production.</p>
+          </div>
+        `;
+        lucide.createIcons();
+      }, 500);
     }
 
     function init() {
@@ -329,12 +372,20 @@
           nav.appendChild(h);
         }
 
+        const isLocked = !currentUserName && idx >= MAX_FREE_TOPICS;
+
         const btn = document.createElement("button");
-        btn.className = `w-full text-left px-3 py-2 rounded-lg text-xs font-medium transition-all ${
+        btn.className = `w-full text-left px-3 py-2 rounded-lg text-xs font-medium transition-all flex items-center justify-between ${
           idx === currentIndex ? "bg-sky-600 text-white font-semibold shadow-sm" : "text-slate-400 hover:bg-slate-800 hover:text-slate-200"
         }`;
-        btn.innerText = item.title;
+        
+        btn.innerHTML = `
+          <span class="truncate">${item.title}</span>
+          ${isLocked ? '<i data-lucide="lock" class="w-3 h-3 text-slate-500 flex-shrink-0 ml-1"></i>' : ''}
+        `;
+
         btn.onclick = () => {
+          if (!checkAuthGate(idx)) return;
           renderPage(idx);
           if (window.innerWidth < 768) closeMobileSidebar();
         };
@@ -399,7 +450,7 @@
             <div class="bg-slate-900 rounded-2xl overflow-hidden border border-slate-800 shadow-sm">
               <div class="bg-slate-950 px-4 py-2.5 text-xs font-mono text-slate-400 border-b border-slate-800 flex items-center gap-2">
                 <i data-lucide="terminal" class="w-3.5 h-3.5 text-emerald-400"></i>
-                <span>Syntax / Steps</span>
+                <span>Syntax / Logical Steps</span>
               </div>
               <pre class="p-4 text-xs font-mono text-emerald-400 overflow-x-auto leading-relaxed">${escapeHtml(data.syntax)}</pre>
             </div>
@@ -422,7 +473,7 @@
             </div>
           ` : ''}
 
-          <!-- ANALYST DECISION BOX / QUESTION BOX -->
+          <!-- ANALYST DECISION BOX -->
           ${data.decisionBox ? `
             <div class="bg-gradient-to-br from-indigo-50/90 to-sky-50/90 border border-indigo-200/80 rounded-2xl p-4 sm:p-6 shadow-sm space-y-3">
               <div class="flex items-center justify-between">
@@ -490,6 +541,32 @@
               </div>
             </div>
           ` : ''}
+
+          <!-- QUESTION / DISCUSSION BOX (ASK AI) -->
+          <div id="aiDoubtBox" class="bg-white p-4 sm:p-6 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+            <div class="flex items-center justify-between">
+              <h4 class="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
+                <i data-lucide="message-square" class="w-4 h-4 text-sky-600"></i>
+                <span>Discussion & Doubt Box (Ask AI)</span>
+              </h4>
+              <span class="text-[10px] font-semibold text-sky-700 bg-sky-50 px-2 py-0.5 rounded-full">Interactive Companion</span>
+            </div>
+
+            <p class="text-xs text-slate-600">Have a question about this topic, syntax, or the hospital scenario? Ask below:</p>
+
+            <div class="flex gap-2">
+              <input type="text" id="aiQuestionInput" placeholder="e.g. Why did we use LEFT JOIN instead of INNER JOIN here?" 
+                class="flex-1 px-3 py-2 border border-slate-300 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-sky-500">
+              <button onclick="askAIQuestion()" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all shadow-sm">
+                <i data-lucide="sparkles" class="w-3.5 h-3.5 text-sky-400"></i>
+                <span>Ask AI</span>
+              </button>
+            </div>
+
+            <div id="aiAnswerArea" class="hidden mt-3 p-3.5 bg-sky-50/70 border border-sky-100 rounded-xl">
+              <div id="aiAnswerText"></div>
+            </div>
+          </div>
 
           ${data.extra ? `<div class="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 text-xs sm:text-sm text-slate-700">${data.extra}</div>` : ''}
         </div>
