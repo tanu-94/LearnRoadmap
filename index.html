@@ -22,7 +22,7 @@
     }
 
     @media print {
-      aside, header, footer, #mobileBackdrop, #cueCard, #loginModal, button, #aiDoubtBox {
+      aside, header, footer, #mobileBackdrop, #cueCard, #loginModal, #schemaModal, #badgeModal, button, #aiDoubtBox {
         display: none !important;
       }
       body, main, #contentContainer {
@@ -56,7 +56,7 @@
       </div>
 
       <p id="loginModalSubtitle" class="text-xs text-slate-500 leading-relaxed">
-        Please enter your name to unlock the curriculum and track your progress.
+        Please enter your name to unlock all lessons and track completed topics.
       </p>
 
       <div class="space-y-3">
@@ -74,7 +74,123 @@
           Start Learning
         </button>
         <button id="logoutBtn" onclick="logoutUser()" class="hidden px-3 py-2.5 rounded-xl border border-slate-200 text-rose-600 hover:bg-rose-50 font-semibold text-xs transition-all">
-          Clear Name
+          Clear
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- DATA MODEL / ER-DIAGRAM MODAL -->
+  <div id="schemaModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-3xl w-full p-6 shadow-2xl border border-slate-100 space-y-4 max-h-[90vh] overflow-y-auto custom-scroll">
+      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+        <div class="flex items-center gap-2">
+          <i data-lucide="network" class="w-5 h-5 text-indigo-600"></i>
+          <h3 class="font-bold text-slate-900 text-sm sm:text-base">Hospital Database Relational Schema</h3>
+        </div>
+        <button onclick="toggleSchemaModal()" class="text-slate-400 hover:text-slate-700 p-1">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <p class="text-xs text-slate-600">This 3-table relational schema powers all SQL, Python, and Power BI lessons:</p>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-3 pt-2">
+        <div class="border border-slate-200 rounded-xl p-3 bg-slate-50 space-y-2">
+          <div class="flex items-center justify-between border-b border-slate-200 pb-1.5">
+            <span class="font-bold text-xs text-slate-800 flex items-center gap-1">
+              <i data-lucide="table" class="w-3.5 h-3.5 text-sky-600"></i> departments
+            </span>
+            <span class="text-[9px] bg-sky-100 text-sky-700 font-semibold px-1.5 py-0.5 rounded">Dimension</span>
+          </div>
+          <ul class="text-[11px] font-mono space-y-1 text-slate-700">
+            <li class="font-bold text-amber-600 flex items-center gap-1"><i data-lucide="key" class="w-3 h-3"></i> dept_id (PK)</li>
+            <li>dept_name</li>
+          </ul>
+        </div>
+
+        <div class="border-2 border-indigo-200 rounded-xl p-3 bg-indigo-50/40 space-y-2">
+          <div class="flex items-center justify-between border-b border-indigo-100 pb-1.5">
+            <span class="font-bold text-xs text-indigo-900 flex items-center gap-1">
+              <i data-lucide="table" class="w-3.5 h-3.5 text-indigo-600"></i> staff
+            </span>
+            <span class="text-[9px] bg-indigo-100 text-indigo-700 font-semibold px-1.5 py-0.5 rounded">Core Entity</span>
+          </div>
+          <ul class="text-[11px] font-mono space-y-1 text-slate-700">
+            <li class="font-bold text-amber-600 flex items-center gap-1"><i data-lucide="key" class="w-3 h-3"></i> staff_id (PK)</li>
+            <li>staff_name</li>
+            <li>role</li>
+            <li class="text-sky-600 font-bold flex items-center gap-1"><i data-lucide="link" class="w-3 h-3"></i> dept_id (FK)</li>
+            <li>salary</li>
+            <li>join_date</li>
+          </ul>
+        </div>
+
+        <div class="border border-slate-200 rounded-xl p-3 bg-slate-50 space-y-2">
+          <div class="flex items-center justify-between border-b border-slate-200 pb-1.5">
+            <span class="font-bold text-xs text-slate-800 flex items-center gap-1">
+              <i data-lucide="table" class="w-3.5 h-3.5 text-emerald-600"></i> shifts
+            </span>
+            <span class="text-[9px] bg-emerald-100 text-emerald-700 font-semibold px-1.5 py-0.5 rounded">Fact (Activity)</span>
+          </div>
+          <ul class="text-[11px] font-mono space-y-1 text-slate-700">
+            <li class="font-bold text-amber-600 flex items-center gap-1"><i data-lucide="key" class="w-3 h-3"></i> shift_id (PK)</li>
+            <li class="text-indigo-600 font-bold flex items-center gap-1"><i data-lucide="link" class="w-3 h-3"></i> staff_id (FK)</li>
+            <li>shift_date</li>
+            <li>shift_type</li>
+            <li>hours_worked</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="p-3 bg-slate-900 rounded-xl text-xs text-slate-300 space-y-1 font-mono">
+        <p class="text-emerald-400 font-bold">Relational Cardinality:</p>
+        <p>• departments.dept_id (1) ────&lt; staff.dept_id (N)</p>
+        <p>• staff.staff_id (1) ────────&lt; shifts.staff_id (N)</p>
+      </div>
+
+      <div class="flex justify-end pt-2">
+        <button onclick="toggleSchemaModal()" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-semibold">
+          Close Schema
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- LINKEDIN COMPLETION BADGE MODAL -->
+  <div id="badgeModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl border border-slate-100 text-center space-y-5">
+      <div class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-2xl mx-auto flex items-center justify-center shadow-inner">
+        <i data-lucide="award" class="w-9 h-9"></i>
+      </div>
+
+      <div class="space-y-1">
+        <span class="text-xs uppercase tracking-widest text-emerald-600 font-extrabold">Milestone Unlocked</span>
+        <h3 id="badgeModuleTitle" class="text-lg sm:text-xl font-extrabold text-slate-900">Module Completed!</h3>
+        <p class="text-xs text-slate-500">You have completed all topics in this section on <strong>Data Notes by Tanu</strong>.</p>
+      </div>
+
+      <div class="p-4 rounded-2xl bg-gradient-to-br from-slate-900 via-sky-950 to-slate-900 text-white border border-sky-800 shadow-xl space-y-3">
+        <div class="flex items-center justify-between text-left">
+          <div>
+            <p class="text-[10px] text-sky-400 uppercase font-semibold">Verified Learner</p>
+            <p id="badgeUserName" class="text-sm font-bold truncate">Learner Name</p>
+          </div>
+          <img src="image/logo.png" alt="Logo" class="w-7 h-7 rounded-lg bg-white p-0.5">
+        </div>
+        <div class="border-t border-slate-700/80 pt-2 text-left">
+          <p id="badgeTargetModule" class="text-xs font-semibold text-slate-200">MySQL Mastery</p>
+          <p class="text-[10px] text-slate-400">100% Curriculum Completed • Hands-on Verified</p>
+        </div>
+      </div>
+
+      <div class="space-y-2 pt-1">
+        <button onclick="shareOnLinkedIn()" class="w-full py-2.5 px-4 bg-[#0a66c2] hover:bg-[#084e96] text-white font-semibold rounded-xl text-xs flex items-center justify-center gap-2 shadow-md transition-all">
+          <i data-lucide="linkedin" class="w-4 h-4"></i>
+          <span>Share Achievement on LinkedIn</span>
+        </button>
+        <button onclick="toggleBadgeModal()" class="w-full py-2 text-xs font-semibold text-slate-500 hover:text-slate-800">
+          Continue Learning
         </button>
       </div>
     </div>
@@ -111,13 +227,24 @@
       <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-slate-500"></i>
     </div>
 
-    <!-- SEARCH BOX -->
-    <div class="px-4 py-3 border-b border-slate-800">
+    <!-- SEARCH & INTERVIEW FILTER -->
+    <div class="px-4 py-3 border-b border-slate-800 space-y-2">
       <div class="relative">
         <i data-lucide="search" class="w-4 h-4 absolute left-3 top-3 text-slate-500"></i>
         <input type="text" id="searchInput" placeholder="Search roadmap topics..." 
           class="w-full bg-slate-800 text-slate-200 text-xs rounded-lg pl-9 pr-3 py-2 focus:outline-none focus:ring-2 focus:ring-sky-500 placeholder-slate-500">
       </div>
+
+      <label class="flex items-center justify-between cursor-pointer px-1 py-1 text-slate-300 select-none">
+        <span class="text-[11px] font-semibold flex items-center gap-1.5 text-indigo-300">
+          <i data-lucide="help-circle" class="w-3.5 h-3.5 text-indigo-400"></i> Interview Decisions Only
+        </span>
+        <div class="relative inline-flex items-center">
+          <input type="checkbox" id="interviewModeToggle" class="sr-only peer">
+          <div class="w-8 h-4 bg-slate-700 rounded-full peer-checked:bg-indigo-500 transition-colors duration-200"></div>
+          <div class="absolute left-0.5 top-0.5 w-4 h-4 bg-white rounded-full transition-transform duration-200 ease-in-out peer-checked:translate-x-4 pointer-events-none shadow-sm"></div>
+        </div>
+      </label>
     </div>
 
     <!-- NAVIGATION LIST -->
@@ -138,7 +265,6 @@
         </a>
       </div>
 
-      <!-- INSTRUCTOR CUE MODE TOGGLE -->
       <label class="flex items-center justify-between cursor-pointer pt-2 border-t border-slate-800/80 select-none">
         <span class="text-[11px] font-semibold text-slate-300 flex items-center gap-1.5">
           <i data-lucide="mic" class="w-3.5 h-3.5 text-amber-400"></i> Instructor Cue Mode
@@ -167,11 +293,15 @@
         <span id="breadcrumbTitle" class="text-sky-600 font-semibold truncate">Topic Title</span>
       </div>
 
-      <!-- Action Area: User Name Button & PDF -->
-      <div class="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+      <div class="flex items-center gap-2 sm:gap-2.5 flex-shrink-0">
+        <button onclick="toggleSchemaModal()" title="View Hospital Relational ER Schema" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-indigo-50 text-indigo-700 hover:bg-indigo-100 border border-indigo-200 text-xs font-semibold transition-all">
+          <i data-lucide="network" class="w-3.5 h-3.5 text-indigo-600"></i>
+          <span class="hidden sm:inline">Data Model</span>
+        </button>
+
         <button onclick="toggleLoginModal(true)" id="userHeaderBtn" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition-all">
           <i data-lucide="user" class="w-3.5 h-3.5 text-sky-600"></i>
-          <span id="userHeaderLabel" class="max-w-[120px] truncate">Enter Name</span>
+          <span id="userHeaderLabel" class="max-w-[100px] truncate">Enter Name</span>
         </button>
 
         <button onclick="window.print()" title="Download PDF of this lesson" class="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 hover:text-slate-900 text-xs font-medium transition-all shadow-sm">
@@ -184,7 +314,7 @@
 
     <!-- Top Visual Progress Bar -->
     <div class="w-full bg-slate-100 h-1 flex-shrink-0">
-      <div id="topProgressBar" class="bg-sky-600 h-1 transition-all duration-300" style="width: 0%;"></div>
+      <div id="topProgressBar" class="bg-emerald-500 h-1 transition-all duration-300" style="width: 0%;"></div>
     </div>
 
     <!-- Scrollable Content -->
@@ -216,7 +346,9 @@
 
     let currentIndex = 0;
     let isCueMode = localStorage.getItem("dataRoadmapCueMode") === "true";
+    let isInterviewMode = localStorage.getItem("dataRoadmapInterviewMode") === "true";
     let currentUserName = localStorage.getItem("dataRoadmapUserName") || null;
+    let completedTopics = JSON.parse(localStorage.getItem("completedRoadmapTopics") || "[]");
 
     const sidebar = document.getElementById("sidebar");
     const mobileBackdrop = document.getElementById("mobileBackdrop");
@@ -225,6 +357,96 @@
     const loginModal = document.getElementById("loginModal");
     const closeModalXBtn = document.getElementById("closeModalXBtn");
     const logoutBtn = document.getElementById("logoutBtn");
+    const schemaModal = document.getElementById("schemaModal");
+    const badgeModal = document.getElementById("badgeModal");
+
+    // DOWNLOAD STARTER FILES
+    function downloadStarterData(type) {
+      let filename = "";
+      let content = "";
+      let mime = "text/plain";
+
+      if (type === 'excel') {
+        filename = "tblSales_Starter.csv";
+        mime = "text/csv;charset=utf-8;";
+        content = "OrderID,OrderDate,Region,Product,Qty,UnitPrice,Amount\n" +
+          "1001,2026-01-05,South,Pen,10,12,120\n" +
+          "1002,2026-01-07,North,Book,3,150,450\n" +
+          "1003,2026-01-09,South,Book,2,150,300\n" +
+          "1004,2026-02-02,East,Pen,25,12,300\n" +
+          "1005,2026-02-11,North,Bag,1,800,800\n" +
+          "1006,2026-02-15,South,Bag,2,800,1600\n" +
+          "1007,2026-03-03,East,Book,4,150,600\n" +
+          "1008,2026-03-08,North,Pen,5,12,60\n";
+      } else if (type === 'sql') {
+        filename = "hospital_db_setup.sql";
+        mime = "text/sql;charset=utf-8;";
+        content = "-- Hospital Schema Starter File - Data Notes by Tanu\n" +
+          "CREATE DATABASE hospital_db;\nUSE hospital_db;\n\n" +
+          "CREATE TABLE departments (\n  dept_id INT PRIMARY KEY,\n  dept_name VARCHAR(50)\n);\n\n" +
+          "CREATE TABLE staff (\n  staff_id INT PRIMARY KEY,\n  staff_name VARCHAR(50),\n  role VARCHAR(30),\n  dept_id INT,\n  salary DECIMAL(10,2),\n  join_date DATE\n);\n\n" +
+          "CREATE TABLE shifts (\n  shift_id INT PRIMARY KEY,\n  staff_id INT,\n  shift_date DATE,\n  shift_type VARCHAR(10),\n  hours_worked INT\n);\n\n" +
+          "INSERT INTO departments VALUES\n(1,'Emergency'),(2,'Pharmacy'),(3,'Radiology'),(4,'Nursing');\n\n" +
+          "INSERT INTO staff VALUES\n(1,'Asha','Nurse',4,32000,'2022-03-15'),\n(2,'Ravi','Doctor',1,85000,'2020-06-01'),\n(3,'Meena','Pharmacist',2,40000,'2021-09-10'),\n(4,'John','Technician',3,38000,'2023-01-20'),\n(5,'Priya','Nurse',4,33000,'2022-08-05'),\n(6,'Kiran','Doctor',1,90000,'2019-11-12'),\n(7,'Sara','Nurse',NULL,31000,'2024-02-01');\n\n" +
+          "INSERT INTO shifts VALUES\n(1,1,'2026-09-01','Morning',8),\n(2,1,'2026-09-02','Night',10),\n(3,2,'2026-09-01','Night',12),\n(4,3,'2026-09-01','Morning',8),\n(5,5,'2026-09-02','Morning',8),\n(6,6,'2026-09-02','Night',12);\n";
+      }
+
+      const blob = new Blob([content], { type: mime });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    // MARK TOPIC AS COMPLETED
+    function toggleComplete(idx) {
+      if (!checkAuthGate(idx)) return;
+      const pos = completedTopics.indexOf(idx);
+      if (pos > -1) {
+        completedTopics.splice(pos, 1);
+      } else {
+        completedTopics.push(idx);
+        checkModuleCompletion(curriculum[idx].module);
+      }
+      localStorage.setItem("completedRoadmapTopics", JSON.stringify(completedTopics));
+      renderPage(idx);
+      renderSidebar();
+    }
+
+    function toggleSchemaModal() {
+      schemaModal.classList.toggle("hidden");
+    }
+
+    function toggleBadgeModal() {
+      badgeModal.classList.toggle("hidden");
+    }
+
+    let lastBadgedModule = "";
+    function checkModuleCompletion(moduleName) {
+      const moduleIndices = curriculum
+        .map((item, idx) => (item.module === moduleName ? idx : null))
+        .filter(idx => idx !== null);
+
+      const allDone = moduleIndices.length > 0 && moduleIndices.every(idx => completedTopics.includes(idx));
+      if (allDone && lastBadgedModule !== moduleName) {
+        lastBadgedModule = moduleName;
+        document.getElementById("badgeModuleTitle").innerText = `${moduleName} Completed!`;
+        document.getElementById("badgeTargetModule").innerText = moduleName;
+        document.getElementById("badgeUserName").innerText = currentUserName || "Dedicated Analyst";
+        toggleBadgeModal();
+      }
+    }
+
+    function shareOnLinkedIn() {
+      const text = encodeURIComponent(
+        `Excited to share that I just completed the ${lastBadgedModule || 'Data Analytics Roadmap'} on Data Notes by Tanu! 🚀\n\nPracticed SQL, Python, Excel & Power BI decision models. Check out the roadmap here:\nhttps://tanu-94.github.io/LearnRoadmap/`
+      );
+      window.open(`https://www.linkedin.com/feed/?shareActive=true&text=${text}`, '_blank');
+    }
 
     function toggleLoginModal(canClose = true) {
       if (!canClose && !currentUserName) {
@@ -265,7 +487,6 @@
       loginModal.classList.add("hidden");
       renderSidebar();
 
-      // Silently log visitor to Google Sheet
       fetch(GOOGLE_SHEET_URL, {
         method: "POST",
         mode: "no-cors",
@@ -287,7 +508,7 @@
       if (currentUserName) {
         const initials = currentUserName.split(" ").map(n => n[0]).join("").toUpperCase().substring(0, 2);
         document.getElementById("userNameSidebar").innerText = currentUserName;
-        document.getElementById("userStatusSidebar").innerText = "Active Learner";
+        document.getElementById("userStatusSidebar").innerText = `${completedTopics.length}/${curriculum.length} Completed`;
         document.getElementById("userAvatarSidebar").innerText = initials;
         document.getElementById("userHeaderLabel").innerText = currentUserName;
       } else {
@@ -335,112 +556,79 @@
       return { label: "Advanced", color: "bg-purple-100 text-purple-800 border-purple-200", time: "20-25 min" };
     }
 
-    // ACCURATE KNOWLEDGE BASE FOR DATA ANALYTICS CONCEPTS
-    const AI_KNOWLEDGE_BASE = {
-      ddl: {
-        title: "DDL (Data Definition Language)",
-        desc: "DDL commands define, create, and modify database structure and schema. Key commands: CREATE, ALTER, DROP, and TRUNCATE. In MySQL, DDL changes are auto-committed immediately.",
-        topicRef: "Types of SQL Commands"
-      },
-      dml: {
-        title: "DML (Data Manipulation Language)",
-        desc: "DML commands manage and modify the actual data rows stored inside tables. Key commands: INSERT, UPDATE, and DELETE.",
-        topicRef: "Types of SQL Commands"
-      },
-      dql: {
-        title: "DQL (Data Query Language)",
-        desc: "DQL is used to read and retrieve data from tables using the SELECT command. As an analyst, you will spend 90% of your SQL time writing DQL.",
-        topicRef: "SELECT"
-      },
-      tcl: {
-        title: "TCL (Transaction Control Language)",
-        desc: "TCL commands manage database transactions to protect data integrity. Key commands: COMMIT (save changes), ROLLBACK (undo uncommitted changes), and SAVEPOINT.",
-        topicRef: "Types of SQL Commands"
-      },
-      join: {
-        title: "SQL Joins",
-        desc: "INNER JOIN returns only matching rows. LEFT JOIN returns all rows from the left table and matching rows from the right. RIGHT JOIN returns all rows from the right. FULL JOIN returns all rows from both tables.",
-        topicRef: "INNER JOIN"
-      },
-      null: {
-        title: "NULL (Missing Values)",
-        desc: "NULL represents a missing, unrecorded, or unknown value. It is neither 0 nor an empty string. Always check for it using IS NULL or IS NOT NULL, never = NULL.",
-        topicRef: "NULL (Missing Values)"
-      },
-      vlookup: {
-        title: "VLOOKUP vs XLOOKUP",
-        desc: "VLOOKUP searches left-to-right by column index number and breaks if columns shift. XLOOKUP searches in any direction, defaults to exact match, and provides built-in not-found handling.",
-        topicRef: "XLOOKUP"
-      },
-      dax: {
-        title: "DAX in Power BI",
-        desc: "DAX (Data Analysis Expressions) is Power BI's formula language. Calculated Columns evaluate row-by-row on data refresh, while Measures calculate dynamically in response to active slicers and filters.",
-        topicRef: "Calculated Column vs Measure"
-      }
-    };
-
-    function askAI() {
+    // =========================================================================
+    // TRUE UNIVERSAL ASK AI (LIVE ZERO-CONFIG AI WITH OFFLINE SMART FALLBACK)
+    // =========================================================================
+    async function askAI() {
       const input = document.getElementById("aiQuestionInput");
       const answerArea = document.getElementById("aiAnswerArea");
       const answerText = document.getElementById("aiAnswerText");
       const rawQ = input.value.trim();
       if (!rawQ) return;
 
-      const q = rawQ.toLowerCase();
-
       answerArea.classList.remove("hidden");
       answerText.innerHTML = `
         <span class="text-sky-600 animate-pulse flex items-center gap-1.5">
-          <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> Searching curriculum and formulating answer...
+          <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> Analyst AI is formulating your answer...
         </span>`;
       lucide.createIcons();
 
-      setTimeout(() => {
-        // 1. Check direct knowledge base match
-        let matchedKey = Object.keys(AI_KNOWLEDGE_BASE).find(k => q.includes(k));
-        
-        if (matchedKey) {
-          const item = AI_KNOWLEDGE_BASE[matchedKey];
-          const targetIdx = curriculum.findIndex(t => t.title.toLowerCase().includes(item.topicRef.toLowerCase()));
+      // System context for the AI
+      const systemPrompt = "You are a friendly, highly skilled Data Analytics tutor on 'Data Notes by Tanu'. " +
+        "Answer the user's question clearly, concisely, and accurately in 2 to 4 sentences. " +
+        "If it is a technical data concept (SQL, Python, Pandas, Excel, DAX, Power BI, Statistics), explain what it is and how analysts use it.";
 
-          answerText.innerHTML = `
-            <div class="space-y-2 text-xs sm:text-sm text-slate-800">
-              <p class="font-bold text-sky-950 flex items-center gap-1.5">
-                <i data-lucide="sparkles" class="w-4 h-4 text-sky-600"></i>
-                <span>${item.title}:</span>
-              </p>
-              <p class="leading-relaxed text-slate-700">${item.desc}</p>
-              ${targetIdx !== -1 ? `
-                <div class="pt-2">
-                  <button onclick="renderPage(${targetIdx})" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-sky-50 hover:bg-sky-100 text-sky-700 font-semibold rounded-lg text-xs border border-sky-200 transition-colors">
-                    <i data-lucide="arrow-right-circle" class="w-3.5 h-3.5"></i>
-                    <span>Jump to Lesson: ${curriculum[targetIdx].title}</span>
-                  </button>
-                </div>
-              ` : ''}
-            </div>
-          `;
-          lucide.createIcons();
-          return;
-        }
+      try {
+        const fullPrompt = `${systemPrompt}\n\nQuestion: ${rawQ}`;
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 6500); // 6.5s timeout
 
-        // 2. Search curriculum topics across all modules
+        const response = await fetch(`https://text.pollinations.ai/${encodeURIComponent(fullPrompt)}`, {
+          signal: controller.signal
+        });
+        clearTimeout(timeoutId);
+
+        if (!response.ok) throw new Error("AI service busy");
+
+        const aiResponseText = await response.text();
+
+        answerText.innerHTML = `
+          <div class="space-y-2 text-xs sm:text-sm text-slate-800">
+            <p class="font-bold text-sky-950 flex items-center gap-1.5">
+              <i data-lucide="sparkles" class="w-4 h-4 text-sky-600"></i>
+              <span>Analyst AI Answer:</span>
+            </p>
+            <div class="leading-relaxed text-slate-700 whitespace-pre-wrap">${escapeHtml(aiResponseText.trim())}</div>
+          </div>
+        `;
+        input.value = "";
+        lucide.createIcons();
+        return;
+
+      } catch (err) {
+        // Fallback: Smart offline dictionary check (Never dumps wrong lesson notes!)
+        const q = rawQ.toLowerCase();
+
+        // Check if query matches another topic across the roadmap
         const matchedTopicIdx = curriculum.findIndex(t => 
           t.title.toLowerCase().includes(q) || 
-          t.definition.toLowerCase().includes(q) || 
-          t.meaning.toLowerCase().includes(q)
+          (q.includes("panda") && t.title.toLowerCase().includes("pandas")) ||
+          (q.includes("join") && t.title.toLowerCase().includes("join")) ||
+          (q.includes("dax") && t.title.toLowerCase().includes("dax")) ||
+          (q.includes("excel") && t.module.toLowerCase().includes("excel"))
         );
 
-        if (matchedTopicIdx !== -1 && matchedTopicIdx !== currentIndex) {
+        if (matchedTopicIdx !== -1) {
           const found = curriculum[matchedTopicIdx];
           answerText.innerHTML = `
             <div class="space-y-2 text-xs sm:text-sm text-slate-800">
               <p class="font-bold text-sky-950 flex items-center gap-1.5">
                 <i data-lucide="sparkles" class="w-4 h-4 text-sky-600"></i>
-                <span>Found in ${found.module}:</span>
+                <span>Found in Curriculum (${found.module}):</span>
               </p>
-              <p class="font-semibold text-slate-900">${found.title}</p>
+              <p class="font-bold text-slate-900">${found.title}</p>
               <p class="leading-relaxed text-slate-700">${found.definition}</p>
+              <p class="text-xs text-slate-500">${found.meaning}</p>
               <div class="pt-2">
                 <button onclick="renderPage(${matchedTopicIdx})" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-sky-50 hover:bg-sky-100 text-sky-700 font-semibold rounded-lg text-xs border border-sky-200 transition-colors">
                   <i data-lucide="arrow-right-circle" class="w-3.5 h-3.5"></i>
@@ -449,29 +637,20 @@
               </div>
             </div>
           `;
-          lucide.createIcons();
-          return;
+        } else {
+          // Clean fallback if completely unknown
+          answerText.innerHTML = `
+            <div class="space-y-2 text-xs sm:text-sm text-slate-800">
+              <p class="font-bold text-sky-950 flex items-center gap-1.5">
+                <i data-lucide="sparkles" class="w-4 h-4 text-sky-600"></i>
+                <span>Analyst AI Note:</span>
+              </p>
+              <p class="leading-relaxed text-slate-700">I specialize in data analytics concepts like <strong>SQL queries</strong>, <strong>Python (Pandas, NumPy)</strong>, <strong>Excel formulas</strong>, and <strong>Power BI / DAX</strong>. Try searching for terms like <em>"What is Pandas"</em>, <em>"Explain Left Join"</em>, or <em>"XLOOKUP syntax"</em>.</p>
+            </div>
+          `;
         }
-
-        // 3. Fallback: contextual guidance for the current lesson
-        const curTopic = curriculum[currentIndex];
-        answerText.innerHTML = `
-          <div class="space-y-2 text-xs sm:text-sm text-slate-800">
-            <p class="font-bold text-sky-950 flex items-center gap-1.5">
-              <i data-lucide="sparkles" class="w-4 h-4 text-sky-600"></i>
-              <span>Guidance for "${escapeHtml(rawQ)}":</span>
-            </p>
-            <p class="leading-relaxed text-slate-700">For <strong>${curTopic.title}</strong>, note: ${curTopic.meaning.substring(0, 160)}...</p>
-            ${curTopic.syntax ? `
-              <div class="p-2.5 bg-slate-900 text-emerald-400 font-mono text-xs rounded-xl mt-2 overflow-x-auto">
-                ${escapeHtml(curTopic.syntax.split('\n')[0])}
-              </div>
-            ` : ''}
-            <p class="text-[11px] text-slate-500 mt-1">Try testing this directly against the hospital schema or practice tasks above.</p>
-          </div>
-        `;
         lucide.createIcons();
-      }, 300);
+      }
     }
 
     function init() {
@@ -492,6 +671,8 @@
       let currentMod = "";
 
       curriculum.forEach((item, idx) => {
+        if (isInterviewMode && !item.decisionBox) return;
+
         if (filter && !item.title.toLowerCase().includes(filter.toLowerCase()) && !item.meaning.toLowerCase().includes(filter.toLowerCase())) return;
 
         if (item.module !== currentMod) {
@@ -503,6 +684,7 @@
         }
 
         const isLocked = !currentUserName && idx >= MAX_FREE_TOPICS;
+        const isDone = completedTopics.includes(idx);
 
         const btn = document.createElement("button");
         btn.className = `w-full text-left px-3 py-2 rounded-lg text-xs font-medium transition-all flex items-center justify-between ${
@@ -510,7 +692,10 @@
         }`;
         
         btn.innerHTML = `
-          <span class="truncate">${item.title}</span>
+          <div class="flex items-center gap-2 truncate">
+            ${isDone ? '<i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-emerald-400 flex-shrink-0"></i>' : ''}
+            <span class="truncate">${item.title}</span>
+          </div>
           ${isLocked ? '<i data-lucide="lock" class="w-3 h-3 text-slate-500 flex-shrink-0 ml-1"></i>' : ''}
         `;
 
@@ -528,35 +713,97 @@
       currentIndex = idx;
       const data = curriculum[idx];
       const level = getLevelInfo(data.module, idx);
-      const progressPercent = Math.round(((idx + 1) / curriculum.length) * 100);
+      const isDone = completedTopics.includes(idx);
+
+      const completionPercent = Math.round((completedTopics.length / curriculum.length) * 100);
+      document.getElementById("topProgressBar").style.width = `${completionPercent}%`;
 
       document.getElementById("breadcrumbModule").innerText = data.module;
       document.getElementById("breadcrumbTitle").innerText = data.title;
-      document.getElementById("pageProgress").innerText = `${progressPercent}% (${idx + 1}/${curriculum.length})`;
-      document.getElementById("topProgressBar").style.width = `${progressPercent}%`;
+      document.getElementById("pageProgress").innerText = `${completedTopics.length}/${curriculum.length} Done (${completionPercent}%)`;
 
       document.getElementById("prevBtn").disabled = (idx === 0);
       document.getElementById("nextBtn").disabled = (idx === curriculum.length - 1);
+
+      const isExcel = data.module.includes("Excel");
+      const isSql = data.module.includes("MySQL");
 
       const container = document.getElementById("lessonContent");
       container.className = "max-w-4xl mx-auto space-y-6 pb-6 topic-animated";
 
       container.innerHTML = `
         <div class="space-y-4">
-          <!-- BADGES -->
-          <div class="flex flex-wrap items-center gap-2">
-            <span class="px-2.5 py-0.5 rounded-full text-xs font-bold border ${level.color}">
-              ${level.label}
-            </span>
-            <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-600 border border-slate-200 flex items-center gap-1">
-              <i data-lucide="clock" class="w-3 h-3 text-slate-500"></i> ${level.time}
-            </span>
-            <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-sky-100 text-sky-800 border border-sky-200">
-              ${data.section || 'Core Roadmap'}
-            </span>
+          <!-- BADGES & TOP ACTIONS -->
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-3">
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-bold border ${level.color}">
+                ${level.label}
+              </span>
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-slate-600 border border-slate-200 flex items-center gap-1">
+                <i data-lucide="clock" class="w-3 h-3 text-slate-500"></i> ${level.time}
+              </span>
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-sky-100 text-sky-800 border border-sky-200">
+                ${data.section || 'Core Roadmap'}
+              </span>
+            </div>
+
+            <!-- MARK AS DONE BUTTON -->
+            <button onclick="toggleComplete(${idx})" class="flex items-center gap-1.5 px-3 py-1 rounded-xl text-xs font-semibold transition-all shadow-sm ${
+              isDone 
+              ? 'bg-emerald-600 text-white hover:bg-emerald-700' 
+              : 'bg-white text-slate-700 border border-slate-300 hover:bg-slate-50'
+            }">
+              <i data-lucide="${isDone ? 'check-circle-2' : 'circle'}" class="w-4 h-4 ${isDone ? 'text-white' : 'text-slate-400'}"></i>
+              <span>${isDone ? 'Completed' : 'Mark as Done'}</span>
+            </button>
           </div>
 
           <h1 class="text-xl sm:text-3xl font-extrabold text-slate-900 tracking-tight leading-snug">${data.title}</h1>
+
+          <!-- DOWNLOAD STARTER BANNER -->
+          ${isExcel ? `
+            <div class="p-3 bg-emerald-50/80 border border-emerald-200 rounded-xl flex items-center justify-between">
+              <div class="flex items-center gap-2 text-emerald-900 text-xs font-semibold">
+                <i data-lucide="file-spreadsheet" class="w-4 h-4 text-emerald-600"></i>
+                <span>Practice this lesson with the starter dataset (tblSales)</span>
+              </div>
+              <button onclick="downloadStarterData('excel')" class="px-3 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-semibold flex items-center gap-1 shadow-sm">
+                <i data-lucide="download" class="w-3.5 h-3.5"></i>
+                <span>Download .CSV</span>
+              </button>
+            </div>
+          ` : ''}
+
+          ${isSql && idx === 4 ? `
+            <div class="p-3 bg-sky-50/80 border border-sky-200 rounded-xl flex items-center justify-between">
+              <div class="flex items-center gap-2 text-sky-900 text-xs font-semibold">
+                <i data-lucide="database" class="w-4 h-4 text-sky-600"></i>
+                <span>Download the complete SQL hospital schema & insert statements</span>
+              </div>
+              <button onclick="downloadStarterData('sql')" class="px-3 py-1 bg-sky-600 hover:bg-sky-700 text-white rounded-lg text-xs font-semibold flex items-center gap-1 shadow-sm">
+                <i data-lucide="download" class="w-3.5 h-3.5"></i>
+                <span>Download .SQL</span>
+              </button>
+            </div>
+          ` : ''}
+
+          <!-- IF INTERVIEW MODE IS ON: SHOW DECISION FIRST -->
+          ${isInterviewMode && data.decisionBox ? `
+            <div class="bg-gradient-to-br from-indigo-50 to-sky-50 border-2 border-indigo-400 rounded-2xl p-4 sm:p-6 shadow-md space-y-3">
+              <div class="flex items-center justify-between">
+                <h4 class="text-xs font-bold uppercase tracking-wider text-indigo-900 flex items-center gap-2">
+                  <i data-lucide="help-circle" class="w-4 h-4 text-indigo-600"></i>
+                  <span>Interview Scenario (Active Focus)</span>
+                </h4>
+                <span class="text-[10px] font-semibold bg-indigo-200 text-indigo-900 px-2 py-0.5 rounded-full">Primary Question</span>
+              </div>
+              <p class="text-slate-900 text-sm font-bold">${data.decisionBox.question}</p>
+              <div class="pt-2 text-xs space-y-1.5 bg-white p-3.5 rounded-xl border border-indigo-100">
+                <p class="font-bold text-indigo-950">${data.decisionBox.decision}</p>
+                <p class="text-slate-600">${data.decisionBox.tradeoff}</p>
+              </div>
+            </div>
+          ` : ''}
 
           <!-- DEFINITION CARD -->
           <div class="bg-white p-4 sm:p-6 rounded-2xl border border-slate-200/90 shadow-sm space-y-3">
@@ -603,8 +850,8 @@
             </div>
           ` : ''}
 
-          <!-- ANALYST DECISION BOX -->
-          ${data.decisionBox ? `
+          <!-- ANALYST DECISION BOX (STANDARD PLACEMENT) -->
+          ${!isInterviewMode && data.decisionBox ? `
             <div class="bg-gradient-to-br from-indigo-50/90 to-sky-50/90 border border-indigo-200/80 rounded-2xl p-4 sm:p-6 shadow-sm space-y-3">
               <div class="flex items-center justify-between">
                 <h4 class="text-xs font-bold uppercase tracking-wider text-indigo-900 flex items-center gap-2">
@@ -672,7 +919,7 @@
             </div>
           ` : ''}
 
-          <!-- QUESTION / DISCUSSION BOX (ASK AI) -->
+          <!-- UNIVERSAL ASK AI BOX -->
           <div id="aiDoubtBox" class="bg-white p-4 sm:p-6 rounded-2xl border border-slate-200 shadow-sm space-y-3">
             <div class="flex items-center justify-between">
               <h4 class="text-xs font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
@@ -680,16 +927,16 @@
                 <span>Discussion & Doubt Box (Ask AI)</span>
               </h4>
               <span class="text-[10px] font-semibold text-sky-700 bg-sky-50 border border-sky-100 px-2 py-0.5 rounded-full flex items-center gap-1">
-                <i data-lucide="sparkles" class="w-3 h-3 text-sky-500"></i> AI Assistant
+                <i data-lucide="sparkles" class="w-3 h-3 text-sky-500"></i> Universal AI
               </span>
             </div>
 
-            <p class="text-xs text-slate-600">Have a question about this topic, syntax, or the hospital scenario? Ask below:</p>
+            <p class="text-xs text-slate-600">Have a question about this topic, syntax, or any data concept? Ask below:</p>
 
             <div class="flex gap-2">
               <input type="text" id="aiQuestionInput" 
                 onkeydown="if(event.key==='Enter') askAI()"
-                placeholder="e.g. What is DDL, or Why use LEFT JOIN here?" 
+                placeholder="e.g. What is Pandas, or Why use LEFT JOIN here?" 
                 class="flex-1 px-3 py-2 border border-slate-300 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-sky-500">
               <button onclick="askAI()" class="px-4 py-2 bg-gradient-to-r from-sky-600 to-indigo-600 hover:from-sky-700 hover:to-indigo-700 text-white rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all shadow-sm">
                 <i data-lucide="sparkles" class="w-3.5 h-3.5 text-sky-200"></i>
@@ -729,7 +976,7 @@
       closeSidebarBtn.onclick = closeMobileSidebar;
       mobileBackdrop.onclick = closeMobileSidebar;
 
-      // Sync and handle Instructor Mode toggle
+      // Instructor Mode
       const cueToggle = document.getElementById("cueModeToggle");
       cueToggle.checked = isCueMode;
       cueToggle.onchange = (e) => {
@@ -737,6 +984,16 @@
         localStorage.setItem("dataRoadmapCueMode", isCueMode);
         const c = document.getElementById("cueCard");
         if (c) c.classList.toggle("hidden", !isCueMode);
+      };
+
+      // Interview Mode Toggle
+      const interviewToggle = document.getElementById("interviewModeToggle");
+      interviewToggle.checked = isInterviewMode;
+      interviewToggle.onchange = (e) => {
+        isInterviewMode = e.target.checked;
+        localStorage.setItem("dataRoadmapInterviewMode", isInterviewMode);
+        renderSidebar();
+        renderPage(currentIndex);
       };
 
       document.getElementById("searchInput").oninput = (e) => renderSidebar(e.target.value);
