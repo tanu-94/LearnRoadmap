@@ -22,6 +22,28 @@ const curriculum = [
   },
   {
     module: "Module 0: Business Analytics",
+    section: "Challenge",
+    title: "Challenge 01: The E-Commerce Margin Trap",
+    definition: "UrbanCart reports that Q2 revenue rose about 18% and orders about 23%, while net profit fell about 36%. Apply 5W1H before choosing an analysis.",
+    meaning: "Q1: 12,000 orders, ₹1.20 crore revenue, ₹18 lakh profit, and 6.5% average discount. Q2: 14,800 orders, ₹1.42 crore revenue, ₹11.5 lakh profit, and 18.2% average discount. The discount increase coincides with lower profit, but these summary figures alone do not prove it caused the decline.",
+    instructorCue: "Give students five minutes to calculate both margins. Ask them to separate the observed discount increase from a causal conclusion, then identify the order-level evidence needed to test the hypothesis.",
+    syntax: `Challenge Tasks:
+1. Calculate net profit margin for Q1 and Q2, and the change in percentage points.
+2. State the anomaly visible in these figures and one hypothesis to investigate; do not claim causation from these aggregates alone.
+3. Name three order-level fields needed to investigate discounting and profitability.`,
+    example: `-- Benchmark:
+-- Q1 margin = 1,800,000 / 12,000,000 = 15.00%
+-- Q2 margin = 1,150,000 / 14,200,000 = 8.10%
+-- Change = -6.90 percentage points (about a 46% relative decline).
+-- Observed anomaly: average discount rose from 6.5% to 18.2%
+-- while profit fell despite higher revenue and order volume.
+-- Hypothesis to test: discounting may have contributed to lower profit.
+-- Example fields: order_date, discount_amount, and unit_cost.
+-- Confirm actual field names and include revenue, returns/refunds, and
+-- other relevant costs when building a profit bridge.`
+  },
+  {
+    module: "Module 0: Business Analytics",
     section: "Framework",
     title: "02. Establish Baseline & Find the Anomaly",
     definition: "Establishing what is 'normal' before diagnosing problems and isolating outliers.",
@@ -191,6 +213,34 @@ INSERT INTO shifts VALUES
 (4,3,'2026-09-01','Morning',8),
 (5,5,'2026-09-02','Morning',8),
 (6,6,'2026-09-02','Night',12);`
+  },
+  {
+    module: "Module 1: MySQL",
+    section: "Challenge",
+    title: "Challenge 07: Hospital Schema & Data Quality Audit",
+    definition: "Inspect the hospital schema and use its seeded records to find a missing department assignment and staff with no recorded shifts.",
+    meaning: "The sample schema has departments, staff, and shifts. The `staff.dept_id` column is nullable; the shifts table contains records for Asha, Ravi, Meena, Priya, and Kiran. A missing shift record means no shift is recorded in this sample, not necessarily that the person never worked.",
+    instructorCue: "Ask students to inspect the schema before querying. Emphasize that an absent shift row is evidence about this dataset, not proof about a person's real-world work history.",
+    syntax: `Challenge Tasks:
+1. Inspect the staff table's columns, data types, and nullability.
+2. Find staff whose department assignment is NULL.
+3. Find staff with no matching shift rows.`,
+    example: `-- 1. Inspect columns, types, and nullability
+DESCRIBE staff;
+
+-- 2. Find staff without a department assignment
+SELECT staff_name
+FROM staff
+WHERE dept_id IS NULL;
+-- Result: Sara
+
+-- 3. Find staff without a recorded shift
+SELECT s.staff_name
+FROM staff AS s
+LEFT JOIN shifts AS sh ON sh.staff_id = s.staff_id
+WHERE sh.shift_id IS NULL
+ORDER BY s.staff_id;
+-- Results: John, Sara`
   },
   {
     module: "Module 1: MySQL",
@@ -374,6 +424,36 @@ WHERE staff_id = 1;`
   },
   {
     module: "Module 1: MySQL",
+    section: "Challenge",
+    title: "Challenge 22: Hospital Staff Filter Audit",
+    definition: "The hospital director asks for three staff audits: doctors earning at least 85,000, staff hired before 2021, and salaries outside the 35,000–85,000 inclusive range.",
+    meaning: "Use the sample `staff` table. Salary is stored as a numeric value and `join_date` as DATE. These are all-staff filters; the first task identifies doctors by role but does not filter by department.",
+    instructorCue: "Remind students to use single quotes for the text value 'Doctor', no quotes for numeric salaries, and an ISO date literal for the DATE comparison.",
+    syntax: `Challenge Tasks:
+1. Find all Doctors earning 85,000 or more.
+2. List all staff hired before January 1, 2021.
+3. Find staff whose salary is outside the inclusive range 35,000–85,000.`,
+    example: `-- 1. Doctors earning at least 85,000
+SELECT staff_name, role, salary
+FROM staff
+WHERE role = 'Doctor' AND salary >= 85000;
+-- Results: Ravi (85000), Kiran (90000)
+
+-- 2. Hired before January 1, 2021
+SELECT staff_name, join_date
+FROM staff
+WHERE join_date < '2021-01-01';
+-- Results: Ravi, Kiran
+
+-- 3. Salary outside the inclusive range
+SELECT staff_name, salary
+FROM staff
+WHERE salary NOT BETWEEN 35000 AND 85000
+ORDER BY salary;
+-- Results: Sara (31000), Asha (32000), Priya (33000), Kiran (90000)`
+  },
+  {
+    module: "Module 1: MySQL",
     section: "Part 3: Querying Data",
     title: "23. AND, OR, NOT",
     definition: "Logical operators used to combine or reverse conditions in a WHERE clause.",
@@ -484,6 +564,32 @@ FROM staff;`
   },
   {
     module: "Module 1: MySQL",
+    section: "Challenge",
+    title: "Challenge 32: Role Payroll & Shift Summary",
+    definition: "Summarize salary commitments by role and recorded shift hours by shift type to support staffing and budget discussions.",
+    meaning: "Use `SUM(salary)` as the total listed salary amount by role (the sample does not define a pay period). Sum `hours_worked` from the six seeded shift records; these totals describe only the supplied sample rows.",
+    instructorCue: "Have students check that every selected non-aggregate column is grouped. Point out that the sample shift totals are based on recorded rows, not a complete monthly staffing or payroll forecast.",
+    syntax: `Challenge Tasks:
+1. Calculate staff headcount and total listed salary by role.
+2. Calculate recorded hours by shift type.
+3. Identify the shift type with the most recorded hours.`,
+    example: `-- 1. Headcount and listed salary by role
+SELECT role, COUNT(*) AS staff_count, SUM(salary) AS total_salary
+FROM staff
+GROUP BY role
+ORDER BY role;
+-- Doctor: 2, 175000; Nurse: 3, 96000
+-- Pharmacist: 1, 40000; Technician: 1, 38000
+
+-- 2-3. Recorded hours by shift type, highest first
+SELECT shift_type, SUM(hours_worked) AS total_hours
+FROM shifts
+GROUP BY shift_type
+ORDER BY total_hours DESC;
+-- Night: 34 hours; Morning: 24 hours`
+  },
+  {
+    module: "Module 1: MySQL",
     section: "Part 4: Summarizing Data",
     title: "33. HAVING",
     definition: "HAVING filters groups after GROUP BY aggregation takes place.",
@@ -531,6 +637,32 @@ SELECT s.staff_name, d.dept_name FROM staff s LEFT JOIN departments d ON s.dept_
 
 -- Anti-Join: staff who worked 0 shifts
 SELECT s.staff_name FROM staff s LEFT JOIN shifts sh ON s.staff_id = sh.staff_id WHERE sh.shift_id IS NULL;`
+  },
+  {
+    module: "Module 1: MySQL",
+    section: "Challenge",
+    title: "Challenge 36: Staff Shift Coverage & Anti-Join",
+    definition: "Management wants to distinguish staff with recorded shifts from staff who have no matching shift rows in the sample data.",
+    meaning: "Use a LEFT JOIN from staff to shifts. Count a non-NULL shift key so unmatched staff have a count of zero. In this sample, John and Sara have no recorded shifts; this does not establish whether they are inactive outside the sample.",
+    instructorCue: "Explain why an INNER JOIN cannot retain zero-shift staff. The LEFT JOIN preserves every staff row, while COUNT(sh.shift_id) ignores the NULL introduced for unmatched rows.",
+    syntax: `Challenge Tasks:
+1. Show each staff member's name and recorded shift count, including zero.
+2. Return only staff with no matching shift records.`,
+    example: `-- 1. Include every staff member and their recorded shift count
+SELECT s.staff_id, s.staff_name, COUNT(sh.shift_id) AS shift_count
+FROM staff AS s
+LEFT JOIN shifts AS sh ON sh.staff_id = s.staff_id
+GROUP BY s.staff_id, s.staff_name
+ORDER BY s.staff_id;
+-- John: 0; Sara: 0
+
+-- 2. Anti-join: staff with no matching shift row
+SELECT s.staff_id, s.staff_name, s.role
+FROM staff AS s
+LEFT JOIN shifts AS sh ON sh.staff_id = s.staff_id
+WHERE sh.shift_id IS NULL
+ORDER BY s.staff_id;
+-- Results: John (Technician), Sara (Nurse)`
   },
   {
     module: "Module 1: MySQL",
