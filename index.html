@@ -335,37 +335,143 @@
       return { label: "Advanced", color: "bg-purple-100 text-purple-800 border-purple-200", time: "20-25 min" };
     }
 
+    // ACCURATE KNOWLEDGE BASE FOR DATA ANALYTICS CONCEPTS
+    const AI_KNOWLEDGE_BASE = {
+      ddl: {
+        title: "DDL (Data Definition Language)",
+        desc: "DDL commands define, create, and modify database structure and schema. Key commands: CREATE, ALTER, DROP, and TRUNCATE. In MySQL, DDL changes are auto-committed immediately.",
+        topicRef: "Types of SQL Commands"
+      },
+      dml: {
+        title: "DML (Data Manipulation Language)",
+        desc: "DML commands manage and modify the actual data rows stored inside tables. Key commands: INSERT, UPDATE, and DELETE.",
+        topicRef: "Types of SQL Commands"
+      },
+      dql: {
+        title: "DQL (Data Query Language)",
+        desc: "DQL is used to read and retrieve data from tables using the SELECT command. As an analyst, you will spend 90% of your SQL time writing DQL.",
+        topicRef: "SELECT"
+      },
+      tcl: {
+        title: "TCL (Transaction Control Language)",
+        desc: "TCL commands manage database transactions to protect data integrity. Key commands: COMMIT (save changes), ROLLBACK (undo uncommitted changes), and SAVEPOINT.",
+        topicRef: "Types of SQL Commands"
+      },
+      join: {
+        title: "SQL Joins",
+        desc: "INNER JOIN returns only matching rows. LEFT JOIN returns all rows from the left table and matching rows from the right. RIGHT JOIN returns all rows from the right. FULL JOIN returns all rows from both tables.",
+        topicRef: "INNER JOIN"
+      },
+      null: {
+        title: "NULL (Missing Values)",
+        desc: "NULL represents a missing, unrecorded, or unknown value. It is neither 0 nor an empty string. Always check for it using IS NULL or IS NOT NULL, never = NULL.",
+        topicRef: "NULL (Missing Values)"
+      },
+      vlookup: {
+        title: "VLOOKUP vs XLOOKUP",
+        desc: "VLOOKUP searches left-to-right by column index number and breaks if columns shift. XLOOKUP searches in any direction, defaults to exact match, and provides built-in not-found handling.",
+        topicRef: "XLOOKUP"
+      },
+      dax: {
+        title: "DAX in Power BI",
+        desc: "DAX (Data Analysis Expressions) is Power BI's formula language. Calculated Columns evaluate row-by-row on data refresh, while Measures calculate dynamically in response to active slicers and filters.",
+        topicRef: "Calculated Column vs Measure"
+      }
+    };
+
     function askAI() {
       const input = document.getElementById("aiQuestionInput");
       const answerArea = document.getElementById("aiAnswerArea");
       const answerText = document.getElementById("aiAnswerText");
-      const q = input.value.trim();
-      if (!q) return;
+      const rawQ = input.value.trim();
+      if (!rawQ) return;
+
+      const q = rawQ.toLowerCase();
 
       answerArea.classList.remove("hidden");
       answerText.innerHTML = `
         <span class="text-sky-600 animate-pulse flex items-center gap-1.5">
-          <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> Thinking through lesson logic...
+          <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> Searching curriculum and formulating answer...
         </span>`;
       lucide.createIcons();
 
       setTimeout(() => {
+        // 1. Check direct knowledge base match
+        let matchedKey = Object.keys(AI_KNOWLEDGE_BASE).find(k => q.includes(k));
+        
+        if (matchedKey) {
+          const item = AI_KNOWLEDGE_BASE[matchedKey];
+          const targetIdx = curriculum.findIndex(t => t.title.toLowerCase().includes(item.topicRef.toLowerCase()));
+
+          answerText.innerHTML = `
+            <div class="space-y-2 text-xs sm:text-sm text-slate-800">
+              <p class="font-bold text-sky-950 flex items-center gap-1.5">
+                <i data-lucide="sparkles" class="w-4 h-4 text-sky-600"></i>
+                <span>${item.title}:</span>
+              </p>
+              <p class="leading-relaxed text-slate-700">${item.desc}</p>
+              ${targetIdx !== -1 ? `
+                <div class="pt-2">
+                  <button onclick="renderPage(${targetIdx})" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-sky-50 hover:bg-sky-100 text-sky-700 font-semibold rounded-lg text-xs border border-sky-200 transition-colors">
+                    <i data-lucide="arrow-right-circle" class="w-3.5 h-3.5"></i>
+                    <span>Jump to Lesson: ${curriculum[targetIdx].title}</span>
+                  </button>
+                </div>
+              ` : ''}
+            </div>
+          `;
+          lucide.createIcons();
+          return;
+        }
+
+        // 2. Search curriculum topics across all modules
+        const matchedTopicIdx = curriculum.findIndex(t => 
+          t.title.toLowerCase().includes(q) || 
+          t.definition.toLowerCase().includes(q) || 
+          t.meaning.toLowerCase().includes(q)
+        );
+
+        if (matchedTopicIdx !== -1 && matchedTopicIdx !== currentIndex) {
+          const found = curriculum[matchedTopicIdx];
+          answerText.innerHTML = `
+            <div class="space-y-2 text-xs sm:text-sm text-slate-800">
+              <p class="font-bold text-sky-950 flex items-center gap-1.5">
+                <i data-lucide="sparkles" class="w-4 h-4 text-sky-600"></i>
+                <span>Found in ${found.module}:</span>
+              </p>
+              <p class="font-semibold text-slate-900">${found.title}</p>
+              <p class="leading-relaxed text-slate-700">${found.definition}</p>
+              <div class="pt-2">
+                <button onclick="renderPage(${matchedTopicIdx})" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-sky-50 hover:bg-sky-100 text-sky-700 font-semibold rounded-lg text-xs border border-sky-200 transition-colors">
+                  <i data-lucide="arrow-right-circle" class="w-3.5 h-3.5"></i>
+                  <span>Open Lesson: ${found.title}</span>
+                </button>
+              </div>
+            </div>
+          `;
+          lucide.createIcons();
+          return;
+        }
+
+        // 3. Fallback: contextual guidance for the current lesson
         const curTopic = curriculum[currentIndex];
         answerText.innerHTML = `
           <div class="space-y-2 text-xs sm:text-sm text-slate-800">
-            <p class="font-semibold text-sky-950 flex items-center gap-1.5">
+            <p class="font-bold text-sky-950 flex items-center gap-1.5">
               <i data-lucide="sparkles" class="w-4 h-4 text-sky-600"></i>
-              <span>Analyst AI Guidance for "${escapeHtml(q)}":</span>
+              <span>Guidance for "${escapeHtml(rawQ)}":</span>
             </p>
-            <p class="leading-relaxed">In <strong>${curTopic.title}</strong>, keep this core analytical rule in mind: <em>${curTopic.meaning.substring(0, 160)}...</em></p>
-            <div class="p-2.5 bg-slate-900 text-emerald-400 font-mono text-xs rounded-xl mt-2 overflow-x-auto shadow-inner">
-              ${curTopic.syntax ? escapeHtml(curTopic.syntax.split('\n')[0]) : '-- Verify code against sample schema'}
-            </div>
-            <p class="text-[11px] text-slate-500 mt-1">Tip: Practice this query or formula directly using the hospital dataset to test your logic.</p>
+            <p class="leading-relaxed text-slate-700">For <strong>${curTopic.title}</strong>, note: ${curTopic.meaning.substring(0, 160)}...</p>
+            ${curTopic.syntax ? `
+              <div class="p-2.5 bg-slate-900 text-emerald-400 font-mono text-xs rounded-xl mt-2 overflow-x-auto">
+                ${escapeHtml(curTopic.syntax.split('\n')[0])}
+              </div>
+            ` : ''}
+            <p class="text-[11px] text-slate-500 mt-1">Try testing this directly against the hospital schema or practice tasks above.</p>
           </div>
         `;
         lucide.createIcons();
-      }, 400);
+      }, 300);
     }
 
     function init() {
@@ -583,7 +689,7 @@
             <div class="flex gap-2">
               <input type="text" id="aiQuestionInput" 
                 onkeydown="if(event.key==='Enter') askAI()"
-                placeholder="e.g. Why did we use LEFT JOIN instead of INNER JOIN here?" 
+                placeholder="e.g. What is DDL, or Why use LEFT JOIN here?" 
                 class="flex-1 px-3 py-2 border border-slate-300 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-sky-500">
               <button onclick="askAI()" class="px-4 py-2 bg-gradient-to-r from-sky-600 to-indigo-600 hover:from-sky-700 hover:to-indigo-700 text-white rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all shadow-sm">
                 <i data-lucide="sparkles" class="w-3.5 h-3.5 text-sky-200"></i>
