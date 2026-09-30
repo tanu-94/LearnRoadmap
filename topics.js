@@ -1209,4 +1209,555 @@ VAR Hrs = FORMAT([Total Hours], "#,0")
 RETURN
 "Staff Hours for " & Dept & ": " & Hrs & " hrs"`
   }
+
+  // =========================================================================
+  // MODULE: EXCEL FOR ANALYSTS (TOPICS 1 TO 27)
+  // =========================================================================
+  {
+    module: "Module: Excel Mastery",
+    section: "Part 1: Getting Started & Cleaning",
+    title: "01. Sample Sales Data Setup (tblSales)",
+    definition: "A standardized sales table (orders, regions, products) used across all Excel examples so calculations can be verified immediately.",
+    meaning: "Paste it starting at cell A1 (columns A to G, rows 2 to 9). Totals: Total Amount = 4,230; South = 2,020, North = 1,310, East = 900.",
+    instructorCue: "Have students type this in Excel immediately. Knowing the totals (4,230) beforehand allows them to self-check every formula.",
+    syntax: "OrderID | OrderDate | Region | Product | Qty | UnitPrice | Amount",
+    example: `OrderID, OrderDate, Region, Product, Qty, UnitPrice, Amount
+1001, 2026-01-05, South, Pen, 10, 12, 120
+1002, 2026-01-07, North, Book, 3, 150, 450
+1003, 2026-01-09, South, Book, 2, 150, 300
+1004, 2026-02-02, East, Pen, 25, 12, 300
+1005, 2026-02-11, North, Bag, 1, 800, 800
+1006, 2026-02-15, South, Bag, 2, 800, 1600
+1007, 2026-03-03, East, Book, 4, 150, 600
+1008, 2026-03-08, North, Pen, 5, 12, 60`,
+    decisionBox: {
+      question: "Why should we use a small 8-row table instead of a 100,000-row file when learning core formulas?",
+      decision: "Always learn logic on data where you can verify calculations manually or in your head.",
+      tradeoff: "Once logic is proven error-free on 8 rows, it will execute reliably across 1,000,000 rows without silent bugs."
+    },
+    practice: "Enter this dataset into Excel and verify that the sum of the Amount column is exactly 4,230.",
+    hint: "Use =SUM(G2:G9).",
+    answer: "=SUM(G2:G9)  --> Returns 4,230"
+  },
+  {
+    module: "Module: Excel Mastery",
+    section: "Part 1: Getting Started & Cleaning",
+    title: "02. Excel Tables (Ctrl + T)",
+    definition: "An Excel Table turns an unorganized cell range into a named, structured database object.",
+    meaning: "Headers stay visible when scrolling, calculated columns fill down automatically, and formulas use readable column names instead of cell coordinates like A1.",
+    instructorCue: "Never let students build analysis on raw ranges. Press Ctrl+T and name it tblSales immediately.",
+    syntax: "1. Click inside data -> Press Ctrl + T\n2. Table Design tab -> Table Name: tblSales",
+    example: `=SUM(tblSales[Amount])
+=[@Qty]*[@UnitPrice]`,
+    decisionBox: {
+      question: "Should you write formulas using cell ranges (=G2*F2) or Structured Table References (=[@Qty]*[@UnitPrice])?",
+      decision: "Always use Structured References inside Excel Tables.",
+      tradeoff: "Table formulas automatically expand to new rows and are self-documenting for team collaboration."
+    },
+    practice: "Convert your sales range into a table and name it tblSales. Then add a column calculating Line Total.",
+    hint: "Click inside the data, press Ctrl + T, and write =[@Qty]*[@UnitPrice] in the new column.",
+    answer: "=[@Qty]*[@UnitPrice]"
+  },
+  {
+    module: "Module: Excel Mastery",
+    section: "Part 1: Getting Started & Cleaning",
+    title: "03. Remove Duplicates",
+    definition: "Deletes repeated rows based on the specific columns you select.",
+    meaning: "Excel keeps the first occurrence and purges later duplicates. Make a backup copy first, as deletion cannot be undone once saved. Use =UNIQUE() for non-destructive dynamic extraction.",
+    instructorCue: "Emphasize: 'Data > Remove Duplicates is destructive. If you want a clean list without destroying the original table, use =UNIQUE(tblSales[Region]).'",
+    syntax: "=UNIQUE(range)\nData tab > Remove Duplicates > Select Columns",
+    example: `=UNIQUE(tblSales[Region])
+-- Returns South, North, East once each`,
+    decisionBox: {
+      question: "When should you use Data > Remove Duplicates vs. the =UNIQUE() function?",
+      decision: "Use =UNIQUE() when building reports or dropdowns to preserve raw transactional audit trails. Use Remove Duplicates only during initial staging table cleaning.",
+      tradeoff: "=UNIQUE() updates automatically when source records change; Remove Duplicates requires manual re-runs."
+    },
+    practice: "Extract an automated list of unique products from tblSales.",
+    hint: "Use =UNIQUE(tblSales[Product]) in a blank cell.",
+    answer: "=UNIQUE(tblSales[Product])  --> Returns Pen, Book, Bag"
+  },
+  {
+    module: "Module: Excel Mastery",
+    section: "Part 1: Getting Started & Cleaning",
+    title: "04. Missing Values & Blank Cells",
+    definition: "Locating, counting, and treating empty cells before they distort metrics.",
+    meaning: "Use ISBLANK to test cells, COUNTBLANK to audit missing data, and Go To Special > Blanks to fill empty spots in batches.",
+    instructorCue: "Golden Rule: 'Never fill blank numbers with 0 unless zero is the true measurement. Filling missing salaries with 0 ruins the true average.'",
+    syntax: `=ISBLANK(cell)
+=COUNTBLANK(range)
+=IF(cell="","Unknown",cell)`,
+    example: `=COUNTBLANK(C2:C9)
+=IF(C2="","Unknown",C2)`,
+    decisionBox: {
+      question: "If customer phone numbers are missing in a sales file, should you drop the rows or replace with 'Unrecorded'?",
+      decision: "Replace with 'Unrecorded' using =IF(A2=\"\",\"Unrecorded\",A2).",
+      tradeoff: "Dropping rows loses transaction amounts and distorts financial reporting."
+    },
+    practice: "Write a formula to display 'Missing Region' if cell C2 is blank, otherwise display the region name.",
+    hint: "Combine IF with ISBLANK or check for empty quotes \"\".",
+    answer: '=IF(ISBLANK(C2), "Missing Region", C2)'
+  },
+  {
+    module: "Module: Excel Mastery",
+    section: "Part 1: Getting Started & Cleaning",
+    title: "05. Text Functions (TRIM, PROPER, TEXTJOIN)",
+    definition: "Formulas used to clean trailing whitespace, fix letter casing, and merge strings.",
+    meaning: "TRIM removes invisible leading/trailing spaces. PROPER capitalizes the first letter of each word. TEXTJOIN concatenates ranges with a delimiter while ignoring empty cells.",
+    instructorCue: "Show them: 'Why did VLOOKUP fail? Because \"Pen \" has a hidden space at the end! Always wrap messy text in TRIM().'",
+    syntax: `=TRIM(text) | =PROPER(text) | =UPPER(text)
+=LEFT(text, n) | =RIGHT(text, n) | =MID(text, start, n)
+=TEXTJOIN(delimiter, ignore_empty, range)`,
+    example: `=PROPER(TRIM("  soUTH "))  --> "South"
+=TEXTJOIN(", ", TRUE, C2:D2)  --> "South, Pen"`,
+    decisionBox: {
+      question: "Why is TEXTJOIN preferred over CONCAT or the ampersand (&)?",
+      decision: "TEXTJOIN accepts a whole range and lets you specify a separator once while skipping empty cells.",
+      tradeoff: "Using & on 10 cells requires typing & \", \" & nine times and leaves trailing commas for blanks."
+    },
+    practice: "Clean up cell with value '   bOOK ' so it is trimmed and in proper title case.",
+    hint: "Nest TRIM inside PROPER.",
+    answer: '=PROPER(TRIM("   bOOK "))  --> "Book"'
+  },
+  {
+    module: "Module: Excel Mastery",
+    section: "Part 1: Getting Started & Cleaning",
+    title: "06. Flash Fill (Ctrl + E)",
+    definition: "An pattern recognition tool that auto-populates columns based on typing examples.",
+    meaning: "Splits names, extracts domains, or formats phone numbers without writing complex string formulas. Warning: Output is static text, not formulas, so it will not update when source values change.",
+    instructorCue: "Demonstrate: 'Type Asha from Asha Rao in row 1, press Ctrl+E, and Excel instantly extracts all first names.'",
+    syntax: "1. Type desired pattern in adjacent column\n2. Select next cell and press Ctrl + E",
+    example: `-- Input: OrderID 1001-South
+-- Type in next cell: South
+-- Press Ctrl + E: Automatically extracts region for all rows`,
+    decisionBox: {
+      question: "When should an analyst use Flash Fill instead of text formulas?",
+      decision: "Use Flash Fill for quick one-time ad-hoc cleanup. Use text formulas (MID, LEFT, TEXTSPLIT) for recurring weekly models.",
+      tradeoff: "Flash Fill produces static values and does not recalculate when raw data changes."
+    },
+    practice: "Try splitting 'Pen-12' into product and unit price using Ctrl + E.",
+    hint: "Type 'Pen' in column H, select the cell below it, and press Ctrl + E.",
+    answer: "Press Ctrl + E on the next row."
+  },
+  {
+    module: "Module: Excel Mastery",
+    section: "Part 1: Getting Started & Cleaning",
+    title: "07. Fixing Data Types (VALUE, DATEVALUE, TEXT)",
+    definition: "Converting numbers and dates stored as text into true computational data types.",
+    meaning: "Numbers formatted as text align to the left and return 0 in SUM formulas. VALUE converts text numbers to numeric values; DATEVALUE converts text strings into Excel serial dates.",
+    instructorCue: "Point out: 'If your SUM shows 0 even though there are numbers in the column, your numbers are text! Use Text to Columns to fix them in 2 clicks.'",
+    syntax: `=VALUE(text)
+=DATEVALUE(text)
+=TEXT(value, "format")`,
+    example: `=VALUE("1,200")  --> 1200
+=DATEVALUE("05-Jan-2026")  --> Date serial number
+=TEXT(B2, "mmm yyyy")  --> "Jan 2026"`,
+    decisionBox: {
+      question: "Should you store postal codes or customer IDs as Numbers or Text?",
+      decision: "Store IDs, phone numbers, and postal codes as Text.",
+      tradeoff: "Numeric formatting drops leading zeros (e.g. 07001 becomes 7001)."
+    },
+    practice: "Convert the text date string '2026-01-05' into month-year format 'Jan 2026'.",
+    hint: "Use the TEXT function with \"mmm yyyy\".",
+    answer: '=TEXT(DATEVALUE("2026-01-05"), "mmm yyyy")  --> "Jan 2026"'
+  },
+  {
+    module: "Module: Excel Mastery",
+    section: "Part 2: Formulas & Functions",
+    title: "08. Cell References (A1, $A$1,$A1, A$1)",
+    definition: "Defines whether cell coordinates shift when copied down or across.",
+    meaning: "Relative (A1) shifts row and column. Absolute ($A$1) locks both. Mixed ($A1 or A$1) locks only the column or only the row. Toggle with F4.",
+    instructorCue: "Tell students: 'Put a tax rate in J1. If you multiply by J1 and drag down, row 2 multiplies by empty J2. You must lock it with $J$1!'",
+    syntax: "Press F4 while editing formula to cycle: A1 -> $A$1 -> A$1 ->$A1",
+    example: `=E2 * $J$1
+-- When copied down to row 3:
+=E3 * $J$1  (E changes, J1 stays locked)`,
+    decisionBox: {
+      question: "When should you use a mixed reference ($A2) instead of full absolute ($A$2)?",
+      decision: "Use $A2 when you want the column locked while dragging across columns, but want the row to adjust as you drag down.",
+      tradeoff: "Full absolute ($A$2) locks both directions and cannot be dragged down a column list."
+    },
+    practice: "Multiply cell E2 by tax rate cell J1 so that when dragged down the column, J1 stays permanently locked.",
+    hint: "Add dollar signs to lock row and column on J1.",
+    answer: "=E2 * $J$1"
+  },
+  {
+    module: "Module: Excel Mastery",
+    section: "Part 2: Formulas & Functions",
+    title: "09. Conditional Logic (IF, AND, OR, IFS)",
+    definition: "Executes conditional decision branching directly inside spreadsheet cells.",
+    meaning: "IF tests one condition. AND checks that all criteria match. OR checks that at least one matches. IFS replaces nested IF statements (equivalent to SQL CASE WHEN).",
+    instructorCue: "Tip: 'Always put TRUE as the final test in IFS to handle the fallback ELSE condition.'",
+    syntax: `=IF(condition, value_if_true, value_if_false)
+=IFS(cond1, val1, cond2, val2, TRUE, fallback)`,
+    example: `=IF(G2>=500, "High", "Low")
+=IF(AND(C2="South", G2>=300), "Check", "OK")
+=IFS(G2>=800, "High", G2>=300, "Medium", TRUE, "Low")`,
+    decisionBox: {
+      question: "Why should analysts stop writing 5 nested IF() statements and use IFS() instead?",
+      decision: "Use IFS() for clean, sequential condition checks.",
+      tradeoff: "Nested IFs (=IF(a, b, IF(c, d, IF(...)))) are hard to read and easy to break with closing parentheses."
+    },
+    practice: "Categorize an amount in G2: if >= 1000 'Premium', >= 500 'Standard', otherwise 'Basic'.",
+    hint: "Use =IFS(G2>=1000, \"Premium\", G2>=500, \"Standard\", TRUE, \"Basic\").",
+    answer: '=IFS(G2>=1000, "Premium", G2>=500, "Standard", TRUE, "Basic")'
+  },
+  {
+    module: "Module: Excel Mastery",
+    section: "Part 2: Formulas & Functions",
+    title: "10. Conditional Aggregations (SUMIFS, COUNTIFS, AVERAGEIFS)",
+    definition: "Aggregating values only for records that meet one or more specific criteria.",
+    meaning: "The calculation range comes first in SUMIFS and AVERAGEIFS, followed by pairs of criteria range and criterion. Enclose comparison symbols in quotes.",
+    instructorCue: "Say: 'In SUMIFS, the column you want to add up is always the FIRST argument. In SUMIF (singular), it was at the end. Always use SUMIFS.'",
+    syntax: `=SUMIFS(sum_range, crit_range1, criterion1, ...)
+=COUNTIFS(crit_range1, criterion1, ...)
+=AVERAGEIFS(avg_range, crit_range1, criterion1, ...)`,
+    example: `=SUMIFS(G2:G9, C2:C9, "South")  --> Returns 2,020
+=COUNTIFS(C2:C9, "South", G2:G9, ">=300")  --> Returns 2
+=AVERAGEIFS(G2:G9, D2:D9, "Book")  --> Returns 450`,
+    decisionBox: {
+      question: "Should you use SUMIF or SUMIFS when writing a model?",
+      decision: "Always standardize on SUMIFS, even if you only have one condition.",
+      tradeoff: "SUMIFS supports multiple criteria and maintains a consistent parameter structure."
+    },
+    practice: "Calculate the total sales amount for the North region from tblSales.",
+    hint: "Formula: =SUMIFS(tblSales[Amount], tblSales[Region], \"North\").",
+    answer: '=SUMIFS(tblSales[Amount], tblSales[Region], "North")  --> Returns 1,310'
+  },
+  {
+    module: "Module: Excel Mastery",
+    section: "Part 2: Formulas & Functions",
+    title: "11. VLOOKUP",
+    definition: "Searches for a key in the leftmost column of a table and returns a value from a specified column index.",
+    meaning: "Requires FALSE for an exact match. If someone inserts a column into your table later, the hardcoded column index breaks.",
+    instructorCue: "Warn them: 'Always write FALSE or 0 at the end! If you omit it, Excel defaults to TRUE (approximate match) and returns incorrect data.'",
+    syntax: "=VLOOKUP(lookup_value, table_array, col_index_num, FALSE)",
+    example: `=VLOOKUP("Bag", F2:G4, 2, FALSE)
+-- With price list in F2:G4 (Pen 12, Book 150, Bag 800), returns 800`,
+    decisionBox: {
+      question: "Why does VLOOKUP break when someone inserts a new column into the source table?",
+      decision: "Because the column index number (e.g. 2) is hardcoded.",
+      tradeoff: "Use XLOOKUP or INDEX/MATCH, which reference actual column ranges rather than fixed column counts."
+    },
+    practice: "Look up the unit price for 'Pen' from range F2:G4 using VLOOKUP.",
+    hint: "Set lookup value to \"Pen\", column index to 2, and exact match to FALSE.",
+    answer: '=VLOOKUP("Pen", F2:G4, 2, FALSE)  --> Returns 12'
+  },
+  {
+    module: "Module: Excel Mastery",
+    section: "Part 2: Formulas & Functions",
+    title: "12. XLOOKUP",
+    definition: "Modern, robust replacement for VLOOKUP that looks in any direction without column index numbers.",
+    meaning: "Defaults to exact match, allows looking left or right, and includes an optional built-in [if_not_found] fallback. Requires Excel 2021 or Microsoft 365.",
+    instructorCue: "Tell them: 'XLOOKUP is the gold standard. No more counting columns, no more #N/A errors, and it looks to the left seamlessly.'",
+    syntax: "=XLOOKUP(lookup_val, lookup_range, return_range, [if_not_found])",
+    example: `=XLOOKUP("Book", F2:F4, G2:G4, "Not found")  --> Returns 150
+=XLOOKUP("Cap", F2:F4, G2:G4, "Not Available")  --> Returns "Not Available"`,
+    decisionBox: {
+      question: "Why should modern analysts replace VLOOKUP with XLOOKUP in their models?",
+      decision: "XLOOKUP eliminates column index numbers, defaults to exact match, and provides built-in error handling.",
+      tradeoff: "XLOOKUP requires Excel 2021 or Microsoft 365; older Excel versions will return a #NAME? error."
+    },
+    practice: "Write an XLOOKUP to return the unit price for 'Bag' from F2:F4 and G2:G4, returning 'Missing' if not found.",
+    hint: "Syntax: =XLOOKUP(\"Bag\", F2:F4, G2:G4, \"Missing\").",
+    answer: '=XLOOKUP("Bag", F2:F4, G2:G4, "Missing")  --> Returns 800'
+  },
+  {
+    module: "Module: Excel Mastery",
+    section: "Part 2: Formulas & Functions",
+    title: "13. INDEX & MATCH",
+    definition: "Two-function combination where MATCH finds the row coordinate and INDEX retrieves the value.",
+    meaning: "Works in every Excel edition and can look to the left of the lookup column. The 0 in MATCH indicates an exact match.",
+    instructorCue: "Explain: 'MATCH returns the row number (e.g. Row 2). INDEX looks at that row in the target column and grabs the value.'",
+    syntax: "=INDEX(return_range, MATCH(lookup_value, lookup_range, 0))",
+    example: `=INDEX(G2:G4, MATCH("Pen", F2:F4, 0))  --> Returns 12`,
+    decisionBox: {
+      question: "When should an analyst use INDEX/MATCH instead of XLOOKUP?",
+      decision: "Use INDEX/MATCH when building workbooks for clients who may run older Excel versions (2016 or earlier).",
+      tradeoff: "INDEX/MATCH works in every version of Excel since 1995 without compatibility issues."
+    },
+    practice: "Write an INDEX/MATCH formula to fetch the price of 'Book' from columns F and G.",
+    hint: "=INDEX(G2:G4, MATCH(\"Book\", F2:F4, 0)).",
+    answer: '=INDEX(G2:G4, MATCH("Book", F2:F4, 0))  --> Returns 150'
+  },
+  {
+    module: "Module: Excel Mastery",
+    section: "Part 2: Formulas & Functions",
+    title: "14. IFERROR Handling",
+    definition: "Intercepts formula errors (#N/A, #DIV/0!, #VALUE!) and substitutes a user-defined fallback.",
+    meaning: "Keeps executive dashboards clean, but can mask underlying typos, so use it intentionally.",
+    instructorCue: "Say: 'Never put IFERROR around your formula until you have tested that the formula works. Otherwise, you will hide genuine syntax mistakes.'",
+    syntax: "=IFERROR(formula, value_if_error)",
+    example: `=IFERROR(VLOOKUP("Cap", F2:G4, 2, FALSE), "Not in Catalog")
+-- Returns "Not in Catalog" instead of #N/A`,
+    decisionBox: {
+      question: "Is it good practice to wrap every formula in =IFERROR(formula, \"\")?",
+      decision: "No. Only wrap lookup formulas or divisions where missing records or zeros are expected.",
+      tradeoff: "Blanket IFERROR usage conceals real structural problems like broken range names or wrong types."
+    },
+    practice: "Protect a division =G2/E2 from #DIV/0! errors by returning 0 if an error occurs.",
+    hint: "Wrap the formula in =IFERROR(..., 0).",
+    answer: "=IFERROR(G2/E2, 0)"
+  },
+  {
+    module: "Module: Excel Mastery",
+    section: "Part 2: Formulas & Functions",
+    title: "15. Date Functions (EOMONTH, DATEDIF, NETWORKDAYS)",
+    definition: "Calculates calendar deadlines, intervals, and working business days.",
+    meaning: "Excel stores dates as numeric serial integers. EOMONTH returns month-end dates. DATEDIF computes intervals in days, months, or years. NETWORKDAYS counts working days excluding weekends.",
+    instructorCue: "Tip: '=EOMONTH(TODAY(), 0) always gives the exact final date of the current month.'",
+    syntax: `=TODAY() | =YEAR(date) | =MONTH(date)
+=EOMONTH(date, months_offset)
+=DATEDIF(start_date, end_date, "d"/"m"/"y")
+=NETWORKDAYS(start_date, end_date, [holidays])`,
+    example: `=EOMONTH(B2, 0)  --> 31 Jan 2026
+=DATEDIF(B2, B9, "d")  --> 62 days between 5 Jan and 8 Mar 2026`,
+    decisionBox: {
+      question: "Why should analysts use EOMONTH(date, 0) instead of typing '2026-01-31' manually?",
+      decision: "EOMONTH calculates the correct month-end automatically, including leap years.",
+      tradeoff: "Hardcoded date strings break when rolled forward into February or 30-day months."
+    },
+    practice: "Calculate the exact number of days between OrderDate 2026-01-05 and 2026-03-08 using DATEDIF.",
+    hint: "Use =DATEDIF(B2, B9, \"d\").",
+    answer: '=DATEDIF(B2, B9, "d")  --> Returns 62'
+  },
+  {
+    module: "Module: Excel Mastery",
+    section: "Part 2: Formulas & Functions",
+    title: "16. Dynamic Arrays (FILTER, SORT, UNIQUE)",
+    definition: "Formulas that output multiple rows and columns that spill into adjacent cells automatically.",
+    meaning: "One formula filters or sorts an entire dataset dynamically. A #SPILL! error indicates an existing cell is blocking the spill range.",
+    instructorCue: "Demonstrate: 'Type =FILTER(tblSales, tblSales[Region]=\"South\"). All 3 South rows spill down instantly with zero drag-and-drop.'",
+    syntax: `=FILTER(array, include_condition, [if_empty])
+=SORT(array, [sort_index], [sort_order])
+=UNIQUE(array)`,
+    example: `=FILTER(tblSales, tblSales[Region]="South", "None")
+=SORT(tblSales[Amount], , -1)  --> Sorts highest to lowest
+=SUM(FILTER(tblSales[Amount], tblSales[Product]="Book"))  --> Returns 1,350`,
+    decisionBox: {
+      question: "What causes a #SPILL! error in dynamic array formulas?",
+      decision: "An obstacle (text, formatting, or another formula) is blocking the output range.",
+      tradeoff: "Clear the cells beneath and to the right of the formula to let the spill range expand."
+    },
+    practice: "Write a formula to dynamically filter tblSales for all rows where Product is 'Pen'.",
+    hint: "Use =FILTER(tblSales, tblSales[Product]=\"Pen\", \"None\").",
+    answer: '=FILTER(tblSales, tblSales[Product]="Pen", "None")'
+  },
+  {
+    module: "Module: Excel Mastery",
+    section: "Part 3: Analysis & Reporting",
+    title: "17. Sorting and Filtering (Ctrl + Shift + L)",
+    definition: "Reordering table records and isolating row subsets matching conditions without deleting data.",
+    meaning: "Filter hides non-matching rows temporarily. Sort re-sequences rows across single or multiple levels. Always sort inside an Excel Table to keep row integrity.",
+    instructorCue: "Tip: 'Press Ctrl + Shift + L to toggle filter arrows on and off instantly.'",
+    syntax: "Toggle Filters: Ctrl + Shift + L\nSort Dialog: Data tab > Sort > Add Level",
+    example: `-- Level 1: Sort Region Alphabetically (A to Z)
+-- Level 2: Sort Amount Descending (Largest to Smallest)`,
+    decisionBox: {
+      question: "Why should you never sort an un-formatted range with blank column gaps?",
+      decision: "Blank gaps cause Excel to sort only one half of the table, detaching names from amounts.",
+      tradeoff: "Using Excel Tables (Ctrl + T) ensures the entire row moves as an atomic record."
+    },
+    practice: "Shortcut test: What keyboard shortcut toggles AutoFilter on and off in Excel?",
+    hint: "Hold down Ctrl and Shift together, then press L.",
+    answer: "Ctrl + Shift + L"
+  },
+  {
+    module: "Module: Excel Mastery",
+    section: "Part 3: Analysis & Reporting",
+    title: "18. Pivot Tables",
+    definition: "Interactive aggregation engine that summarizes thousands of transaction rows into cross-tabulated reports.",
+    meaning: "Four drop zones: Rows, Columns, Values, Filters. After source data changes, click Refresh (Alt + F5) to update.",
+    instructorCue: "Point to the screen: 'Drag Region to Rows, Amount to Values. In 3 seconds, you get South 2,020, North 1,310, East 900.'",
+    syntax: "1. Click inside tblSales -> Insert > PivotTable\n2. Rows: Region | Values: Sum of Amount\n3. Refresh: Alt + F5",
+    example: `PivotTable Output:
+South:  2,020
+North:  1,310
+East:     900
+Grand Total: 4,230`,
+    decisionBox: {
+      question: "Why does a PivotTable not update automatically when you edit numbers in raw data?",
+      decision: "PivotTables run from an in-memory snapshot called the Pivot Cache to preserve performance.",
+      tradeoff: "You must press Alt + F5 or click Data > Refresh All to sync latest table edits."
+    },
+    practice: "What are the 4 drop zones of an Excel Pivot Table field list?",
+    hint: "Two describe layout dimensions, one holds numbers, one filters the view.",
+    answer: "Rows, Columns, Values, and Filters"
+  },
+  {
+    module: "Module: Excel Mastery",
+    section: "Part 3: Analysis & Reporting",
+    title: "19. Percentages in a Pivot Table (Show Values As)",
+    definition: "Displays summary metrics as percentages of totals or period differences without writing formulas.",
+    meaning: "Options include % of Grand Total, % of Column Total, % of Row Total, and Difference From.",
+    instructorCue: "Show this: 'Right-click any value in your pivot -> Show Values As -> % of Grand Total. It calculates share of total instantly.'",
+    syntax: "Right-click Pivot Value -> Show Values As -> % of Grand Total",
+    example: `Region Share of Total Sales:
+South: 47.8%
+North: 31.0%
+East:  21.3%`,
+    decisionBox: {
+      question: "When should an analyst show % of Column Total vs % of Row Total in a cross-tab pivot?",
+      decision: "Use % of Column Total when comparing category proportions inside a single department. Use % of Row Total to see how a product splits across regions.",
+      tradeoff: "Mislabeled percentage bases lead stakeholders to draw incorrect share conclusions."
+    },
+    practice: "Convert the regional sales numbers into percentages of the overall total. What is the South region's share?",
+    hint: "Divide 2,020 by 4,230.",
+    answer: "47.8% (2,020 / 4,230)"
+  },
+  {
+    module: "Module: Excel Mastery",
+    section: "Part 3: Analysis & Reporting",
+    title: "20. Slicers and Timelines",
+    definition: "Visual, clickable interactive filter buttons that control PivotTables and PivotCharts.",
+    meaning: "Slicers filter categorical dimensions like Region or Product. Timelines filter dates. Connect one slicer to multiple PivotTables via Report Connections.",
+    instructorCue: "Demonstrate: 'Click Report Connections, check both PivotTables, and one click on South updates your entire executive view!'",
+    syntax: "PivotTable Analyze tab -> Insert Slicer\nRight-click Slicer -> Report Connections -> Check all target pivots",
+    example: `-- Slicer: Region [South | North | East]
+-- Connected to: Regional Sales Pivot + Product Mix Pivot`,
+    decisionBox: {
+      question: "Why is a Slicer better than a standard Pivot Filter dropdown for executive reports?",
+      decision: "Slicers show all available options and active selections at a glance.",
+      tradeoff: "Dropdown filters hide the unselected choices behind a menu, obscuring context."
+    },
+    practice: "How do you connect a single Slicer to three different PivotTables in the same workbook?",
+    hint: "Right-click the slicer border and select the connections menu.",
+    answer: "Right-click Slicer -> Report Connections -> Check all target PivotTables"
+  },
+  {
+    module: "Module: Excel Mastery",
+    section: "Part 3: Analysis & Reporting",
+    title: "21. Conditional Formatting",
+    definition: "Applies cell colors, data bars, or icon alerts automatically based on dynamic values.",
+    meaning: "Highlights outliers, top percentiles, and thresholds. Use custom formulas with locked columns (e.g. =$G2>=500) to highlight entire table rows.",
+    instructorCue: "Key trick: 'If you want the ENTIRE row highlighted, lock the column letter with a dollar sign: =$G2>=500.'",
+    syntax: "Home tab -> Conditional Formatting -> New Rule -> Use a formula\nFormula: =$G2>=500",
+    example: `=$G2>=500
+-- Highlights entire row for orders 1005 (800), 1006 (1600), and 1007 (600)`,
+    decisionBox: {
+      question: "Why should analysts limit conditional formatting to 1 or 2 rules per dashboard?",
+      decision: "Color should highlight anomalies, not overwhelm the sheet.",
+      tradeoff: "Too many colors turn a spreadsheet into 'visual noise' where nothing stands out."
+    },
+    practice: "Write the conditional formatting formula to highlight all rows where Amount in column G is at least 800.",
+    hint: "Lock the G column using $G2.",
+    answer: "=$G2>=800"
+  },
+  {
+    module: "Module: Excel Mastery",
+    section: "Part 3: Analysis & Reporting",
+    title: "22. Charts (Visual Selection)",
+    definition: "Translates numerical data into visual representations to reveal patterns and relationships.",
+    meaning: "Column/Bar: Category comparison. Line: Trends over time. Pie: Parts of a whole (keep to under 5 slices). Scatter: Correlation between 2 numeric metrics. Remove clutter like 3D effects and heavy gridlines.",
+    instructorCue: "Golden Rule: 'Never use 3D pie charts. They distort angles and make front slices look larger than they are. Keep it 2D and clean.'",
+    syntax: "Select Data / Pivot -> Insert tab -> Column / Line / Bar",
+    example: `-- Comparing Regional Sales: Use Clustered Column Chart
+-- Tracking Monthly Shift Costs: Use Line Chart`,
+    decisionBox: {
+      question: "When should an analyst use a Bar Chart instead of a Column Chart?",
+      decision: "Use horizontal Bar Charts when category names are long or when displaying more than 10 categories.",
+      tradeoff: "Vertical column charts force text labels to slant or truncate on crowded axes."
+    },
+    practice: "What chart type is best for showing sales trends across months?",
+    hint: "Continuous time sequences are best shown with connected points.",
+    answer: "Line Chart"
+  },
+  {
+    module: "Module: Excel Mastery",
+    section: "Part 3: Analysis & Reporting",
+    title: "23. Building an Executive Dashboard",
+    definition: "A single-page summary view presenting high-level KPIs, trends, and interactive slicers.",
+    meaning: "Maintain clean workbook architecture: separate Raw Data, Calculations/Pivots, and Dashboard presentation sheets. A dashboard is not complete until it includes an executive recommendation.",
+    instructorCue: "Teach structure: 'Sheet 1 = Data, Sheet 2 = Pivots, Sheet 3 = Dashboard. Turn off gridlines in View to give it an executive look.'",
+    syntax: "Architecture: Raw Data Sheet -> Pivot Engine Sheet -> Dashboard Sheet",
+    example: `Dashboard Architecture:
+- Top: 3 Headline KPI Cards (Total Sales ₹4,230 | Orders 8 | Top Region South)
+- Middle: Sales by Region Chart & Product Mix Breakdown
+- Right: Region Slicer`,
+    decisionBox: {
+      question: "Why should raw data and dashboard charts never live on the same worksheet?",
+      decision: "Keeping presentation separate prevents stakeholders from accidentally editing source records.",
+      tradeoff: "Mixed sheets look cluttered and break when rows are filtered or inserted."
+    },
+    practice: "What key visual setting in the View tab should be turned off to give an Excel dashboard a software feel?",
+    hint: "It removes the gray spreadsheet lines.",
+    answer: "Uncheck 'Gridlines' under the View tab"
+  },
+  {
+    module: "Module: Excel Mastery",
+    section: "Part 3: Analysis & Reporting",
+    title: "24. Data Validation",
+    definition: "Restricts allowable cell inputs to predefined lists, numeric boundaries, or date ranges.",
+    meaning: "Prevents data entry errors, invalid spellings, and inconsistent regional names. Use Circle Invalid Data to flag existing bad entries.",
+    instructorCue: "Say: 'Data validation stops messy data at the source. If someone tries to type Soth instead of South, Excel rejects it.'",
+    syntax: "Data tab -> Data Validation -> Allow: List -> Source: South,North,East",
+    example: `=COUNTA(A2:A9)=ROWS(A2:A9)
+-- Quick check: returns TRUE when no OrderID cell is empty`,
+    decisionBox: {
+      question: "Should validation use an inline list ('South,North,East') or a reference range ('=$M$1:$M$3')?",
+      decision: "Reference a dedicated lookup range.",
+      tradeoff: "Referenced ranges can be updated in one place without re-editing validation rules across thousands of cells."
+    },
+    practice: "Configure an Excel Data Validation rule so users can only pick 'Pen', 'Book', or 'Bag'.",
+    hint: "Choose Allow: List, and enter the items separated by commas.",
+    answer: "Data Validation -> Allow: List -> Source: Pen,Book,Bag"
+  },
+  {
+    module: "Module: Excel Mastery",
+    section: "Part 4: Power Query & Power Pivot",
+    title: "25. Power Query (Get & Transform)",
+    definition: "Automated ETL engine in Excel that imports, reshapes, and cleans raw files using repeatable Applied Steps.",
+    meaning: "Never clean the same monthly file by hand. Power Query records each transformation in M language so clicking Refresh All re-runs the entire pipeline on new files.",
+    instructorCue: "Tell students: 'If your boss gives you a messy report every Monday, clean it once in Power Query. Next Monday, click Refresh and you are done.'",
+    syntax: "Data tab -> Get Data -> From Text/CSV or From Workbook\nTransform Data -> Applied Steps -> Close & Load",
+    example: `Power Query Workflow:
+Source File -> Promote Headers -> Changed Type -> Filtered Rows -> Loaded to Worksheet`,
+    decisionBox: {
+      question: "When should an analyst use Power Query instead of worksheet formulas?",
+      decision: "Use Power Query for recurring imports, multi-file appends, unpivoting, or large datasets.",
+      tradeoff: "Power Query does not bloat worksheet calculation time and runs reliably on source refresh."
+    },
+    practice: "Where do you locate the recorded transformation history inside the Power Query Editor window?",
+    hint: "It is listed on the right sidebar pane.",
+    answer: "In the 'Applied Steps' pane on the right side of the editor"
+  },
+  {
+    module: "Module: Excel Mastery",
+    section: "Part 4: Power Query & Power Pivot",
+    title: "26. Common Power Query Transformations (M Code)",
+    definition: "Standard data cleaning operations: type casting, splitting, custom columns, and merging.",
+    meaning: "Every UI action generates a line of M code in the formula bar. Common operations include Remove Columns, Split Column by Delimiter, and Unpivot Columns.",
+    instructorCue: "Highlight Unpivot: 'If months run across columns (Jan, Feb, Mar), select them and click Unpivot Columns. It reshapes wide spreadsheets into clean tabular records.'",
+    syntax: `= Table.SelectRows(Source, each [Amount] > 500)
+= Table.AddColumn(Source, "Total", each [Qty] * [UnitPrice], type number)`,
+    example: `= Table.SelectRows(Source, each [Amount] > 500)
+= Table.AddColumn(Source, "Line Total", each [Qty] * [UnitPrice], type number)`,
+    decisionBox: {
+      question: "Why is 'Unpivot Columns' in Power Query critical for downstream analytics?",
+      decision: "Databases, PivotTables, and Power BI require narrow, tall tables with one metric column, not wide matrix grids.",
+      tradeoff: "Wide summary tables cannot be grouped, filtered, or sliced effectively in BI tools."
+    },
+    practice: "Write an M code expression to add a custom column named 'Total' that multiplies [Qty] by [UnitPrice].",
+    hint: "Use each [Qty] * [UnitPrice].",
+    answer: '= Table.AddColumn(Source, "Total", each [Qty] * [UnitPrice], type number)'
+  },
+  {
+    module: "Module: Excel Mastery",
+    section: "Part 4: Power Query & Power Pivot",
+    title: "27. Power Pivot & Data Modeling",
+    definition: "In-memory database engine inside Excel for building multi-table relational models and DAX measures.",
+    meaning: "Handles millions of rows beyond Excel's 1,048,576 row sheet limit. Links tables using relationships without VLOOKUP, and powers PivotTables from a unified Data Model.",
+    instructorCue: "Bridge to Power BI: 'Power Pivot in Excel is the exact same engine inside Power BI! Learn DAX measures here and you are already halfway through Power BI.'",
+    syntax: "Measure Name := expression\nData tab -> Relationships -> New",
+    example: `Total Sales := SUM(tblSales[Amount])
+Average Sale := AVERAGEX(tblSales, tblSales[Amount])`,
+    decisionBox: {
+      question: "Why should an analyst use Power Pivot relationships instead of adding 50 VLOOKUP columns to a worksheet?",
+      decision: "Relationships connect tables in memory without creating duplicate lookup columns.",
+      tradeoff: "50 VLOOKUP columns across large tables bloat file size and freeze recalculation times."
+    },
+    practice: "What is the standard syntax for defining an explicit DAX measure inside Power Pivot?",
+    hint: "Use a colon before the equals sign.",
+    answer: "Measure Name := expression (e.g. Total Sales := SUM(tblSales[Amount]))"
+  }
 ];
