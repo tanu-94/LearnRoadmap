@@ -1208,8 +1208,9 @@ VAR Dept = SELECTEDVALUE(departments[dept_name], "All Departments")
 VAR Hrs = FORMAT([Total Hours], "#,0")
 RETURN
 "Staff Hours for " & Dept & ": " & Hrs & " hrs"`
-  }
+  },
 
+  
   // =========================================================================
   // MODULE: EXCEL FOR ANALYSTS (TOPICS 1 TO 27)
   // =========================================================================
