@@ -8,7 +8,7 @@ const curriculum = [
     title: "01. Understand the Business First & 5W1H",
     definition: "Before opening Excel, SQL, or Power BI, an analyst must translate vague business issues into a measurable question.",
     meaning: "Ask: What does the business want to improve? Who is affected? What is the cost? What does success look like? Use the 5W1H framework: What, Why, Who, When, Where, and How to prevent random analysis.",
-    instructorCue: "Tell students: 'Never open SQL Workbench first. If management says shift costs are high, ask who, when, and where. Our job is answering business questions, not just writing code.'",
+    instructorCue: "'Never open SQL Workbench first. If management says shift costs are high, ask who, when, and where. Our job is answering business questions, not just writing code.'",
     syntax: `5W1H Framework:
 - What: What exactly is happening?
 - Why: Why might it be happening?
